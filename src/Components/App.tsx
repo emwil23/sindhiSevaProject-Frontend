@@ -3,6 +3,8 @@ import React, { FC } from 'react'
 import { Route, Routes, useRoutes } from 'react-router-dom';
 import HomeComponent from './pages/homePage';
 import NotFoundComponent from './pages/notfoundPage';
+import RegisterComponent from './pages/registerPage';
+import LoginComponent from './pages/loginPage';
 
 const App: FC = () => {
   const routes = useRoutes([
@@ -13,6 +15,19 @@ const App: FC = () => {
     {
       path: '*',
       element: <NotFoundComponent />
+    },
+    {
+      path: '/auth/*',
+      children: [
+        {
+          path: 'register',
+          element: <RegisterComponent />
+        },
+        {
+          path: 'login',
+          element: <LoginComponent />
+        }
+      ]
     }
   ])
 
