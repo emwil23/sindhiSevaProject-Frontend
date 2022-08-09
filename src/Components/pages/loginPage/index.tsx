@@ -1,9 +1,9 @@
-import { Button, Col, Form, Input, Row, Space } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React, { FC } from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
 import { Link } from 'react-router-dom';
+import { Button, Form, Input } from 'antd';
 
 const index: FC = () => {
 
@@ -12,9 +12,9 @@ const index: FC = () => {
   }
 
   return (
-    <React.Fragment>
-      <Row>
-        <Col lg={12}>
+    <div className='container my-5'>
+      <div className='row align-items-center'>
+        <div className='col-6'>
           <Form
             onFinish={onFinish}
           >
@@ -38,15 +38,15 @@ const index: FC = () => {
               <Button type="primary" htmlType="submit">
                 Log in
               </Button>
-              Or <Link to={'../register'}>register now!</Link>
+              &nbsp;Or&nbsp; <Link to={'../register'}>register now!</Link>
             </Form.Item>
           </Form>
-        </Col>
-        <Col lg={12}>
+        </div>
+        <div className='col-6'>
           <Lottie animationData={registrationLottie} loop={false} />
-        </Col>
-      </Row>
-    </React.Fragment>
+        </div>
+      </div>
+    </div>
   )
 }
 

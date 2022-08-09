@@ -1,6 +1,6 @@
 import './App.css';
 import React, { FC } from 'react'
-import { Route, Routes, useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 import HomeComponent from './pages/homePage';
 import NotFoundComponent from './pages/notfoundPage';
 import RegisterComponent from './pages/registerPage';
