@@ -1,20 +1,19 @@
-import { Col, Row } from 'antd';
-import  React, {FC} from 'react';
+import  {FC} from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
 
 const index: FC = () => {
   return (
-    <React.Fragment>
-      <Row>
-        <Col lg={12}>
+    <div className='container my-5'>
+      <div className='row align-items-center'>
+        <div className='col-md-6'>
           Form for Registration
-        </Col>
-        <Col lg={12}>
+        </div>
+        <div className='col-md-6'>
           <Lottie animationData={registrationLottie} loop={false} />
-        </Col>
-      </Row>
-    </React.Fragment>
+        </div>
+      </div>
+    </div>
   )
 }
 

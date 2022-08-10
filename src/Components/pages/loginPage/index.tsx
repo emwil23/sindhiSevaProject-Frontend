@@ -1,5 +1,5 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,7 @@ const index: FC = () => {
   return (
     <div className='container my-5'>
       <div className='row align-items-center'>
-        <div className='col-6'>
+        <div className='col-md-6'>
           <Form
             onFinish={onFinish}
           >
@@ -42,7 +42,7 @@ const index: FC = () => {
             </Form.Item>
           </Form>
         </div>
-        <div className='col-6'>
+        <div className='col-md-6'>
           <Lottie animationData={registrationLottie} loop={false} />
         </div>
       </div>
