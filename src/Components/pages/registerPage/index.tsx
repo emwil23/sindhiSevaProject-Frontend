@@ -77,7 +77,38 @@ const RegisterComponent: FC = () => {
                 </Form.Item>
               </div>
             </div>
-
+            <div className="row">
+              <div className="col-md-6">
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter the password",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Enter the password" />
+                </Form.Item>
+              </div>
+              <div className="col-md-6">
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter same password",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Confirm the password" />
+                </Form.Item>
+              </div>
+            </div>
             <div className="row">
               <div className="col-md-6">
                 <Form.Item
