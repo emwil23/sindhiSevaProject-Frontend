@@ -1,6 +1,6 @@
 import React, {FC} from 'react'
 
-const index: FC = () => {
+const HeaderComponent: FC = () => {
   return (
     <React.Fragment>
       Some text.
@@ -9,4 +9,4 @@ const index: FC = () => {
   )
 }
 
-export default index
+export default HeaderComponent

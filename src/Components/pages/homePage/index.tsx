@@ -1,9 +1,9 @@
 import {FC} from 'react'
 
-const index: FC = () => {
+const HomeComponent: FC = () => {
   return (
-    <div>index</div>
+    <div>HomeComponent</div>
   )
 }
 
-export default index
+export default HomeComponent

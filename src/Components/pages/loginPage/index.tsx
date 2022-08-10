@@ -5,7 +5,7 @@ import registrationLottie from '../../../assets/register.json';
 import { Link } from 'react-router-dom';
 import { Button, Form, Input } from 'antd';
 
-const index: FC = () => {
+const LoginComponent: FC = () => {
 
   const onFinish = (values: any) => {
     console.log(values);
@@ -26,11 +26,19 @@ const index: FC = () => {
             </Form.Item>
             <Form.Item
               name="password"
-              rules={[{ required: true, message: '', min: 6}]}
+              rules={[{ required: true, message: 'Please Input your password!'}, 
+              ({ getFieldValue }) => ({
+                validator(_, value: string){
+                  if(!value || value.length >= 6){
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error('Password length should be more than 6!'))
+                }
+              })
+            ]}
             >
-              <Input
+              <Input.Password
                 prefix={<LockOutlined />}
-                type="password"
                 placeholder="Password"
               />
             </Form.Item>
@@ -50,4 +58,4 @@ const index: FC = () => {
   )
 }
 
-export default index;
+export default LoginComponent;

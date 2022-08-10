@@ -8,7 +8,7 @@ import {
   WhatsAppOutlined,
 } from "@ant-design/icons";
 
-const index: FC = () => {
+const FooterComponent: FC = () => {
   return (
     <React.Fragment>
       <Row>
@@ -39,4 +39,4 @@ const index: FC = () => {
   );
 };
 
-export default index;
+export default FooterComponent;

@@ -1,9 +1,9 @@
 import {FC} from 'react'
 
-const index:FC = () => {
+const NotFoundComponent:FC = () => {
   return (
     <div>404 NOT FOUND</div>
   )
 }
 
-export default index
+export default NotFoundComponent
