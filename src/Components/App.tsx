@@ -26,6 +26,10 @@ const App: FC = () => {
         {
           path: 'login',
           element: <LoginComponent />
+        },
+        {
+          path: '*',
+          element: <NotFoundComponent />
         }
       ]
     }
