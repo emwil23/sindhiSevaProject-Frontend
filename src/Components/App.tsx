@@ -1,9 +1,10 @@
 import './App.css';
 import {FC} from 'react'
+import Footer from './website/footer';
 
 const App: FC = () => {
   return (
-    <div>App</div>
+    <div><Footer /></div>
   )
 }
 

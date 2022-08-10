@@ -2,7 +2,10 @@ import React, {FC} from 'react'
 
 const index: FC = () => {
   return (
-    <div>index</div>
+    <React.Fragment>
+      Some text.
+      <h2>A heading</h2>
+    </React.Fragment>
   )
 }
 
