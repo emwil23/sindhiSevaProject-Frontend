@@ -3,7 +3,7 @@ import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
 import { Button, DatePicker, Form, Input, Select } from "antd";
 
-const index: FC = () => {
+const RegisterComponent: FC = () => {
   const onFinish = (values: any) => {
     console.log(values);
   };
@@ -77,24 +77,46 @@ const index: FC = () => {
                 </Form.Item>
               </div>
             </div>
-            <div>
-              <Form.Item
-                label="Gender"
-                name="gender"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select the gender",
-                    type: "string",
-                  },
-                ]}
-              >
-                <Select placeholder="Select gender">
-                  <Select.Option value="male">male</Select.Option>
-                  <Select.Option value="female">female</Select.Option>
-                  <Select.Option value="other">other</Select.Option>
-                </Select>
-              </Form.Item>
+
+            <div className="row">
+              <div className="col-md-6">
+                <Form.Item
+                  label="Gender"
+                  name="gender"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select the gender",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Select gender">
+                    <Select.Option value="male">male</Select.Option>
+                    <Select.Option value="female">female</Select.Option>
+                    <Select.Option value="other">other</Select.Option>
+                  </Select>
+                </Form.Item>
+              </div>
+              <div className="col-md-6">
+                <Form.Item
+                  label="Profession"
+                  name="profession"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select the Profession",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Select Profession">
+                    <Select.Option value="Doctor">Doctor</Select.Option>
+                    <Select.Option value="Enginner">Enginner</Select.Option>
+                    <Select.Option value="other">other</Select.Option>
+                  </Select>
+                </Form.Item>
+              </div>
             </div>
             <div>
               <Form.Item>
@@ -113,4 +135,4 @@ const index: FC = () => {
   );
 };
 
-export default index
+export default RegisterComponent;
