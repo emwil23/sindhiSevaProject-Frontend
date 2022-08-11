@@ -13,29 +13,28 @@ const FooterComponent: FC = () => {
     <footer>
       <Divider></Divider>
       <div className="row">
-        <div className="col-md-4 d-flex justify-content-center">
+        <div className="col-md-4 d-flex justify-content-center text-white">
           <address>
             <div>Sindhi Seva Samithi</div>
             <div>#10/7, Kumara Krupa Road, Bangalore 560001</div>
           </address>
         </div>
-        <div className="col-md-4 flex-column justify-content-center">
+        <div className="col-md-4 flex-column justify-content-center text-white">
           <div>Email: sindhisevasamiti@gmail.com</div>
           <div>Phone: 080-4151 2028</div>
         </div>
         <div className="col-md-4 d-flex justify-content-center">
-          <Space style={{ fontSize: "20px", color: "#08c" }}>
-            <HomeOutlined />
-            <FacebookOutlined />
-            <LinkedinOutlined />
-            <WhatsAppOutlined />
+          <Space>
+            <HomeOutlined className="text-white" />
+            <FacebookOutlined className="text-white" />
+            <LinkedinOutlined className="text-white" />
+            <WhatsAppOutlined className="text-white" />
           </Space>
         </div>
       </div>
-      {/* <hr></hr> */}
-      <Divider orientation="center">
-        <p className="fw-light">Copyright © 2022 Sindhi College</p>
-      </Divider>
+      <p className="text-white d-flex justify-content-center">
+        Copyright © 2022 Sindhi College
+      </p>
     </footer>
   );
 };
