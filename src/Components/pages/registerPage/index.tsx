@@ -1,14 +1,29 @@
-import  {FC} from 'react';
+import { FC, useState } from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
-import { Button, DatePicker, Form, Input, message, Select, Space } from "antd";
+import { Button, DatePicker, Form, Input, Select } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/lib/input/TextArea";
+import { genderOptions, professionOptions, bloodGroupOptions, qualificationOptions, martialStatusOptions, relationsOptions } from '../../selectOptions';
 
 const RegisterComponent: FC = () => {
+  const [hideAnniversary, setHideAnniversary] = useState(true);
+
+  const onMartialStatusChange = (value: string) => {
+    switch(value){
+      case 'Married': 
+        setHideAnniversary(false);
+        return;
+      default:
+        setHideAnniversary(true);
+        return;
+    }
+  }
+
   const onFinish = (values: any) => {
     console.log(values);
   };
+
 
   return (
     <div className="container my-5">
@@ -70,7 +85,7 @@ const RegisterComponent: FC = () => {
                     }),
                   ]}
                 >
-                  <Input placeholder="Enter the password" />
+                  <Input.Password placeholder="Enter the password" />
                 </Form.Item>
               </div>
               <div className="col-md-6">
@@ -99,7 +114,7 @@ const RegisterComponent: FC = () => {
                     }),
                   ]}
                 >
-                  <Input placeholder="Confirm the password" />
+                  <Input.Password placeholder="Confirm the password" />
                 </Form.Item>
               </div>
             </div>
@@ -112,7 +127,7 @@ const RegisterComponent: FC = () => {
                     {
                       required: true,
                       message: "Please enter the Email",
-                      type: "string",
+                      type: 'email',
                     },
                   ]}
                 >
@@ -131,7 +146,7 @@ const RegisterComponent: FC = () => {
                     },
                   ]}
                 >
-                  <DatePicker placeholder="select date" className="w-100" />
+                  <DatePicker placeholder="select date" className="w-100" format={'YYYY-MM-DD'} />
                 </Form.Item>
               </div>
             </div>
@@ -150,9 +165,9 @@ const RegisterComponent: FC = () => {
                   ]}
                 >
                   <Select placeholder="Select gender">
-                    <Select.Option value="male">male</Select.Option>
-                    <Select.Option value="female">female</Select.Option>
-                    <Select.Option value="other">other</Select.Option>
+                    {genderOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
                   </Select>
                 </Form.Item>
               </div>
@@ -169,9 +184,9 @@ const RegisterComponent: FC = () => {
                   ]}
                 >
                   <Select placeholder="Select Profession">
-                    <Select.Option value="Doctor">Doctor</Select.Option>
-                    <Select.Option value="Enginner">Enginner</Select.Option>
-                    <Select.Option value="other">other</Select.Option>
+                    {professionOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
                   </Select>
                 </Form.Item>
               </div>
@@ -179,17 +194,17 @@ const RegisterComponent: FC = () => {
             <div className="row">
               <div className="col-md-6">
                 <Form.Item
-                  label="Phone "
+                  label="Phone"
                   name="mobile"
                   rules={[
                     {
                       required: true,
                       message: "Please enter mobile number",
-                      type: "string",
+                      type: 'string',
                     },
                   ]}
                 >
-                  <Input placeholder="Enter Mobile Number" />
+                  <Input type={'number'} placeholder="Enter Mobile Number" />
                 </Form.Item>
               </div>
               <div className="col-md-6">
@@ -204,7 +219,11 @@ const RegisterComponent: FC = () => {
                     },
                   ]}
                 >
-                  <Input placeholder="Enter Blood Group" />
+                  <Select placeholder='Select Blood Group'>
+                    {bloodGroupOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
+                  </Select>
                 </Form.Item>
               </div>
             </div>
@@ -222,12 +241,9 @@ const RegisterComponent: FC = () => {
                   ]}
                 >
                   <Select placeholder="Select">
-                    <Select.Option value="10th">10th</Select.Option>
-                    <Select.Option value="12th">12th</Select.Option>
-                    <Select.Option value="graduate">Graduate</Select.Option>
-                    <Select.Option value="postgraduate">
-                      Post Graduate
-                    </Select.Option>
+                    {qualificationOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
                   </Select>
                 </Form.Item>
               </div>
@@ -243,97 +259,95 @@ const RegisterComponent: FC = () => {
                     },
                   ]}
                 >
-                  <Select placeholder="Select">
-                    <Select.Option value="married">Married</Select.Option>
-                    <Select.Option value="unmarried">Unmarried</Select.Option>
-                    <Select.Option value="divorce">Divorce</Select.Option>
-                    <Select.Option value="widow">Widow</Select.Option>
-                    <Select.Option value="widower">Widower</Select.Option>
+                  <Select placeholder="Select" onChange={onMartialStatusChange}>
+                    {martialStatusOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
                   </Select>
                 </Form.Item>
               </div>
             </div>
-            <div>
-              <Form.Item
-                label="Address"
-                name="address"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter address",
-                    type: "string",
-                  },
-                ]}
-              >
-                <TextArea rows={3} placeholder="Enter Address" />
-              </Form.Item>
-            </div>
-
-            <div>
-              <Form.List name="members">
-                {(fields, { add, remove }) => (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Space
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
+            <Form.Item
+              label="Anniverssary Date"
+              name="anniversarry"
+              dependencies={['maritalStatus']}
+              rules={[
+                {
+                  required: true,
+                  message: "Please select date",
+                  type: "date",
+                }
+              ]}
+              hidden={hideAnniversary}
+            >
+              <DatePicker placeholder="select date" className="w-100" format={'YYYY-MM-DD'} />
+            </Form.Item>
+            <Form.Item
+              label="Address"
+              name="address"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter address",
+                  type: "string",
+                },
+              ]}
+            >
+              <TextArea rows={3} placeholder="Enter Address" />
+            </Form.Item>
+            <Form.List name="members">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <div className='row mx-1' key={key}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "relationId"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter member idhusband",
+                          },
+                        ]}
+                        className='col-5'
                       >
-                        <Form.Item
-                          {...restField}
-                          name={[name, "relationId"]}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please enter member idhusband",
-                            },
-                          ]}
-                        >
-                          <Input placeholder="Enter Exsiting member id" />
-                        </Form.Item>
+                        <Input placeholder="Enter Exsiting member id" />
+                      </Form.Item>
 
-                        <Form.Item
-                          {...restField}
-                          name={[name, "relationName"]}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please select relation",
-                            },
-                          ]}
-                        >
-                          <Select>
-                            <Select.Option value="father">Father</Select.Option>
-                            <Select.Option value="mother">Mother</Select.Option>
-                            <Select.Option value="husband">
-                              Husband
-                            </Select.Option>
-                            <Select.Option value="wife">Wife</Select.Option>
-                            <Select.Option value="sister">Sister</Select.Option>
-                            <Select.Option value="brother">
-                              Brother
-                            </Select.Option>
-                          </Select>
-                        </Form.Item>
-
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
-                    ))}
-                    <Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        block
-                        icon={<PlusOutlined />}
+                      <Form.Item
+                        {...restField}
+                        name={[name, "relationName"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select relation",
+                          },
+                        ]}
+                        className='col-5 ms-1'
                       >
-                        Add Member
-                      </Button>
-                    </Form.Item>
-                  </>
-                )}
-              </Form.List>
-            </div>
+                        <Select placeholder='Select Relation'>
+                          {relationsOptions.map((option, index) => {
+                            return <Select.Option value={option} key={index}>{option}</Select.Option>
+                          })}
+                        </Select>
+                      </Form.Item>
 
+                      <MinusCircleOutlined onClick={() => remove(name)} className='col-1 mt-2' />
+                    </div>
+                  ))}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Add Member
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
             <div>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
