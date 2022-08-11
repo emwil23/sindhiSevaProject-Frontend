@@ -1,7 +1,13 @@
 @import 'antd/dist/antd.css';
 
-a{
-    &:hover{
-        color: rgb(25, 121, 254) !important;
+$primary : rgb(25, 121, 254);
+
+a {
+    &:hover {
+        color: $primary  !important;
     }
+}
+
+footer {
+    background-color: $primary  !important;
 }
