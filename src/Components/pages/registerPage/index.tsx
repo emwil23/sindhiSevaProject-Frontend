@@ -268,8 +268,8 @@ const RegisterComponent: FC = () => {
               </div>
             </div>
             <Form.Item
-              label="Anniverssary Date"
-              name="anniversarry"
+              label="Anniversary Date"
+              name="anniversary"
               dependencies={['maritalStatus']}
               rules={[
                 {

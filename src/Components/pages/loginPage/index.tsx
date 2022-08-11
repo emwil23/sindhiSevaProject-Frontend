@@ -3,13 +3,31 @@ import { FC } from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
 import { Link } from 'react-router-dom';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input} from 'antd';
+import { postRequest } from '../../../services/apiHelperService';
+import { openNotification } from '../../../services/notificationService';
+import { useDispatch} from 'react-redux';
+import { loggedInTrue } from '../../app/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { pushUserDetails } from '../../app/slices/userSlice';
 
 const LoginComponent: FC = () => {
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const onFinish = (values: any) => {
-    console.log(values);
+    postRequest('/login', values).then(res => {
+      dispatch(pushUserDetails(res));
+      openNotification('Logged In');
+      dispatch(loggedInTrue());
+      navigate('/', { replace: true });
+    }).catch(() => {
+      openNotification('Some problem occured while logging in')
+    })
   }
+
+  
 
   return (
     <div className='container my-5'>
@@ -27,7 +45,7 @@ const LoginComponent: FC = () => {
             <Form.Item
               name="password"
               rules={[{ required: true, message: 'Please Input your password!'}, 
-              ({ getFieldValue }) => ({
+              () => ({
                 validator(_, value: string){
                   if(!value || value.length >= 6){
                     return Promise.resolve();
