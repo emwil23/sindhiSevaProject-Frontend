@@ -1,9 +1,7 @@
-import { Divider, Space } from "antd";
-
-import React, { FC } from "react";
+import './index.scss';
+import { FC } from "react";
 import {
   FacebookOutlined,
-  HomeOutlined,
   LinkedinOutlined,
   WhatsAppOutlined,
 } from "@ant-design/icons";
@@ -11,30 +9,27 @@ import {
 const FooterComponent: FC = () => {
   return (
     <footer>
-      <Divider></Divider>
-      <div className="row">
-        <div className="col-md-4 d-flex justify-content-center text-white">
+      <div className="row py-2">
+        <div className="col-md-4 text-center text-white">
           <address>
-            <div>Sindhi Seva Samithi</div>
-            <div>#10/7, Kumara Krupa Road, Bangalore 560001</div>
+            Sindhi Seva Samithi<br/>#10/7, Kumara Krupa Road, Bangalore 560001
           </address>
         </div>
-        <div className="col-md-4 flex-column justify-content-center text-white">
+        <div className="col-md-4 text-center text-white">
           <div>Email: sindhisevasamiti@gmail.com</div>
           <div>Phone: 080-4151 2028</div>
         </div>
-        <div className="col-md-4 d-flex justify-content-center">
-          <Space>
-            <HomeOutlined className="text-white" />
+        <div className="col-md-4 text-center">
             <FacebookOutlined className="text-white" />
             <LinkedinOutlined className="text-white" />
             <WhatsAppOutlined className="text-white" />
-          </Space>
         </div>
       </div>
+      <div>
       <p className="text-white d-flex justify-content-center">
         Copyright © 2022 Sindhi College
       </p>
+      </div>
     </footer>
   );
 };
