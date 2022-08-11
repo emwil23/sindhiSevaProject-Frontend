@@ -201,6 +201,7 @@ const RegisterComponent: FC = () => {
                       required: true,
                       message: "Please enter mobile number",
                       type: 'string',
+                      len: 10
                     },
                   ]}
                 >
@@ -306,7 +307,8 @@ const RegisterComponent: FC = () => {
                         rules={[
                           {
                             required: true,
-                            message: "Please enter member idhusband",
+                            message: "Please enter member UID",
+                            len: 8
                           },
                         ]}
                         className='col-5'
