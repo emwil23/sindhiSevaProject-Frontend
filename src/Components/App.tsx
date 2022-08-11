@@ -1,12 +1,12 @@
-// import './App.scss';
 import React, { FC } from 'react'
 import { useRoutes } from 'react-router-dom';
 import HomeComponent from './pages/homePage';
-import NotFoundComponent from './pages/notfoundPage';
-import RegisterComponent from './pages/registerPage';
-import LoginComponent from './pages/loginPage';
 import HeaderComponent from './website/header';
 import FooterComponent from './website/footer';
+const NotFoundComponent = React.lazy(() => import('./pages/notfoundPage'));
+const RegisterComponent = React.lazy(() => import('./pages/registerPage'));
+const LoginComponent = React.lazy(() => import('./pages/loginPage'));
+
 
 const App: FC = () => {
   const routes = useRoutes([
@@ -16,22 +16,22 @@ const App: FC = () => {
     },
     {
       path: '*',
-      element: <NotFoundComponent />
+      element: <React.Suspense fallback='loading...'><NotFoundComponent /></React.Suspense> 
     },
     {
       path: '/auth/*',
       children: [
         {
           path: 'register',
-          element: <RegisterComponent />
+          element: <React.Suspense fallback='loading...'><RegisterComponent /></React.Suspense> 
         },
         {
           path: 'login',
-          element: <LoginComponent />
+          element: <React.Suspense fallback='loading...'><LoginComponent /></React.Suspense> 
         },
         {
           path: '*',
-          element: <NotFoundComponent />
+          element:<React.Suspense fallback='loading...'><NotFoundComponent /></React.Suspense> 
         }
       ]
     }
