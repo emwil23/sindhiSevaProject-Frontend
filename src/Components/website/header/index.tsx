@@ -2,7 +2,6 @@ import { Button, Divider, Space } from 'antd';
 import { FC } from 'react';
 import { useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
-// import { loggedInTrue, loggedInFalse } from '../../app/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 const HeaderComponent: FC = () => {
