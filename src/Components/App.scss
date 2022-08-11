@@ -3,11 +3,11 @@
 $primary : rgb(25, 121, 254);
 
 a {
-    &:hover{
-        color: rgb(25, 121, 254) !important;
+    &:hover {
+        color: $primary  !important;
     }
 }
 
 footer {
-    background-color: $primary !important;
+    background-color: $primary  !important;
 }
