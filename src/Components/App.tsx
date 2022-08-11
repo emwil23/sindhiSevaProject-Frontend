@@ -1,10 +1,12 @@
-import './App.css';
+// import './App.scss';
 import React, { FC } from 'react'
 import { useRoutes } from 'react-router-dom';
 import HomeComponent from './pages/homePage';
 import NotFoundComponent from './pages/notfoundPage';
 import RegisterComponent from './pages/registerPage';
 import LoginComponent from './pages/loginPage';
+import HeaderComponent from './website/header';
+import FooterComponent from './website/footer';
 
 const App: FC = () => {
   const routes = useRoutes([
@@ -37,11 +39,13 @@ const App: FC = () => {
 
   return (
     <React.Fragment>
+      <HeaderComponent />
       {routes}
       {/* <Routes>
         <Route path='/' element={<HomeComponent />} />
         <Route path='*' element={<NotFoundComponent />} />
       </Routes> */}
+      <FooterComponent />
     </React.Fragment>
   )
 }
