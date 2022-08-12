@@ -332,7 +332,8 @@ const RegisterComponent: FC = () => {
                           {
                             required: true,
                             message: "Please enter member UID",
-                            len: 9
+                            min: 8,
+                            max: 9
                           },
                         ]}
                         className='col-5'
