@@ -5,9 +5,17 @@ import { Button, DatePicker, Form, Input, Select } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/lib/input/TextArea";
 import { genderOptions, professionOptions, bloodGroupOptions, qualificationOptions, martialStatusOptions, relationsOptions } from '../../selectOptions';
+import { postRequest } from '../../../services/apiHelperService';
+import { openNotification } from '../../../services/notificationService';
+import { pushUserDetails } from '../../app/slices/userSlice';
+import { loggedInTrue } from '../../app/slices/authSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterComponent: FC = () => {
   const [hideAnniversary, setHideAnniversary] = useState(true);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onMartialStatusChange = (value: string) => {
     switch(value){
@@ -21,7 +29,20 @@ const RegisterComponent: FC = () => {
   }
 
   const onFinish = (values: any) => {
-    console.log(values);
+    if(values.dob){
+      let dob = new Date(values?.dob);
+      values.dob = dob.getDate();      
+    }
+    if(values.anniversary){
+      let date = new Date(values.anniversary);
+      values.anniversary = date;
+    }
+    postRequest('/signup', values).then(res => {
+      dispatch(loggedInTrue());
+      dispatch(pushUserDetails(res));
+      openNotification('SignUp Successful');
+      navigate('/', { replace: true});
+    }).catch(() => openNotification('Problem occured while signup'))
   };
 
 
@@ -271,10 +292,9 @@ const RegisterComponent: FC = () => {
             <Form.Item
               label="Anniversary Date"
               name="anniversary"
-              dependencies={['maritalStatus']}
               rules={[
                 {
-                  required: true,
+                  required: false,
                   message: "Please select date",
                   type: "date",
                 }

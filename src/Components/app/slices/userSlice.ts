@@ -16,7 +16,7 @@ const userSlice = createSlice({
 });
 
 
-export const currentUser = (state:any) => state.user;
+export const currentUser = (state:any) => state.currentUser.userDetails;
 
 export const { pushUserDetails } = userSlice.actions;
 
