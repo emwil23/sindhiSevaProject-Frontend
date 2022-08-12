@@ -2,6 +2,10 @@
 
 $primary : rgb(25, 121, 254);
 
+.main-body{
+    min-height: 85vh;
+}
+
 a {
     &:hover {
         color: $primary  !important;

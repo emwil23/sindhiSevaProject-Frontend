@@ -17,11 +17,11 @@ const App: FC = () => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <HomeComponent/>
+      element: <HomeComponent />
     },
     {
       path: '/aboutUs',
-      element: <React.Suspense fallback={<LoadingService />}><AboutUsComponent/></React.Suspense>
+      element: <React.Suspense fallback={<LoadingService />}><AboutUsComponent /></React.Suspense>
     },
     {
       path: '/editprofile',
@@ -37,22 +37,22 @@ const App: FC = () => {
     },
     {
       path: '*',
-      element: <React.Suspense fallback={<LoadingService />}><NotFoundComponent /></React.Suspense> 
+      element: <React.Suspense fallback={<LoadingService />}><NotFoundComponent /></React.Suspense>
     },
     {
       path: '/auth/*',
       children: [
         {
           path: 'register',
-          element: <React.Suspense fallback={<LoadingService />}><RegisterComponent /></React.Suspense> 
+          element: <React.Suspense fallback={<LoadingService />}><RegisterComponent /></React.Suspense>
         },
         {
           path: 'login',
-          element: <React.Suspense fallback={<LoadingService />}><LoginComponent /></React.Suspense> 
+          element: <React.Suspense fallback={<LoadingService />}><LoginComponent /></React.Suspense>
         },
         {
           path: '*',
-          element:<React.Suspense fallback={<LoadingService />}><NotFoundComponent /></React.Suspense> 
+          element: <React.Suspense fallback={<LoadingService />}><NotFoundComponent /></React.Suspense>
         }
       ]
     }
@@ -61,11 +61,9 @@ const App: FC = () => {
   return (
     <React.Fragment>
       <HeaderComponent />
-      {routes}
-      {/* <Routes>
-        <Route path='/' element={<HomeComponent />} />
-        <Route path='*' element={<NotFoundComponent />} />
-      </Routes> */}
+      <div className='main-body'>
+        {routes}
+      </div>
       <FooterComponent />
     </React.Fragment>
   )
