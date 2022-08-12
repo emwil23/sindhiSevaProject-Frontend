@@ -10,6 +10,7 @@ import { useDispatch} from 'react-redux';
 import { loggedInTrue } from '../../app/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { pushUserDetails } from '../../app/slices/userSlice';
+import { AxiosError } from 'axios';
 
 const LoginComponent: FC = () => {
 
@@ -22,8 +23,9 @@ const LoginComponent: FC = () => {
       openNotification('Logged In');
       dispatch(loggedInTrue());
       navigate('/', { replace: true });
-    }).catch(() => {
-      openNotification('Some problem occured while logging in')
+    }).catch((err : AxiosError) => {
+      let error:any = err.response?.data;
+      openNotification(error.error.message);
     })
   }
 

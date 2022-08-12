@@ -31,18 +31,22 @@ const RegisterComponent: FC = () => {
   const onFinish = (values: any) => {
     if(values.dob){
       let dob = new Date(values?.dob);
-      values.dob = dob.getDate();      
+      values.dob = `${dob.getFullYear()}-${dob.getMonth() < 10 ? `0${dob.getMonth()}` : dob.getMonth()}-${dob.getDate()}`
     }
     if(values.anniversary){
       let date = new Date(values.anniversary);
-      values.anniversary = date;
+      values.anniversary = `${date.getFullYear()}-${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate()}`
     }
+    delete values.confirmPassword;
     postRequest('/signup', values).then(res => {
+      if(res.isExisting){
+        return openNotification('User with Email already exists');
+      }
       dispatch(loggedInTrue());
       dispatch(pushUserDetails(res));
       openNotification('SignUp Successful');
       navigate('/', { replace: true});
-    }).catch(() => openNotification('Problem occured while signup'))
+    }).catch(() => openNotification('Problem occured while signup', 'Retry after some time.'))
   };
 
 
@@ -70,7 +74,7 @@ const RegisterComponent: FC = () => {
               <div className="col-md-6">
                 <Form.Item
                   label="Last Name"
-                  name="lasttName"
+                  name="lastName"
                   rules={[
                     {
                       required: true,
@@ -328,7 +332,7 @@ const RegisterComponent: FC = () => {
                           {
                             required: true,
                             message: "Please enter member UID",
-                            len: 8
+                            len: 9
                           },
                         ]}
                         className='col-5'
