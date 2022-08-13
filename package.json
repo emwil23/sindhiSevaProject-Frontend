@@ -14,6 +14,7 @@
     "@types/react-dom": "^18.0.6",
     "antd": "^4.22.4",
     "axios": "^0.27.2",
+    "lodash": "^4.17.21",
     "lottie-react": "^2.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -48,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.182",
     "node-sass": "^7.0.1"
   }
 }

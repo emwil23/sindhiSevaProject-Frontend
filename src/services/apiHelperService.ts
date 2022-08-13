@@ -1,7 +1,13 @@
 import axios from './axios';
+import qs from 'qs';
 
-export const getRequest = (url: string): Promise<any> => {
-    return axios.get(url).then(res => res.data);
+export const getRequest = (url: string, params?: any): Promise<any> => {
+    return axios.get(url, {
+        params: params,
+        paramsSerializer: params => {
+            return qs.stringify(params)
+        }
+    }).then(res => res.data);
 }
 
 export const postRequest = (url: string, data?: any): Promise<any> => {

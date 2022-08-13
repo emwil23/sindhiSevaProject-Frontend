@@ -1,6 +1,8 @@
+import TableComponent from "../../TableComponent";
+
 const DirectoriesComponent = () => {
   return (
-    <div>DirectoriesComponent</div>
+    <TableComponent />
   )
 }
 
