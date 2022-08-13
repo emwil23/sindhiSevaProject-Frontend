@@ -29,11 +29,11 @@ const RegisterComponent: FC = () => {
   }
 
   const onFinish = (values: any) => {
-    if(values.dob){
+    if (values.dob) {
       let dob = new Date(values?.dob);
       values.dob = `${dob.getFullYear()}-${dob.getMonth() < 10 ? `0${dob.getMonth()}` : dob.getMonth()}-${dob.getDate() < 10 ? `0${dob.getDate()}` : dob.getDate()}`
     }
-    if(values.anniversary){
+    if (values.anniversary) {
       let date = new Date(values.anniversary);
       values.anniversary = `${date.getFullYear()}-${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`
     }
