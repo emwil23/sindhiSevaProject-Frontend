@@ -124,6 +124,7 @@ const TableComponent: FC = () => {
                     onClick={() => clearFilters && handleReset(setSelectedKeys, confirm)}
                     size="small"
                     style={{ width: 90 }}
+                    danger
                 >
                     Reset
                 </Button>
@@ -155,6 +156,7 @@ const TableComponent: FC = () => {
                     onClick={() => clearFilters && handleReset(setSelectedKeys, confirm)}
                     size='small'
                     className='mt-1 w-100'
+                    danger
                 >
                     Reset
                 </Button>
@@ -170,28 +172,31 @@ const TableComponent: FC = () => {
             title: 'First Name',
             dataIndex: 'firstName',
             sorter: true,
-            width: '20%',
             ...getColumnSearchProps('firstName')
         },
         {
             title: 'Last Name',
             dataIndex: 'lastName',
             sorter: true,
-            width: '20%',
             ...getColumnSearchProps('lastName')
         },
         {
             title: 'Gender',
             dataIndex: 'gender',
-            width: '20%',
             ...getColumnFilterProps('gender', 'Gender', [{ label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' }, { label: 'Others', value: 'Others' }])
         },
         {
             title: 'Email',
             dataIndex: 'email',
-            width: '20%',
             ...getColumnSearchProps('email')
         },
+        {
+            title: 'Action',
+            key: 'operation',
+            fixed: 'right',
+            width: 100,
+            render: () => <p>View</p>
+        }
     ];
 
     return (
@@ -201,6 +206,7 @@ const TableComponent: FC = () => {
             dataSource={data}
             pagination={pagination}
             loading={loading}
+            scroll={{ x: 1300 }}
             onChange={handleTableChange}
         />
     );

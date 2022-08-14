@@ -25,7 +25,9 @@ const HeaderComponent: FC = () => {
 
   return (
     <header className="d-flex align-items-center justify-content-center justify-content-md-between py-2 mx-3">
-      <Link to={'/'} className='col-md-4 text-dark fw-light fs-5'>Sindhi Seva Samiti</Link>
+      <div className='col-md-4'>
+        <Link to={'/'} className='text-dark fw-light fs-5'>Sindhi Seva Samiti</Link>
+      </div>
 
       <Space split={<Divider type="vertical" />}>
         <Link to={'/'} className='text-dark'>Home</Link>
