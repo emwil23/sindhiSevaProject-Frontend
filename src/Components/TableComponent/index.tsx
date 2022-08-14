@@ -1,4 +1,4 @@
-import { EyeOutlined, SearchOutlined } from '@ant-design/icons';
+import { EyeTwoTone, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Select, Table } from 'antd';
 import type { ColumnType, ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
@@ -212,7 +212,7 @@ const TableComponent: FC = () => {
             key: 'operation',
             fixed: 'right',
             width: 100,
-            render: () => <EyeOutlined className='fs-5' onClick={() => ''} />
+            render: () => <EyeTwoTone className='fs-5' onClick={() => ''} />
         }
     ];
 
