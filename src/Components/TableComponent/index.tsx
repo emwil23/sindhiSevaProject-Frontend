@@ -1,8 +1,11 @@
-import { Table } from 'antd';
-import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Input, Select, Table } from 'antd';
+import type { ColumnType, ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import { useEffect, useState, FC } from 'react';
 import { getRequest } from '../../services/apiHelperService';
+
+const exactMatch = 'gender';
 
 
 interface DataType {
@@ -28,23 +31,30 @@ let totalCount: any = getRequest('/members/count').then(({ count }) => {
     totalCount = count as number;
 })
 
-// const whereBuilder = (whereObject: any | undefined) => {
-//     let where:any = []
-//     if(whereObject){
-//     Object.entries(whereObject).map(([key, value]) => {
-//        if(Array.isArray(value)){
-//         let orObject:any = {};
-//          value.map((value) => {
-//             orObject = { or: [{}] }
-//          })
-//        }
-//        else {
-//             where.push({ [key]: value })
-//        }
-//     })
-//     }
-//     console.log(where);
-// }
+const whereBuilder = (whereObject: any | undefined) => {
+    let andObject: any = [];
+    let where: any = {}
+    if (whereObject) {
+        Object.entries(whereObject).map(([key, value]) => {
+            if (Array.isArray(value)) {
+                return value.map((value) => {
+                    if (key.includes(exactMatch))
+                        return andObject.push({ [key]: value });
+                    else
+                        return andObject.push({ [key]: { "like": value, "options": "i" } });
+                })
+            }
+            else {
+                if (value)
+                    return andObject.push({ [key]: value })
+            }
+        })
+    }
+    Object.assign(where, { and: andObject });
+    if (where.and.length !== 0)
+        return where;
+    return undefined;
+}
 
 const TableComponent: FC = () => {
     const [data, setData] = useState();
@@ -53,26 +63,20 @@ const TableComponent: FC = () => {
 
     const fetchData = (params: Params = {}) => {
 
-        let myParams: any = {
+        let filterParams: any = {
             "limit": params.pagination?.pageSize as number,
             "order": `${params?.sortField || 'dateCreated'} ${params?.sortOrder === 'descend' ? 'DESC' : params?.sortOrder === 'ascend' ? 'ASC' : 'DESC'}`,
             "skip": (params.pagination?.pageSize as number * (params.pagination?.current as number - 1)),
-            // "where" : whereBuilder(params.where)
+            "where": whereBuilder(params.where)
         }
 
-        let filterParams: any = myParams;
-
-        console.log(params);
-
         setLoading(true);
-        getRequest('/members', { filter: filterParams }).then((data) => {
+        getRequest('/members', { filter: filterParams }).then((data: any) => {
             setData(data);
-            console.log(data);
-
             setLoading(false);
             setPagination({
                 ...params.pagination,
-                total: totalCount
+                total: filterParams.where === undefined ? totalCount : data.length
             })
         });
     };
@@ -86,8 +90,6 @@ const TableComponent: FC = () => {
         filters: Record<string, FilterValue | null>,
         sorter: SorterResult<any>,
     ) => {
-        console.log(sorter, filters);
-
         fetchData({
             sortField: sorter.field as string,
             sortOrder: sorter.order as string,
@@ -96,40 +98,99 @@ const TableComponent: FC = () => {
         });
     };
 
+    const handleReset = (setSelectedKeys: any, confirm: any) => {
+        setSelectedKeys('');
+        return confirm();
+    };
+
+    const getColumnSearchProps = (dataIndex: string): ColumnType<DataType> => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    placeholder={`Search Name`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    style={{ marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    onClick={() => confirm()}
+                    size='small'
+                    style={{ width: 90 }}
+                    className='me-1'
+                >
+                    Search
+                </Button>
+                <Button
+                    onClick={() => clearFilters && handleReset(setSelectedKeys, confirm)}
+                    size="small"
+                    style={{ width: 90 }}
+                >
+                    Reset
+                </Button>
+            </div>
+        ),
+        onFilter: (value, record: any) => {
+            return record[dataIndex].toLocaleLowerCase().includes((value as string).toLocaleLowerCase());
+        },
+        filterIcon: (filtered: boolean) => (
+            <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+    });
+
+    const getColumnFilterProps = (dataIndex: string, label: string, values: object[]): ColumnType<DataType> => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <div className='mb-1'>{`Select ${label}`}</div>
+                <Select 
+                    placeholder={`Select ${label}`} 
+                    value={selectedKeys} 
+                    onChange={(value: any) => { setSelectedKeys(value ? [value] : ['']); confirm(); }}
+                    className='w-100'
+                >
+                    {values.map((option: any, index) => {
+                        return <Select.Option key={index} value={option.value}>{option.label}</Select.Option>
+                    })}
+                </Select>
+                <Button
+                    onClick={() => clearFilters && handleReset(setSelectedKeys, confirm)}
+                    size='small'
+                    className='mt-1 w-100'
+                >
+                    Reset
+                </Button>
+            </div>
+        ),
+        onFilter: (value, record: any) => {
+            return record[dataIndex].toLocaleLowerCase().includes((value as string).toLocaleLowerCase());
+        },
+    })
+
     const columns: ColumnsType<DataType> = [
-        // {
-        //     title: 'Name',
-        //     dataIndex: 'name',
-        //     sorter: true,
-        //     render: name => { console.log(name); return ''},
-        //     width: '20%',
-        // },
         {
             title: 'First Name',
             dataIndex: 'firstName',
             sorter: true,
-            width: '20%'
+            width: '20%',
+            ...getColumnSearchProps('firstName')
         },
         {
             title: 'Last Name',
             dataIndex: 'lastName',
             sorter: true,
-            width: '20%'
+            width: '20%',
+            ...getColumnSearchProps('lastName')
         },
         {
             title: 'Gender',
             dataIndex: 'gender',
-            // filters: [
-            //     { text: 'Male', value: 'male' },
-            //     { text: 'Female', value: 'female' },
-            //     { text: 'Others', value: 'Others' }
-            // ],
             width: '20%',
+            ...getColumnFilterProps('gender', 'Gender', [{ label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' }, { label: 'Others', value: 'Others' }])
         },
         {
             title: 'Email',
             dataIndex: 'email',
             width: '20%',
+            ...getColumnSearchProps('email')
         },
     ];
 

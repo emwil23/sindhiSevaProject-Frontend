@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC} from 'react';
 
 const HomeComponent: FC = () => {
   return (
@@ -6,4 +6,4 @@ const HomeComponent: FC = () => {
   )
 }
 
-export default HomeComponent
+export default HomeComponent;
