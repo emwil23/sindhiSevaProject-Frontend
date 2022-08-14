@@ -1,4 +1,4 @@
-import { SearchOutlined } from '@ant-design/icons';
+import { EyeOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Select, Table } from 'antd';
 import type { ColumnType, ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
@@ -12,7 +12,18 @@ interface DataType {
     firstName: string,
     lastName: string,
     gender: string,
-    email: string
+    email: string,
+    dob: Date,
+    profession: string,
+    mobile: number,
+    blood: string,
+    qualification: string,
+    maritalStatus: string,
+    active: string,
+    members: any,
+    adminVerified: string,
+    anniversary: Date,
+    address: string,
 }
 
 
@@ -47,6 +58,7 @@ const whereBuilder = (whereObject: any | undefined) => {
             else {
                 if (value)
                     return andObject.push({ [key]: value })
+                return '';
             }
         })
     }
@@ -191,11 +203,16 @@ const TableComponent: FC = () => {
             ...getColumnSearchProps('email')
         },
         {
+            title: 'Profession',
+            dataIndex: 'profession',
+            ...getColumnSearchProps('profession')
+        },
+        {
             title: 'Action',
             key: 'operation',
             fixed: 'right',
             width: 100,
-            render: () => <p>View</p>
+            render: () => <EyeOutlined className='fs-5' onClick={() => ''} />
         }
     ];
 
