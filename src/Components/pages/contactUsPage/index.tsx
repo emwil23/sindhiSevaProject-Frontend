@@ -1,6 +1,7 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import TextArea from "antd/lib/input/TextArea";
+// import GoogleMaps from "../contactUsPage/GoogleMaps";
 
 const ContactUsComponent = () => {
   return (
@@ -43,7 +44,10 @@ const ContactUsComponent = () => {
             </div>
           </Form>
         </div>
-        <div className="col-md-6">sadadsdfs</div>
+        <div className="col-md-6">
+          Google map
+          {/* <GoogleMaps /> */}
+        </div>
       </div>
     </div>
   );
