@@ -3,9 +3,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './Components/App';
 import { BrowserRouter } from 'react-router-dom';
-import { store } from './Components/app/store';
 import { Provider } from 'react-redux';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { persistor, store } from './Components/app/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import LoadingService from './services/loadingService';
 
 
 const root = ReactDOM.createRoot(
@@ -14,9 +16,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+      <PersistGate loading={<LoadingService />} persistor={persistor}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );
