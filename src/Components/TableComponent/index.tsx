@@ -1,5 +1,5 @@
-import { EyeTwoTone, SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Select, Table, Tag } from "antd";
+import { EyeTwoTone, SearchOutlined, SolutionOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Select, Space, Table, Tag } from "antd";
 import type {
   ColumnType,
   ColumnsType,
@@ -8,6 +8,7 @@ import type {
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import { useEffect, useState, FC } from "react";
 import { getRequest } from "../../services/apiHelperService";
+import ViewComponent from '../pages/DirectoriesPage/ViewComponent';
 
 const exactMatch = [
   "gender",
@@ -97,6 +98,8 @@ const TableComponent: FC = () => {
     current: 1,
     pageSize: 10,
   });
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const fetchData = (params: Params = {}) => {
     let filterParams: any = {
@@ -273,9 +276,7 @@ const TableComponent: FC = () => {
     {
       title: "Active",
       dataIndex: "active",
-      render: (active: string) => (
-        <Tag color={"yellow"}>{active.toUpperCase()}</Tag>
-      ),
+      render: (active: string) => active.match('Inactive') ? <Tag color='red'>{active.toUpperCase()}</Tag> : <Tag color='green'>{active.toUpperCase()}</Tag>
     },
     {
       title: "Qualification",
@@ -303,23 +304,50 @@ const TableComponent: FC = () => {
     },
     {
       title: "Action",
-      key: "operation",
+      key: "action",
       fixed: "right",
       width: 100,
-      render: () => <EyeTwoTone className="fs-5" onClick={() => ""} />,
+      render: (_, record) => <Space size='middle'>
+        <EyeTwoTone className="fs-5" onClick={() => confirm(record.firstName, record)} />
+        {/* <DeleteTwoTone className='fs-5' onClick={() => ''} /> */}
+      </Space> 
     },
   ];
 
+  const confirm = (title?: string, records?:any) => {
+    Modal.info({
+      title: `${title} Information`,
+      icon: <SolutionOutlined style={{ color: 'blue-4' }} />,
+      content: <ViewComponent items={records} />,
+      okText: 'CLOSE',
+      width: 1000
+    });
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: ( onSelectChange:any , selectedRow:any ) => {
+        setSelectedRowKeys(onSelectChange);
+        setSelectedRows(selectedRow);
+    },
+  };
+  
+  const hasSelected = selectedRowKeys.length > 0;
+
   return (
+    <>
+    <Button disabled={!hasSelected} onClick={() => {}}>Export</Button>
     <Table
       columns={columns}
       rowKey={(record) => record.id}
+      rowSelection={rowSelection}
       dataSource={data}
       pagination={pagination}
       loading={loading}
-      scroll={{ x: 1300 }}
+      scroll={{ x: 2000 }}
       onChange={handleTableChange}
     />
+    </>
   );
 };
 
