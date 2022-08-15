@@ -10,6 +10,7 @@ import { useEffect, useState, FC } from "react";
 import { getRequest } from "../../services/apiHelperService";
 import { exportCSVFile } from '../../services/excelService';
 import ViewComponent from '../pages/directoriesPage/ViewComponent';
+import { professionOption, qualificationOption } from '../selectOptions';
 
 const exactMatch = [
   "gender",
@@ -69,20 +70,6 @@ const whereBuilder = (whereObject: any | undefined) => {
   if (where.and.length !== 0) return where;
   return undefined;
 };
-
-const professionOption: object[] = [
-  { label: "Doctor", value: "Doctor" },
-  { label: "Engineer", value: "Engineer" },
-  { label: "Other", value: "Other" },
-];
-
-const qualificationOption: object[] = [
-  { label: "10th", value: "10th" },
-  { label: "12th", value: "12th" },
-  { label: "Graduate", value: "Graduate" },
-  { label: "PostGraduate", value: "PostGraduate" },
-  { label: "PHD", value: "PHD" },
-];
 
 const maritalStatusOptions: object[] = [
   { label: "Married", value: "Married" },
