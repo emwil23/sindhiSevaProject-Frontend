@@ -31,7 +31,7 @@ const HeaderComponent: FC = () => {
 
       <Space split={<Divider type="vertical" />}>
         <Link to={'/'} className='text-dark'>Home</Link>
-        <Link to={'/directories'} className='text-dark'>Directories</Link>
+        {userLoggedIn ? <Link to={'/directories'} className='text-dark'>Directories</Link> : null }
         <Link to={'/aboutUs'} className='text-dark'>About</Link>
         <Link to={'/contactUs'} className='text-dark'>ContatctUs</Link>
       </Space>

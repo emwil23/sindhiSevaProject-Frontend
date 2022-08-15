@@ -5,6 +5,8 @@ import App from './Components/App';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './Components/app/store';
 import { Provider } from 'react-redux';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

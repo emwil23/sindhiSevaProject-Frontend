@@ -2,7 +2,7 @@
 
 $primary : rgb(25, 121, 254);
 
-.main-body{
+.main-body {
     min-height: 85vh;
 }
 
@@ -14,4 +14,8 @@ a {
 
 footer {
     background-color: $primary  !important;
+}
+
+.map-container {
+    height: 400px;
 }

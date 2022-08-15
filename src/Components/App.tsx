@@ -9,7 +9,6 @@ const NotFoundComponent = React.lazy(() => import('./pages/notfoundPage'));
 const RegisterComponent = React.lazy(() => import('./pages/registerPage'));
 const LoginComponent = React.lazy(() => import('./pages/loginPage'));
 const AboutUsComponent = React.lazy(() => import('./pages/aboutPage'));
-const EditProfileComponent = React.lazy(() => import('./pages/editProfilePage'));
 const ContactUsComponent = React.lazy(() => import('./pages/contactUsPage'));
 const DirectoriesComponent = React.lazy(() => import('./pages/directoriesPage'));
 const ProfileComponent = React.lazy(() => import('./pages/porfilePage'));
@@ -26,10 +25,6 @@ const App: FC = () => {
       element: <React.Suspense fallback={<LoadingService />}><AboutUsComponent /></React.Suspense>
     },
     {
-      path: '/editprofile',
-      element: <React.Suspense fallback={<LoadingService />}><EditProfileComponent /></React.Suspense>
-    },
-    {
       path: '/contactUs',
       element: <React.Suspense fallback={<LoadingService />}><ContactUsComponent /></React.Suspense>
     },
@@ -39,7 +34,7 @@ const App: FC = () => {
     },
     {
       path: '/profile',
-      element: <React.Suspense fallback={<LoadingService />}><ProfileComponent /></React.Suspense>
+      element: <ProtectedRoute><React.Suspense fallback={<LoadingService />}><ProfileComponent /></React.Suspense></ProtectedRoute>
     },
     {
       path: '*',
