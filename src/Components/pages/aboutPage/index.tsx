@@ -1,14 +1,12 @@
-import { Avatar, Card, Popover, Typography } from "antd";
+import { Avatar, Card } from "antd";
 import Meta from "antd/lib/card/Meta";
 import "./index.scss";
-import myImage from "../../../assets/image.jpg";
 
-const content = (
-  <Typography>
-    To establish, maintain, develop and aid Schools, Colleges, Polytechnics and
-    other educational institutions, including vocational training centres.
-  </Typography>
-);
+// const content = (
+//   <Typography>
+//     To establish, maintain, develop and aid Schools, Colleges, Polytechnics and
+//     other educational institutions, including vocational training centres.
+//   </Typography>
 
 const AboutComponent = () => {
   return (
@@ -27,43 +25,21 @@ const AboutComponent = () => {
       {/* card  */}
       <div className="row">
         <div className="col-md-3">
-          <Popover content={content} placement="right" title="Eduation">
-            <Card
-              // hoverable={true}
-              className="card"
-              cover={<img alt="example" src={myImage} />}
-            >
-              <Meta title="Card title" />
-            </Card>
-          </Popover>
-        </div>
-
-        <div className="col-md-3">
           <Card
             hoverable={true}
             className="card"
             cover={
               <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                alt="Education"
+                src="https://leverageedublog.s3.ap-south-1.amazonaws.com/blog/wp-content/uploads/2019/11/23171737/Modern-Education.png"
               />
             }
           >
-            <Meta title="Eye Donation" description="this is discription" />
-          </Card>
-        </div>
-        <div className="col-md-3">
-          <Card
-            hoverable={true}
-            className="card"
-            cover={
-              <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-              />
-            }
-          >
-            <Meta title="Eye Donation" description=" this is discription" />
+            <Meta
+              className="meta"
+              title="Education"
+              description="    To establish, maintain, develop and aid Schools, Colleges, Polytechnics and other educational institutions, including vocational training centres"
+            />
           </Card>
         </div>
 
@@ -73,12 +49,54 @@ const AboutComponent = () => {
             className="card"
             cover={
               <img
-                alt="example"
-                src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                alt="Eye Donation"
+                src="https://d1avenlh0i1xmr.cloudfront.net/e49deb5a-f290-423c-81ed-3061e95095ac/eye-donation.jpg"
               />
             }
           >
-            <Meta title="Eye Donation" description="this is discription" />
+            <Meta
+              className="meta"
+              title="Eye Donation"
+              description="Working constantly and diligently is this subcommittee in convincing the families of departed souls to donate eyes and help people from darkness to light."
+            />
+          </Card>
+        </div>
+        <div className="col-md-3">
+          <Card
+            hoverable={true}
+            className="card"
+            cover={
+              <img
+                alt="Scholarships"
+                src="https://uniteduniversity.edu.in/images/scholarships.png"
+              />
+            }
+          >
+            <Meta
+              className="meta"
+              title="Scholarships"
+              description="Sindhi Seva Samiti  have continued their main ideology of the service of RETURN by liberally granting scholarships to needy and deserving students regardless of religion or caste."
+            />
+          </Card>
+        </div>
+
+        <div className="col-md-3">
+          <Card
+            hoverable={true}
+            className="card"
+            cover={
+              <img
+                alt="Needy Family Welfare"
+                src="https://cf.ltkcdn.net/save/images/std-xs/208280-340x227-paperfamily.jpg"
+              />
+            }
+          >
+            <Meta
+              className="meta"
+              title="Needy Family Welfare"
+              description="Our Samiti distributes Wheat to 103 needy and under-privileged families every month.
+              Family welfare includes not only planning of birth, but they welfare of wholes family."
+            />
           </Card>
         </div>
       </div>
