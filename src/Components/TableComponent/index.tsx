@@ -9,7 +9,7 @@ import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import { useEffect, useState, FC } from "react";
 import { getRequest } from "../../services/apiHelperService";
 import { exportCSVFile } from '../../services/excelService';
-import ViewComponent from '../pages/DirectoriesPage/ViewComponent';
+import ViewComponent from '../pages/directoriesPage/ViewComponent';
 
 const exactMatch = [
   "gender",

@@ -10,7 +10,8 @@ const LoginComponent = React.lazy(() => import('./pages/loginPage'));
 const AboutUsComponent = React.lazy(() => import('./pages/aboutPage'));
 const EditProfileComponent = React.lazy(() => import('./pages/editProfilePage'));
 const ContactUsComponent = React.lazy(() => import('./pages/contactUsPage'));
-const DirectoriesComponent = React.lazy(() => import('./pages/DirectoriesPage'));
+const DirectoriesComponent = React.lazy(() => import('./pages/directoriesPage'));
+const ProfileComponent = React.lazy(() => import('./pages/porfilePage'));
 
 
 const App: FC = () => {
@@ -34,6 +35,10 @@ const App: FC = () => {
     {
       path: '/directories',
       element: <React.Suspense fallback={<LoadingService />}><DirectoriesComponent /></React.Suspense>
+    },
+    {
+      path: '/profile',
+      element: <React.Suspense fallback={<LoadingService />}><ProfileComponent /></React.Suspense>
     },
     {
       path: '*',

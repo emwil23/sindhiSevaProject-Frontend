@@ -39,7 +39,7 @@ const HeaderComponent: FC = () => {
       <div className="col-md-4 text-end">
         <Button type='text' hidden={userLoggedIn} onClick={() => navigate('/auth/login')}>LogIn</Button>
         <Button type='primary' hidden={userLoggedIn} onClick={() => navigate('/auth/register')}>SignUp</Button>
-        <Button hidden={!userLoggedIn}>{userDetails?.firstName+' '+userDetails?.lastName}</Button>
+        <Button hidden={!userLoggedIn} onClick={() => navigate('/profile')}>{userDetails?.firstName+' '+userDetails?.lastName}</Button>
         <Button type='text' size='small' title='Logout' hidden={!userLoggedIn} onClick={() => logoutAction()}><LogoutOutlined /></Button>
       </div>
     </header>
