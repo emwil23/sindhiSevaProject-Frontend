@@ -8,6 +8,7 @@ import type {
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import { useEffect, useState, FC } from "react";
 import { getRequest } from "../../services/apiHelperService";
+import { exportCSVFile } from '../../services/excelService';
 import ViewComponent from '../pages/DirectoriesPage/ViewComponent';
 
 const exactMatch = [
@@ -100,6 +101,20 @@ const TableComponent: FC = () => {
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+
+  let headers:any = [
+    { label: 'First Name', value: 'firstName'},
+    { label: 'Last Name', value: 'lastName'},
+    { label: 'Date of Birth', value: 'dob'},
+    { label: 'Gender', value: 'gender'},
+    { label: 'Email', value: 'email'},
+    { label: 'Profession', value: 'profession'},
+    { label: 'Qualification', value: 'qualification'},
+    { label: 'Marital Status', value: 'maritalStatus'},
+    { label: 'Address', value: 'address'},
+    { label: 'Blood Group', value: 'blood'},
+    { label: 'Mobile No.', value: 'mobile'},
+  ]
 
   const fetchData = (params: Params = {}) => {
     let filterParams: any = {
@@ -332,11 +347,13 @@ const TableComponent: FC = () => {
     },
   };
   
-  const hasSelected = selectedRowKeys.length > 0;
+  const hasSelected = selectedRowKeys.length < 11;
 
   return (
     <>
-    <Button disabled={!hasSelected} onClick={() => {}}>Export</Button>
+    <div className='text-end my-2 mx-1'>
+        <Button disabled={!hasSelected || selectedRowKeys.length === 0} onClick={() => { if(hasSelected) exportCSVFile(headers, selectedRows, 'Records') }}>Export</Button>
+    </div>
     <Table
       columns={columns}
       rowKey={(record) => record.id}
