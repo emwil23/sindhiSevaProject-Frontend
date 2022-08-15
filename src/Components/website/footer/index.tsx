@@ -24,15 +24,15 @@ const FooterComponent: FC = () => {
         </div>
         <div className="col-md-4 text-center">
           <FacebookOutlined
-            className="text-white me-3"
+            className="text-white me-3 fs-5"
             onClick={() =>
               (window.location.href =
                 "https://www.facebook.com/Sindhi-Seva-Samiti-Bangalore-1935940370031884/")
             }
           />
-          <LinkedinOutlined className="text-white me-3" />
+          <LinkedinOutlined className="text-white me-3 fs-5" />
           <WhatsAppOutlined
-            className="text-white me-3"
+            className="text-white me-3 fs-5"
             onClick={() =>
               (window.location.href =
                 "https://api.whatsapp.com/send?phone=919845040586")
