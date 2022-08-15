@@ -4,6 +4,7 @@ import HomeComponent from './pages/homePage';
 import HeaderComponent from './website/header';
 import FooterComponent from './website/footer';
 import LoadingService from '../services/loadingService';
+import ProtectedRoute from '../services/protectedRoute';
 const NotFoundComponent = React.lazy(() => import('./pages/notfoundPage'));
 const RegisterComponent = React.lazy(() => import('./pages/registerPage'));
 const LoginComponent = React.lazy(() => import('./pages/loginPage'));
@@ -34,7 +35,7 @@ const App: FC = () => {
     },
     {
       path: '/directories',
-      element: <React.Suspense fallback={<LoadingService />}><DirectoriesComponent /></React.Suspense>
+      element: <ProtectedRoute><React.Suspense fallback={<LoadingService />}><DirectoriesComponent /></React.Suspense></ProtectedRoute>
     },
     {
       path: '/profile',
