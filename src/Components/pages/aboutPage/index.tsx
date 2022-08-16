@@ -18,16 +18,6 @@ const AboutComponent = () => {
           Expansion is Life, Contraction is Death.
         </span>
       </h1>
-
-      {/* <div className="text-center my-3 ">
-        <span className="fs-2 mt-0"style={{ color: "#0 050b3" }}>
-          Strength is Life, Weakness is Death.
-        </span>
-        <span className="fs-2 mb-0" style={{ color: "#69c0ff" }}>
-          Expansion is Life, Contraction is Death.
-        </span>
-      </div> */}
-
       <p className="fs-6 text-center my-md-5">
         Sindhi Seva Samiti was founded in 1956 as a social organization by the
         Sindhis of Bangalore to serve the Sindhi community in Bangalore and also
