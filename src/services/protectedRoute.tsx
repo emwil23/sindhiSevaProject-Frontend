@@ -7,7 +7,6 @@ interface Props {
 }
 
 const ProtectedRoute: FC<Props> = ({ children }) => {
-  
     const userLoggedIn = useSelector((state: any) => state.isLoggedIn.userLoggedIn);
     const redirectPath = '/';
   return userLoggedIn ? children : <Navigate to={redirectPath} replace />;

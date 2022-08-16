@@ -1,4 +1,4 @@
-import { EyeTwoTone, SearchOutlined, SolutionOutlined } from '@ant-design/icons';
+import { ExportOutlined, EyeTwoTone, SearchOutlined, SolutionOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Select, Space, Table, Tag } from "antd";
 import type {
   ColumnType,
@@ -339,7 +339,7 @@ const TableComponent: FC = () => {
   return (
     <>
     <div className='text-end my-2 mx-1'>
-        <Button disabled={!hasSelected || selectedRowKeys.length === 0} onClick={() => { if(hasSelected) exportCSVFile(headers, selectedRows, 'Records') }}>Export</Button>
+        <Button disabled={!hasSelected || selectedRowKeys.length === 0} onClick={() => { if(hasSelected) exportCSVFile(headers, selectedRows, 'Records') }}><ExportOutlined />Export</Button>
     </div>
     <Table
       columns={columns}
