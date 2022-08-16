@@ -15,7 +15,10 @@ const ViewComponent: FC<Props> = (props: Props) => {
     const items: any = props.items;
 
     const findRelation = (members: any[]) => {
-        if (!members) return;
+        if (!members) { 
+            setLoading(false);
+            return;
+        };
         members.forEach((value: any) => {
             fetchRelation(value.relationId, value.relationName).then(() => {
                 if(items?.members.length === relationData.length)
@@ -62,7 +65,7 @@ const ViewComponent: FC<Props> = (props: Props) => {
                     {items.address}
                 </Descriptions.Item>
             </Descriptions>
-            <Descriptions title="Family">
+            { items?.members ? <Descriptions title="Family">
                 {relationData.map((value: any, index: any) => {
                     return  <>
                                 <Descriptions.Item label='Name' key={index}>{`${value.data.firstName} ${value.data.lastName}`}</Descriptions.Item>
@@ -70,7 +73,8 @@ const ViewComponent: FC<Props> = (props: Props) => {
                                 { items?.anniversary && ['Wife','Husband'].includes(value.relationName) ? <Descriptions.Item label='Anniversary' key={value.data.id}>{new Date(items.anniversary).toDateString()}</Descriptions.Item> : <></>}
                             </>
                 })}
-            </Descriptions>
+            </Descriptions> : null }
+            
         </>
 }
 
