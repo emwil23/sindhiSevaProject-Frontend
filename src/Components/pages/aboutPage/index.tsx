@@ -11,7 +11,23 @@ import "./index.scss";
 const AboutComponent = () => {
   return (
     <div className="container">
-      <h1 className="text-center fw-light my-md-3">Sindhi Seva Samiti</h1>
+      <h1 className="text-center my-md-3" style={{ color: "#096dd9" }}>
+        Strength is Life, Weakness is Death.
+        <br></br>
+        <span className="fw-light" style={{ color: "#69c0ff" }}>
+          Expansion is Life, Contraction is Death.
+        </span>
+      </h1>
+
+      {/* <div className="text-center my-3 ">
+        <span className="fs-2 mt-0"style={{ color: "#0 050b3" }}>
+          Strength is Life, Weakness is Death.
+        </span>
+        <span className="fs-2 mb-0" style={{ color: "#69c0ff" }}>
+          Expansion is Life, Contraction is Death.
+        </span>
+      </div> */}
+
       <p className="fs-6 text-center my-md-5">
         Sindhi Seva Samiti was founded in 1956 as a social organization by the
         Sindhis of Bangalore to serve the Sindhi community in Bangalore and also
@@ -23,6 +39,15 @@ const AboutComponent = () => {
         strength of around 6000 students.
       </p>
       {/* card  */}
+      <div className="text-center mb-3 ">
+        <span className="fs-1 me-2" style={{ color: "#0050b3" }}>
+          Our
+        </span>
+        <span className="fs-1" style={{ color: "#69c0ff" }}>
+          Service
+        </span>
+      </div>
+
       <div className="row">
         <div className="col-md-3">
           <Card
@@ -99,6 +124,15 @@ const AboutComponent = () => {
             />
           </Card>
         </div>
+      </div>
+
+      <div className="text-center my-3 ">
+        <span className="fs-1 me-2" style={{ color: "#0050b3" }}>
+          president
+        </span>
+        <span className="fs-1" style={{ color: "#69c0ff" }}>
+          message
+        </span>
       </div>
 
       <div className="row my-5 align-items-center text-center">

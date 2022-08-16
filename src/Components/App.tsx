@@ -10,7 +10,9 @@ const RegisterComponent = React.lazy(() => import('./pages/registerPage'));
 const LoginComponent = React.lazy(() => import('./pages/loginPage'));
 const AboutUsComponent = React.lazy(() => import('./pages/aboutPage'));
 const ContactUsComponent = React.lazy(() => import('./pages/contactUsPage'));
-const DirectoriesComponent = React.lazy(() => import('./pages/directoriesPage'));
+const DirectoriesComponent = React.lazy(
+  () => import("./pages/DirectoriesPage")
+);
 const ProfileComponent = React.lazy(() => import('./pages/porfilePage'));
 
 
