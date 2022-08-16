@@ -2,12 +2,6 @@ import { Avatar, Card } from "antd";
 import Meta from "antd/lib/card/Meta";
 import "./index.scss";
 
-// const content = (
-//   <Typography>
-//     To establish, maintain, develop and aid Schools, Colleges, Polytechnics and
-//     other educational institutions, including vocational training centres.
-//   </Typography>
-
 const AboutComponent = () => {
   return (
     <div className="container">
