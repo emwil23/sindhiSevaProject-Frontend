@@ -22,7 +22,8 @@ const ProfileComponent = () => {
   }
 
   const onFinishMembers = (value:any) => {
-    updateData('members',value.members);
+    console.log(value.members);
+    
   }
 
   console.log(userDetails);
