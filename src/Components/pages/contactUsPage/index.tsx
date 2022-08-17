@@ -3,26 +3,32 @@ import { Button, Form, Input } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from "react";
+import geoJson from './geoJson.json';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZXdpbGx5IiwiYSI6ImNsNnYxMncyaTAyNjUzZG1lMzFoOWJtcWsifQ.MwTeNszMhkGiCzPgr_zzYA';
 
 const ContactUsComponent = () => {
 
   const mapContainer = useRef(null);
-  const map = useRef(null);
   const [lng] = useState(77.598391);
   const [lat] = useState(13.050423);
-  const [zoom] = useState(17);
+  const [zoom] = useState(13);
 
   useEffect(() => {
-    if (map.current) return; // initialize map only once
-    map.current = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [lng, lat],
       zoom: zoom
     });
-  });
+    // Create default markers
+    geoJson.features.map((feature) =>
+      new mapboxgl.Marker().setLngLat(feature.geometry.coordinates).addTo(map)
+    );
+
+    // Clean up on unmount
+    return () => map.remove();
+  }, []);
 
   return (
     <div className="container my-5">
@@ -65,6 +71,7 @@ const ContactUsComponent = () => {
           </Form>
         </div>
         <div className="col-md-6" >
+          <div className="fw-light fs-4">Where to find us ?</div>
           <div ref={mapContainer} className="map-container" />
         </div>
       </div>

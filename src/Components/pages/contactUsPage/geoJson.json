@@ -1,0 +1,16 @@
+{
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+              "title": "SINDHI COLLEGE",
+              "description": "Knowledge is power"
+            },
+            "geometry": {
+              "coordinates": [77.598391,13.050423],
+              "type": "Point"
+            }
+        }
+    ],
+    "type": "FeatureCollection"
+}
