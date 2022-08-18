@@ -276,7 +276,7 @@ const TableComponent: FC = () => {
       ...getColumnFilterProps("profession", "Profession", professionOption),
     },
     {
-      title: "Active",
+      title: "Status",
       dataIndex: "active",
       render: (active: string) => active.match('Inactive') ? <Tag color='red'>{active.toUpperCase()}</Tag> : <Tag color='green'>{active.toUpperCase()}</Tag>
     },

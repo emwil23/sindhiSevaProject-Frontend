@@ -1,8 +1,8 @@
-import { Button, DatePicker, Form, Input, Select, Tooltip } from "antd";
+import { Button, DatePicker, Form, Input, Modal, Select, Tooltip } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { patchRequest } from "../../../services/apiHelperService";
-import { currentUser } from "../../app/slices/userSlice";
+import { currentUser, currentUserRole } from "../../app/slices/userSlice";
 import { activeOptions, professionOption, qualificationOption, relationsOptions } from "../../selectOptions";
 import { useDispatch } from "react-redux";
 import { pushUserDetails } from "../../app/slices/userSlice";
@@ -12,6 +12,7 @@ import { CopyOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/ico
 
 const ProfileComponent = () => {
   const userDetails = useSelector(currentUser);
+  const userRole = useSelector(currentUserRole);
   const dispatch = useDispatch();
 
   const updateData = async (index: string, value: string) => {
@@ -25,9 +26,56 @@ const ProfileComponent = () => {
       updateData('members',value.members);
   }
 
-  console.log(userDetails);
+  const stepForm = () => {
+   return <Form autoComplete='off' className="my-5">
+      <Form.List name='feedsList'>
+        {(fields, {add, remove}) => (
+          <>
+            {fields.map(({ key, name, ...restField }) => (
+              <div className="row">
+                <Form.Item
+                  {...restField}
+                  name={[name, 'feed']}
+                  rules={[{ required: true, message: 'Missing first name' }]}
+                  className='col-11'
+                >
+                  <Input placeholder="First Name" />
+                </Form.Item>
+                <MinusCircleOutlined onClick={() => remove(name)} className='col-1 mt-2' />
+              </div>
+            ))}
+            <Form.Item>
+              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                Add Feeds
+              </Button>
+            </Form.Item>
+          </>
+        )}
+      </Form.List>
+    </Form>
+  }
+
+  const openModal = (title: string, content: any) => {
+    Modal.info({
+      title: title,
+      content: content,
+      onOk: () => {},
+      width: '50vw'
+    })
+  }
+
+  const adminControls = () => {
+    return ( 
+      <div className="text-center">
+        <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm() )}>Feeds Panel</Button>
+        <Button type='primary' className="w-75 mb-3">Change Video Panel</Button>
+        <Button type='primary' className="w-75 mb-3">Adverisments Panel</Button>
+      </div>
+    )
+  };
+
   return (
-    <div className="row justify-content-center">
+    <div className="row justify-content-center align-items-center">
       <div className="col-md-6">
         <h3>User Information</h3>
         <div className="row mb-2">
@@ -173,7 +221,9 @@ const ProfileComponent = () => {
           </Form>
         </div>
       </div>
-      <div className="col-md-6">Controls</div>
+      <div className="col-md-6">{
+        userRole === 'admin' ? adminControls() : 'Control' 
+      }</div>
     </div>
   )
 }
