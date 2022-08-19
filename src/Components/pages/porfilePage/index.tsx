@@ -1,7 +1,7 @@
-import { Button, DatePicker, Form, Input, Modal, Select, Tooltip } from "antd";
+import { Button, Card, DatePicker, Form, Input, Modal, Select, Tooltip } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { patchRequest } from "../../../services/apiHelperService";
+import { getRequest, patchRequest } from "../../../services/apiHelperService";
 import { currentUser, currentUserRole } from "../../app/slices/userSlice";
 import { activeOptions, professionOption, qualificationOption, relationsOptions } from "../../selectOptions";
 import { useDispatch } from "react-redux";
@@ -9,8 +9,10 @@ import { pushUserDetails } from "../../app/slices/userSlice";
 import { openNotification } from "../../../services/notificationService";
 import Search from "antd/lib/input/Search";
 import { CopyOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 
 const ProfileComponent = () => {
+  const [membersCount, setMembersCount] = useState(0);
   const userDetails = useSelector(currentUser);
   const userRole = useSelector(currentUserRole);
   const dispatch = useDispatch();
@@ -22,14 +24,14 @@ const ProfileComponent = () => {
     }).catch(err => openNotification('Some Problem Occured', 'Please try again later.'))
   }
 
-  const onFinishMembers = (value:any) => {
-      updateData('members',value.members);
+  const onFinishMembers = (value: any) => {
+    updateData('members', value.members);
   }
 
   const stepForm = () => {
-   return <Form autoComplete='off' className="my-5">
+    return <Form autoComplete='off' className="my-5">
       <Form.List name='feedsList'>
-        {(fields, {add, remove}) => (
+        {(fields, { add, remove }) => (
           <>
             {fields.map(({ key, name, ...restField }) => (
               <div className="row">
@@ -59,23 +61,53 @@ const ProfileComponent = () => {
     Modal.info({
       title: title,
       content: content,
-      onOk: () => {},
+      onOk: () => { },
       width: '50vw'
     })
   }
 
+  async function getUsersCount() {
+    await getRequest('/members/count').then(res => {
+      setMembersCount(res.count);
+    })
+  }
+
+  useEffect(() => {
+    getUsersCount();
+  }, [])
+
   const adminControls = () => {
-    return ( 
-      <div className="text-center">
-        <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm() )}>Feeds Panel</Button>
-        <Button type='primary' className="w-75 mb-3">Change Video Panel</Button>
-        <Button type='primary' className="w-75 mb-3">Adverisments Panel</Button>
-      </div>
+    return (
+      <>
+        <div className="text-end mt-4 me-3">
+          <Button>Add members</Button>
+        </div>
+        <div className="mx-5 my-4 row">
+          <div className="col-6">
+          <Card>
+            <div className="row">
+              <div className="col-6 fs-2 fw-light">
+                {membersCount}
+              </div>
+              <div className="col-6">
+                Total Members
+              </div>
+            </div>
+          </Card>
+          </div>
+          <div className="col-6"></div>
+        </div>
+        <div className="text-center">
+          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm())}>Feeds Panel</Button>
+          <Button type='primary' className="w-75 mb-3">Change Video Panel</Button>
+          <Button type='primary' className="w-75 mb-3">Adverisments Panel</Button>
+        </div>
+      </>
     )
   };
 
   return (
-    <div className="row justify-content-center align-items-center">
+    <div className="row justify-content-center ">
       <div className="col-md-6">
         <h3>User Information</h3>
         <div className="row mb-2">
@@ -133,12 +165,12 @@ const ProfileComponent = () => {
           </div>
         </div>
         <div className="row mb-2">
-        <div className="col-md-6">
-              <span>UID</span><br/>
-              <Input defaultValue={userDetails?.uid} readOnly className="w-75" />
-              <Tooltip title="Copy UID">
-                <Button onClick={() =>  navigator.clipboard.writeText(userDetails?.uid) } icon={<CopyOutlined />} />
-              </Tooltip>
+          <div className="col-md-6">
+            <span>UID</span><br />
+            <Input defaultValue={userDetails?.uid} readOnly className="w-75" />
+            <Tooltip title="Copy UID">
+              <Button onClick={() => navigator.clipboard.writeText(userDetails?.uid)} icon={<CopyOutlined />} />
+            </Tooltip>
           </div>
           <div className="col-md-6">
             <span>Profession</span>
@@ -161,47 +193,47 @@ const ProfileComponent = () => {
         </div>
         <div className="mx-1">
           <span className="ms-1">Members</span>
-          <Form initialValues={{ members: userDetails?.members}} onFinish={onFinishMembers} >
+          <Form initialValues={{ members: userDetails?.members }} onFinish={onFinishMembers} >
             <Form.List name="members">
               {(fields, { add, remove }) => (
                 <>
-                  {fields.map(({key, name, ...restField}) => (
+                  {fields.map(({ key, name, ...restField }) => (
                     <div className='row mx-1' key={key}>
-                    <Form.Item
-                      {...restField}
-                      name={[name, "relationId"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter member UID",
-                          min: 8,
-                          max: 9
-                        },
-                      ]}
-                      className='col-5'
-                    >
-                      <Input placeholder="Enter Exsiting member id" />
-                    </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "relationId"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter member UID",
+                            min: 8,
+                            max: 9
+                          },
+                        ]}
+                        className='col-5'
+                      >
+                        <Input placeholder="Enter Exsiting member id" />
+                      </Form.Item>
 
-                    <Form.Item
-                      {...restField}
-                      name={[name, "relationName"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select relation",
-                        },
-                      ]}
-                      className='col-5 ms-1'
-                    >
-                      <Select placeholder='Select Relation'>
-                        {relationsOptions.map((option, index) => {
-                          return <Select.Option value={option} key={index}>{option}</Select.Option>
-                        })}
-                      </Select>
-                    </Form.Item>
-                    <MinusCircleOutlined onClick={() => remove(name)} className='col-1 mt-2' />
-                  </div>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "relationName"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select relation",
+                          },
+                        ]}
+                        className='col-5 ms-1'
+                      >
+                        <Select placeholder='Select Relation'>
+                          {relationsOptions.map((option, index) => {
+                            return <Select.Option value={option} key={index}>{option}</Select.Option>
+                          })}
+                        </Select>
+                      </Form.Item>
+                      <MinusCircleOutlined onClick={() => remove(name)} className='col-1 mt-2' />
+                    </div>
                   ))}
                   <Form.Item>
                     <Button
@@ -222,7 +254,7 @@ const ProfileComponent = () => {
         </div>
       </div>
       <div className="col-md-6">{
-        userRole === 'admin' ? adminControls() : 'Control' 
+        userRole === 'admin' ? adminControls() : 'Control'
       }</div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { ExportOutlined, EyeTwoTone, SearchOutlined, SolutionOutlined } from '@ant-design/icons';
+import { DeleteTwoTone, ExportOutlined, EyeTwoTone, SearchOutlined, SolutionOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Select, Space, Table, Tag } from "antd";
 import type {
   ColumnType,
@@ -7,10 +7,12 @@ import type {
 } from "antd/es/table";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import { useEffect, useState, FC } from "react";
+import { useSelector } from 'react-redux';
 import { getRequest } from "../../services/apiHelperService";
 import { exportCSVFile } from '../../services/excelService';
 import ViewComponent from "../pages/directoriesPage/ViewComponent";
 import { professionOption, qualificationOption } from '../selectOptions';
+import { currentUserRole } from '../app/slices/userSlice';
 
 const exactMatch = [
   "gender",
@@ -88,6 +90,9 @@ const TableComponent: FC = () => {
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  const userRole = useSelector(currentUserRole);
+  console.log(userRole);
+  
 
   let headers:any = [
     { label: 'First Name', value: 'firstName'},
@@ -311,7 +316,7 @@ const TableComponent: FC = () => {
       width: 100,
       render: (_, record) => <Space size='middle'>
         <EyeTwoTone className="fs-5" onClick={() => confirm(record.firstName, record)} />
-        {/* <DeleteTwoTone className='fs-5' onClick={() => ''} /> */}
+        <DeleteTwoTone hidden={userRole !== 'admin'} className='fs-5' onClick={() => ''} />
       </Space> 
     },
   ];
