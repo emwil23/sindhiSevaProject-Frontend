@@ -8,10 +8,10 @@ import type {
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import { useEffect, useState, FC } from "react";
 import { useSelector } from 'react-redux';
-import { getRequest } from "../../services/apiHelperService";
+import { deleteRequest, getRequest } from "../../services/apiHelperService";
 import { exportCSVFile } from '../../services/excelService';
 import ViewComponent from "../pages/directoriesPage/ViewComponent";
-import { professionOption, qualificationOption } from '../selectOptions';
+import { professionOption, qualificationOption, statusOption } from '../selectOptions';
 import { currentUserRole } from '../app/slices/userSlice';
 
 const exactMatch = [
@@ -19,6 +19,7 @@ const exactMatch = [
   "qualification",
   "martialStatus",
   "maritalStatus",
+  "active"
 ];
 
 interface DataType {
@@ -92,7 +93,6 @@ const TableComponent: FC = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const userRole = useSelector(currentUserRole);
   console.log(userRole);
-  
 
   let headers:any = [
     { label: 'First Name', value: 'firstName'},
@@ -248,6 +248,12 @@ const TableComponent: FC = () => {
     },
   });
 
+  const deleteRecord = (record: any) => {
+    deleteRequest('/members',record?.id).then(res => {
+      window.location.reload();
+    })
+  }
+
   const columns: ColumnsType<DataType> = [
     {
       title: "First Name",
@@ -283,6 +289,7 @@ const TableComponent: FC = () => {
     {
       title: "Status",
       dataIndex: "active",
+      ...getColumnFilterProps("active", "Status", statusOption),
       render: (active: string) => active.match('Inactive') ? <Tag color='red'>{active.toUpperCase()}</Tag> : <Tag color='green'>{active.toUpperCase()}</Tag>
     },
     {
@@ -316,7 +323,7 @@ const TableComponent: FC = () => {
       width: 100,
       render: (_, record) => <Space size='middle'>
         <EyeTwoTone className="fs-5" onClick={() => confirm(record.firstName, record)} />
-        <DeleteTwoTone hidden={userRole !== 'admin'} className='fs-5' onClick={() => ''} />
+        <DeleteTwoTone hidden={userRole !== 'admin'} className='fs-5' onClick={() => { deleteRecord(record) } } />
       </Space> 
     },
   ];

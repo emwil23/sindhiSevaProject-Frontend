@@ -1,6 +1,7 @@
 {
   "name": "sindhi-front",
   "version": "0.1.0",
+  "homepage": "https://emwil23.github.io/sindhiSevaProject-Frontend",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -33,7 +34,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +58,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
+    "gh-pages": "^4.0.0",
     "node-sass": "^7.0.1"
   }
 }

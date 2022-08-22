@@ -29,3 +29,8 @@ export const qualificationOption: object[] = [
     { label: "PostGraduate", value: "PostGraduate" },
     { label: "PHD", value: "PHD" },
   ];
+
+export const statusOption: object[] = [
+    { label: 'Active', value: 'Active' },
+    { label: 'Inactive', value: 'Inactive' },
+]
