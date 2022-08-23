@@ -11,18 +11,19 @@ const ViewComponent: FC<Props> = (props: Props) => {
 
     const [relationData, setRelationData]: any[] = useState([]);
     const [loading, setLoading] = useState(true);
-
     const items: any = props.items;
 
+
     const findRelation = (members: any[]) => {
-        if (!members) { 
+        if (!members || members.length === 0) { 
             setLoading(false);
             return;
         };
         members.forEach((value: any) => {
             fetchRelation(value.relationId, value.relationName).then(() => {
-                if(items?.members.length === relationData.length)
+                if(items?.members.length === relationData.length){
                     setLoading(false);
+                }
             })
         })
     }
