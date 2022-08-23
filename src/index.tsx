@@ -18,7 +18,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={<LoadingService />} persistor={persistor}>
-        <BrowserRouter>
+        <BrowserRouter basename='sindhiSevaProject-Frontend'>
           <App />
         </BrowserRouter>
       </PersistGate>
