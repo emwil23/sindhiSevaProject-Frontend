@@ -6,7 +6,7 @@ import FooterComponent from './website/footer';
 import LoadingService from '../services/loadingService';
 import ProtectedRoute from '../services/protectedRoute';
 const NotFoundComponent = React.lazy(() => import('./pages/notfoundPage'));
-const RegisterComponent = React.lazy(() => import('./pages/registerPage'));
+const RegisterComponent = React.lazy(() => import("./pages/registerPage/Otp"));
 const LoginComponent = React.lazy(() => import('./pages/loginPage'));
 const AboutUsComponent = React.lazy(() => import('./pages/aboutPage'));
 const ContactUsComponent = React.lazy(() => import('./pages/contactUsPage'));

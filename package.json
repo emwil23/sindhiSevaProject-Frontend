@@ -14,6 +14,7 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "antd": "^4.22.4",
+    "antd-country-phone-input": "^4.4.0",
     "axios": "^0.27.2",
     "lodash": "^4.17.21",
     "lottie-react": "^2.3.1",
@@ -28,7 +29,8 @@
     "react-scripts": "^5.0.1",
     "redux-persist": "^6.0.0",
     "typescript": "^4.7.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "world_countries_lists": "^2.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
