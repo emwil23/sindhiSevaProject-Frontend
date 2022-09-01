@@ -10,6 +10,8 @@ import { openNotification } from "../../../services/notificationService";
 import Search from "antd/lib/input/Search";
 import { CopyOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import Lottie from "lottie-react";
+import comingSoonAmination from '../../../assets/Comingsoon.json';
 
 const ProfileComponent = () => {
   const [membersCount, setMembersCount] = useState(0);
@@ -80,7 +82,7 @@ const ProfileComponent = () => {
     return (
       <>
         <div className="text-end mt-4 me-3">
-          <Button>Add members</Button>
+          <Button onClick={() => openModal('Add Members', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)} >Add members</Button>
         </div>
         <div className="mx-5 my-4 row">
           <div className="col-6">
@@ -98,9 +100,10 @@ const ProfileComponent = () => {
           <div className="col-6"></div>
         </div>
         <div className="text-center">
-          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm())}>Feeds Panel</Button>
-          <Button type='primary' className="w-75 mb-3">Change Video Panel</Button>
-          <Button type='primary' className="w-75 mb-3">Adverisments Panel</Button>
+          {/* <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm())}>Feeds Panel</Button> */}
+          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Controls', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)}>Feeds Panel</Button>
+          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Video Controls', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)} >Change Video Panel</Button>
+          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Advertisment Controls', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)} >Adverisments Panel</Button>
         </div>
       </>
     )
@@ -254,7 +257,7 @@ const ProfileComponent = () => {
         </div>
       </div>
       <div className="col-md-6">{
-        userRole === 'admin' ? adminControls() : 'Control'
+        userRole === 'admin' ? adminControls() : ''
       }</div>
     </div>
   )

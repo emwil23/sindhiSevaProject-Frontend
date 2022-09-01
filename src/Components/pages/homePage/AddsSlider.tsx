@@ -48,7 +48,7 @@ function AddsSlider() {
                 </div>
                 <div className="card mx-1">
                     <div className="card-body">
-                        <img className="card-img" alt="" src='https://unsplash.com/photos/XWl8Pu3HrgY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjYwNzEwODAw&force=true&w=640' height="200px" />
+                        <img className="card-img" alt="" src='https://unsplash.com/photos/zFSo6bnZJTw/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Nnx8c2Nob29sfGVufDB8fHx8MTY2MTUyMTg0MA&force=true&w=640' height="200px" />
                         <div className="card-text">
                             <p>
                                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet, qui beatae assumenda voluptates, totam tempora odio modi fugiat iure id.
@@ -58,7 +58,7 @@ function AddsSlider() {
                 </div>
                 <div className="card mx-1">
                     <div className="card-body">
-                        <img className="card-img" alt="" src='https://unsplash.com/photos/XWl8Pu3HrgY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjYwNzEwODAw&force=true&w=640' height="200px" />
+                        <img className="card-img" alt="" src='https://unsplash.com/photos/WE_Kv_ZB1l0/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjYxNTY5Njkx&force=true&w=640' height="200px" />
                         <div className="card-text">
                             <p>
                                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet, qui beatae assumenda voluptates, totam tempora odio modi fugiat iure id.
@@ -68,7 +68,7 @@ function AddsSlider() {
                 </div>
                 <div className="card mx-1">
                     <div className="card-body">
-                        <img className="card-img" alt="" src='https://unsplash.com/photos/XWl8Pu3HrgY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjYwNzEwODAw&force=true&w=640' height="200px" />
+                        <img className="card-img" alt="" src='https://unsplash.com/photos/s9CC2SKySJM/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjB8fHNjaG9vbHxlbnwwfHx8fDE2NjE1MjE4NDA&force=true&w=640' height="200px" />
                         <div className="card-text">
                             <p>
                                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet, qui beatae assumenda voluptates, totam tempora odio modi fugiat iure id.

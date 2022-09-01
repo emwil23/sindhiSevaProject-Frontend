@@ -1,5 +1,5 @@
 import { DeleteTwoTone, ExportOutlined, EyeTwoTone, SearchOutlined, SolutionOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Select, Space, Table, Tag } from "antd";
+import { Button, Input, Modal, Popconfirm, Select, Space, Table, Tag } from "antd";
 import type {
   ColumnType,
   ColumnsType,
@@ -94,30 +94,29 @@ const TableComponent: FC = () => {
   const userRole = useSelector(currentUserRole);
   console.log(userRole);
 
-  let headers:any = [
-    { label: 'First Name', value: 'firstName'},
-    { label: 'Last Name', value: 'lastName'},
-    { label: 'Date of Birth', value: 'dob'},
-    { label: 'Gender', value: 'gender'},
-    { label: 'Email', value: 'email'},
-    { label: 'Profession', value: 'profession'},
-    { label: 'Qualification', value: 'qualification'},
-    { label: 'Marital Status', value: 'maritalStatus'},
-    { label: 'Address', value: 'address'},
-    { label: 'Blood Group', value: 'blood'},
-    { label: 'Mobile No.', value: 'mobile'},
+  let headers: any = [
+    { label: 'First Name', value: 'firstName' },
+    { label: 'Last Name', value: 'lastName' },
+    { label: 'Date of Birth', value: 'dob' },
+    { label: 'Gender', value: 'gender' },
+    { label: 'Email', value: 'email' },
+    { label: 'Profession', value: 'profession' },
+    { label: 'Qualification', value: 'qualification' },
+    { label: 'Marital Status', value: 'maritalStatus' },
+    { label: 'Address', value: 'address' },
+    { label: 'Blood Group', value: 'blood' },
+    { label: 'Mobile No.', value: 'mobile' },
   ]
 
   const fetchData = (params: Params = {}) => {
     let filterParams: any = {
       limit: params.pagination?.pageSize as number,
-      order: `${params?.sortField || "dateCreated"} ${
-        params?.sortOrder === "descend"
+      order: `${params?.sortField || "dateCreated"} ${params?.sortOrder === "descend"
           ? "DESC"
           : params?.sortOrder === "ascend"
-          ? "ASC"
-          : "DESC"
-      }`,
+            ? "ASC"
+            : "DESC"
+        }`,
       skip:
         (params.pagination?.pageSize as number) *
         ((params.pagination?.current as number) - 1),
@@ -249,7 +248,7 @@ const TableComponent: FC = () => {
   });
 
   const deleteRecord = (record: any) => {
-    deleteRequest('/members',record?.id).then(res => {
+    deleteRequest('/members', record?.id).then(res => {
       window.location.reload();
     })
   }
@@ -322,17 +321,26 @@ const TableComponent: FC = () => {
       fixed: "right",
       width: 100,
       render: (_, record) => <Space size='middle'>
-        <EyeTwoTone className="fs-5" onClick={() => confirm(record.firstName, record)} />
-        <DeleteTwoTone hidden={userRole !== 'admin'} className='fs-5' onClick={() => { deleteRecord(record) } } />
-      </Space> 
+        <EyeTwoTone className="fs-5" onClick={() => confirm(record.firstName, record, userRole)} />
+        {/* <DeleteTwoTone hidden={userRole !== 'admin'} className='fs-5' onClick={() => { deleteRecord(record) } } /> */}
+        { userRole === 'admin' ? <Popconfirm
+          title="Are you sure to delete?"
+          onConfirm={() => deleteRecord(record)}
+          placement='topRight'
+          okText="Yes"
+          cancelText="No"
+        >
+          <DeleteTwoTone className='fs-5' />
+        </Popconfirm> : null}
+      </Space>
     },
   ];
 
-  const confirm = (title?: string, records?:any) => {
+  const confirm = (title?: string, records?: any, userRole?: string) => {
     Modal.info({
       title: `${title} Information`,
       icon: <SolutionOutlined style={{ color: 'blue-4' }} />,
-      content: <ViewComponent items={records} />,
+      content: <ViewComponent items={records} userRole={userRole as string} />,
       okText: 'CLOSE',
       width: 1000
     });
@@ -340,29 +348,29 @@ const TableComponent: FC = () => {
 
   const rowSelection = {
     selectedRowKeys,
-    onChange: ( onSelectChange:any , selectedRow:any ) => {
-        setSelectedRowKeys(onSelectChange);
-        setSelectedRows(selectedRow);
+    onChange: (onSelectChange: any, selectedRow: any) => {
+      setSelectedRowKeys(onSelectChange);
+      setSelectedRows(selectedRow);
     },
   };
-  
+
   const hasSelected = selectedRowKeys.length < 11;
 
   return (
     <>
-    <div className='text-end my-2 mx-1'>
-        <Button disabled={!hasSelected || selectedRowKeys.length === 0} onClick={() => { if(hasSelected) exportCSVFile(headers, selectedRows, 'Records') }}><ExportOutlined />Export</Button>
-    </div>
-    <Table
-      columns={columns}
-      rowKey={(record) => record.id}
-      rowSelection={rowSelection}
-      dataSource={data}
-      pagination={pagination}
-      loading={loading}
-      scroll={{ x: 2000 }}
-      onChange={handleTableChange}
-    />
+      <div className='text-end my-2 mx-1'>
+        <Button disabled={!hasSelected || selectedRowKeys.length === 0} onClick={() => { if (hasSelected) exportCSVFile(headers, selectedRows, 'Records') }}><ExportOutlined />Export</Button>
+      </div>
+      <Table
+        columns={columns}
+        rowKey={(record) => record.id}
+        rowSelection={rowSelection}
+        dataSource={data}
+        pagination={pagination}
+        loading={loading}
+        scroll={{ x: 2000 }}
+        onChange={handleTableChange}
+      />
     </>
   );
 };
