@@ -24,7 +24,7 @@ const Otp: FC = () => {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                Submit Yaha hai
               </Button>
             </Form.Item>
           </Form>
