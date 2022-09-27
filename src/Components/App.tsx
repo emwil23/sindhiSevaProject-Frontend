@@ -12,6 +12,7 @@ const AboutUsComponent = React.lazy(() => import('./pages/aboutPage'));
 const ContactUsComponent = React.lazy(() => import('./pages/contactUsPage'));
 const DirectoriesComponent = React.lazy(() => import("./pages/directoriesPage"));
 const ProfileComponent = React.lazy(() => import('./pages/porfilePage'));
+const Association = React.lazy(() => import('./pages/associations'));
 
 
 const App: FC = () => {
@@ -35,6 +36,10 @@ const App: FC = () => {
     {
       path: '/profile',
       element: <ProtectedRoute><React.Suspense fallback={<LoadingService />}><ProfileComponent /></React.Suspense></ProtectedRoute>
+    },
+    {
+      path: '/associations',
+      element: <React.Suspense fallback={<LoadingService />}><Association /></React.Suspense>
     },
     {
       path: '*',
