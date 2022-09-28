@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input, message, Modal, Select, Space, Tooltip } from "antd";
+import { Button, Card, DatePicker, Form, Input, message, Modal, Select, Space, Tooltip, Upload, UploadProps } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { getRequest, patchRequest } from "../../../services/apiHelperService";
@@ -8,11 +8,11 @@ import { useDispatch } from "react-redux";
 import { pushUserDetails } from "../../app/slices/userSlice";
 import { openNotification } from "../../../services/notificationService";
 import Search from "antd/lib/input/Search";
-import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import comingSoonAmination from '../../../assets/Comingsoon.json';
-import form from "antd/lib/form";
+import FormItem from "antd/lib/form/FormItem";
 
 const ProfileComponent = () => {
   const [membersCount, setMembersCount] = useState(0);
@@ -79,6 +79,7 @@ const ProfileComponent = () => {
     getUsersCount();
   }, [])
 
+// feed control panel
   const feedsPanelContent = () => {
       return <>
         <Form name="dynamic_form_nest_item"
@@ -157,6 +158,62 @@ const ProfileComponent = () => {
     </>
   }
 
+    //Advertisment panel
+
+    // const normFile = (e: any) => {
+    //   console.log('Upload event:', e);
+    //   if (Array.isArray(e)) {
+    //     return e;
+    //   }
+    //   return e?.fileList;
+    // };
+
+    const props: UploadProps = {
+      beforeUpload: file => {
+        const isPNG = file.type === 'image/png';
+        if (!isPNG) {
+          message.error(`${file.name} is not a png file`);
+        }
+        return isPNG || Upload.LIST_IGNORE;
+      },
+      onChange: info => {
+        console.log(info.fileList);
+      },
+    };
+
+    const advertismentContent = () => {
+  
+      return <>    
+    <Form      
+      form={form}
+      layout="vertical"
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+      >
+        <Form.Item
+          name="url"
+          label="Enter URL"
+          rules={[ { type: 'url', warningOnly: true }, { type: 'string' }]}
+         >
+        <Input placeholder="Enter your website url" />
+        </Form.Item>
+        <Upload {...props}>
+            <Button icon={<UploadOutlined />}>Upload jpg only</Button>
+        </Upload>
+       <Form.Item
+        className="mt-2"
+        label="Enter Description"
+        rules={[{required:true , message: "missing description" }]}
+        >
+          <Input placeholder="Enter Description"  />
+        </Form.Item>
+      </Form>
+    </>
+    }
+  
+
+
   const adminControls = () => {
     return (
       <>
@@ -182,7 +239,7 @@ const ProfileComponent = () => {
           {/* <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm())}>Feeds Panel</Button> */}
           <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Controls', feedsPanelContent())}>Feeds Panel</Button>
           <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Video Controls', videoPanelContent())} >Change Video Panel</Button>
-          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Advertisment Controls', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)} >Adverisments Panel</Button>
+          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Advertisment Controls', advertismentContent())} >Adverisments Panel</Button>
         </div>
       </>
     )
