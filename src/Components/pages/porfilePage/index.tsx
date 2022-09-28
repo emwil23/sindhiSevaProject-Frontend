@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input, Modal, Select, Space, Tooltip } from "antd";
+import { Button, Card, DatePicker, Form, Input, message, Modal, Select, Space, Tooltip } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { getRequest, patchRequest } from "../../../services/apiHelperService";
@@ -12,6 +12,7 @@ import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined } from 
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import comingSoonAmination from '../../../assets/Comingsoon.json';
+import form from "antd/lib/form";
 
 const ProfileComponent = () => {
   const [membersCount, setMembersCount] = useState(0);
@@ -116,6 +117,46 @@ const ProfileComponent = () => {
       </>
   }
 
+  // video panel
+
+  const [form] = Form.useForm();
+
+  const onFinish = () => {
+    message.success('Submit success!');
+  };
+
+  const onFinishFailed = () => {
+    message.error('Submit failed!');
+  };
+
+  const videoPanelContent = () => {
+  
+    return <>
+
+<Form
+      form={form}
+      layout="vertical"
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
+      <Form.Item
+        name="url"
+        label="Enter Video URL"
+        rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
+      >
+        <Input placeholder="Enter valid video url" />
+      </Form.Item>
+      <Form.Item>      
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>      
+          </Form.Item>
+    </Form>
+    
+    </>
+  }
+
   const adminControls = () => {
     return (
       <>
@@ -140,7 +181,7 @@ const ProfileComponent = () => {
         <div className="text-center">
           {/* <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm())}>Feeds Panel</Button> */}
           <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Controls', feedsPanelContent())}>Feeds Panel</Button>
-          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Video Controls', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)} >Change Video Panel</Button>
+          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Video Controls', videoPanelContent())} >Change Video Panel</Button>
           <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Advertisment Controls', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)} >Adverisments Panel</Button>
         </div>
       </>
