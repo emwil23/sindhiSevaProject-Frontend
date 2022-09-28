@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input, Modal, Select, Tooltip } from "antd";
+import { Button, Card, DatePicker, Form, Input, Modal, Select, Space, Tooltip } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { getRequest, patchRequest } from "../../../services/apiHelperService";
@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { pushUserDetails } from "../../app/slices/userSlice";
 import { openNotification } from "../../../services/notificationService";
 import Search from "antd/lib/input/Search";
-import { CopyOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import comingSoonAmination from '../../../assets/Comingsoon.json';
@@ -78,6 +78,44 @@ const ProfileComponent = () => {
     getUsersCount();
   }, [])
 
+  const feedsPanelContent = () => {
+      return <>
+        <Form name="dynamic_form_nest_item"
+          //  onFinish={onFinish}
+            autoComplete="off">
+        <Form.List name="users">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'first']}
+                    rules={[{ required: true, message: 'Missing first name' }]}
+                  >
+                    <Input placeholder="First Name" />
+                  </Form.Item>
+                  <DeleteOutlined onClick={() => remove(name)} />
+                  {/* <MinusCircleOutlined  onClick={() => remove(name)}/> */}
+                </Space>
+              ))}
+              <Form.Item>
+                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                  Add field
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+      </>
+  }
+
   const adminControls = () => {
     return (
       <>
@@ -101,7 +139,7 @@ const ProfileComponent = () => {
         </div>
         <div className="text-center">
           {/* <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm())}>Feeds Panel</Button> */}
-          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Controls', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)}>Feeds Panel</Button>
+          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Controls', feedsPanelContent())}>Feeds Panel</Button>
           <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Video Controls', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)} >Change Video Panel</Button>
           <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Advertisment Controls', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)} >Adverisments Panel</Button>
         </div>
