@@ -12,6 +12,7 @@ import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined } from 
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import comingSoonAmination from '../../../assets/Comingsoon.json';
+import { read } from "fs";
 
 const ProfileComponent = () => {
   const [membersCount, setMembersCount] = useState(0);
@@ -87,15 +88,15 @@ const ProfileComponent = () => {
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, ...restField }) => (
-                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                <Space key={key} style={{ display:"flex" , marginBottom: 8 }} align="baseline">
                   <Form.Item
                     {...restField}
                     name={[name, 'first']}
-                    rules={[{ required: true, message: 'Missing first name' }]}
+                    rules={[{ required: true, message: 'Missing  message' }]}
                   >
-                    <Input placeholder="First Name" />
+                    <Input placeholder="Enter Message" />
                   </Form.Item>
-                  <DeleteOutlined onClick={() => remove(name)} />
+                  <DeleteOutlined  onClick={() => remove(name)} />
                   {/* <MinusCircleOutlined  onClick={() => remove(name)}/> */}
                 </Space>
               ))}
