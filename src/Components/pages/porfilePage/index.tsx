@@ -12,7 +12,6 @@ import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined, Upload
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import comingSoonAmination from '../../../assets/Comingsoon.json';
-import FormItem from "antd/lib/form/FormItem";
 
 const ProfileComponent = () => {
   const [membersCount, setMembersCount] = useState(0);
@@ -89,17 +88,18 @@ const ProfileComponent = () => {
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, ...restField }) => (
-                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                <div key={key} className="row mx-1">
                   <Form.Item
                     {...restField}
                     name={[name, 'first']}
-                    rules={[{ required: true, message: 'Missing first name' }]}
+                    rules={[{ required: true, message: 'Missing  message' }]}
+                    className='col-10'
                   >
-                    <Input placeholder="First Name" />
+                    <Input placeholder="Enter Message" />
                   </Form.Item>
-                  <DeleteOutlined onClick={() => remove(name)} />
+                  <DeleteOutlined  onClick={() => remove(name)} className="col-2 mt-2" />
                   {/* <MinusCircleOutlined  onClick={() => remove(name)}/> */}
-                </Space>
+                </div>
               ))}
               <Form.Item>
                 <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
