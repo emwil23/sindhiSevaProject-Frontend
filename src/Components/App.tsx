@@ -1,4 +1,4 @@
-import 'antd-country-phone-input/dist/index.css';
+import 'react-phone-number-input/style.css';
 import React, { FC } from 'react'
 import { useRoutes } from 'react-router-dom';
 import HomeComponent from './pages/homePage';

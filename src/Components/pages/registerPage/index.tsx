@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useDeferredValue, useState } from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
 import { Button, DatePicker, Form, Input, Select } from "antd";
@@ -11,9 +11,16 @@ import { pushUserDetails } from '../../app/slices/userSlice';
 import { loggedInTrue } from '../../app/slices/authSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
+import OTPInput, { ResendOTP } from 'otp-input-react';
+import React from 'react';
 
 const RegisterComponent: FC = () => {
   const [hideAnniversary, setHideAnniversary] = useState(true);
+  const [phoneNumber, setPhoneNumber] = useState<string>();
+  const [OTP, setOTP] = useState<number>();
+  const [step, setStep] = useState('otp');
+  const [otpAttempted, setOtpAttempted] = useState<number>(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -37,11 +44,7 @@ const RegisterComponent: FC = () => {
       let date = new Date(values.anniversary);
       values.anniversary = `${date.getFullYear()}-${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`
     }
-    delete values.confirmPassword;
     postRequest('/signup', values).then(res => {
-      if(res.isExisting){
-        return openNotification('User with Email already exists');
-      }
       dispatch(loggedInTrue());
       dispatch(pushUserDetails(res));
       openNotification('SignUp Successful');
@@ -49,12 +52,76 @@ const RegisterComponent: FC = () => {
     }).catch(() => openNotification('Problem occured while signup', 'Retry after some time.'))
   };
 
+  const verifyPhoneNumber = (mobile: string): boolean => {
+    return isValidPhoneNumber(mobile);
+  }
+
+  const sendOtp = (mobile: string) => {
+    if(verifyPhoneNumber(mobile)){
+      postRequest(`/otp-signup/${mobile}`).then(res => {
+        if(res.isExists)
+          openNotification('User Exists');
+        else{
+          openNotification(res.message);
+          setStep('otp-verification');
+        }
+      })
+    }
+  }
+
+  const resendOtp = () => {
+    if (otpAttempted >= 3)
+      openNotification('Too many Attepmts', 'Please try again later');
+    else
+      postRequest(`/otp-signup/${phoneNumber}`).then(res => {
+        openNotification(res.message);
+        setOtpAttempted(otpAttempted + 1);
+      })
+  }
+
+  const verifyOtp = (otp: number) => {
+    postRequest(`/otp-verification/${phoneNumber}/${otp as number}`).then(res => {
+      if(res.varified){
+        openNotification('Verification successful');
+        setStep('form');
+      }
+    })
+  }
+
+  const renderButton = (buttonProps: any) => {
+    return (
+      <Button disabled={otpAttempted >= 3} className='mt-4' {...buttonProps}>
+        {buttonProps.remainingTime !== 0 ? `Please wait for ${buttonProps.remainingTime} sec` : "Resend"}
+      </Button>
+    );
+  };
+  const renderTime = () => React.Fragment;
 
   return (
     <div className="container my-5">
       <div className="row align-items-center">
         <div className="col-md-6">
-          <Form onFinish={onFinish} layout="vertical">
+          { step === 'otp' ? 
+          <>
+              <PhoneInput
+                placeholder="Enter phone number"
+                value={phoneNumber}
+                onChange={setPhoneNumber} 
+                defaultCountry='IN'
+                />
+              <div className='text-end'>
+              <Button className='mt-4' onClick={() => sendOtp(phoneNumber as string)}>Send OTP</Button>
+              </div>
+          </> 
+          : step === 'otp-verification' ? 
+          <div className='d-flex align-items-center flex-column '>
+            <OTPInput value={OTP} onChange={setOTP} autoFocus OTPLength={4} otpType="number" disabled={false} />
+            <div className='d-flex align-items-center'>
+              <ResendOTP onResendClick={() => resendOtp()} renderButton={renderButton} renderTime={renderTime} />
+              <Button className='mt-4 ms-3' onClick={() => verifyOtp(OTP as number)}>Verify OTP</Button>
+            </div>
+          </div> 
+          : <Form onFinish={onFinish} layout="vertical">
             <div className="row">
               <div className="col-md-6">
                 <Form.Item
@@ -87,7 +154,7 @@ const RegisterComponent: FC = () => {
                 </Form.Item>
               </div>
             </div>
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-6">
                 <Form.Item
                   label="Password"
@@ -142,7 +209,7 @@ const RegisterComponent: FC = () => {
                   <Input.Password placeholder="Confirm the password" />
                 </Form.Item>
               </div>
-            </div>
+            </div> */}
             <div className="row">
               <div className="col-md-6">
                 <Form.Item
@@ -150,7 +217,7 @@ const RegisterComponent: FC = () => {
                   name="email"
                   rules={[
                     {
-                      required: true,
+                      // required: true,
                       message: "Please enter the Email",
                       type: 'email',
                     },
@@ -312,7 +379,7 @@ const RegisterComponent: FC = () => {
               name="address"
               rules={[
                 {
-                  required: true,
+                  // required: true,
                   message: "Please enter address",
                   type: "string",
                 },
@@ -382,7 +449,7 @@ const RegisterComponent: FC = () => {
                 </Button>
               </Form.Item>
             </div>
-          </Form>
+          </Form> }
         </div>
         <div className="col-md-6">
           <Lottie animationData={registrationLottie} loop={false} />

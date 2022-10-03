@@ -5,3 +5,4 @@ declare module 'mapbox-gl';
 declare module 'react-advanced-news-ticker';
 declare module 'react-multi-carousel';
 declare module 'react-player';
+declare module 'otp-input-react'
