@@ -1,3 +1,4 @@
+import 'antd-country-phone-input/dist/index.css';
 import React, { FC } from 'react'
 import { useRoutes } from 'react-router-dom';
 import HomeComponent from './pages/homePage';
@@ -6,7 +7,7 @@ import FooterComponent from './website/footer';
 import LoadingService from '../services/loadingService';
 import ProtectedRoute from '../services/protectedRoute';
 const NotFoundComponent = React.lazy(() => import('./pages/notfoundPage'));
-const RegisterComponent = React.lazy(() => import("./pages/registerPage/Otp"));
+const RegisterComponent = React.lazy(() => import("./pages/registerPage"));
 const LoginComponent = React.lazy(() => import('./pages/loginPage'));
 const AboutUsComponent = React.lazy(() => import('./pages/aboutPage'));
 const ContactUsComponent = React.lazy(() => import('./pages/contactUsPage'));
