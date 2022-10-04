@@ -1,8 +1,6 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { FC, useState } from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
-import { Link } from 'react-router-dom';
 import { Button} from 'antd';
 import { postRequest } from '../../../services/apiHelperService';
 import { openNotification } from '../../../services/notificationService';
@@ -42,7 +40,9 @@ const LoginComponent: FC = () => {
 
   const sendOtp = (mobile: string) => {
     if(verifyPhoneNumber(mobile)){
-      postRequest(`/otp-send/${mobile}`).then(res => {
+      postRequest(`/otp-login/${mobile}`).then(res => {
+          if(res.userNotFound)
+            return openNotification('User Not Found');
           openNotification(res.message);
           setStep('otp-verification');
       })
@@ -65,8 +65,10 @@ const LoginComponent: FC = () => {
     postRequest(`/otp-verification/${phoneNumber}/${otp as number}`).then(res => {
       if(res.varified){
         openNotification('Verification successful');
-        setStep('form');
+        onFinish({ mobile: phoneNumber });
       }
+      else
+        openNotification('Invalid OTP')
     })
   }
 
@@ -95,6 +97,8 @@ const LoginComponent: FC = () => {
                 />
               <div className='text-end'>
               <Button className='mt-4' onClick={() => sendOtp(phoneNumber as string)}>Send OTP</Button>
+              <span>&nbsp;or&nbsp;</span>
+              <Button className='mt-4' onClick={() => navigate('/auth/register') }>Register</Button>
               </div>
           </> 
           : 

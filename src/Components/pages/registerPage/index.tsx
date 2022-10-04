@@ -44,6 +44,7 @@ const RegisterComponent: FC = () => {
       let date = new Date(values.anniversary);
       values.anniversary = `${date.getFullYear()}-${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`
     }
+    values.mobile = phoneNumber;
     postRequest('/signup', values).then(res => {
       dispatch(loggedInTrue());
       dispatch(pushUserDetails(res));
@@ -290,14 +291,13 @@ const RegisterComponent: FC = () => {
                   name="mobile"
                   rules={[
                     {
-                      required: true,
+                      // required: true,
                       message: "Please enter mobile number",
                       type: 'string',
-                      len: 10
                     },
                   ]}
                 >
-                  <Input type={'number'} placeholder="Enter Mobile Number" />
+                  <Input defaultValue={phoneNumber} disabled type={'string'} placeholder="Enter Mobile Number" />
                 </Form.Item>
               </div>
               <div className="col-md-6">
