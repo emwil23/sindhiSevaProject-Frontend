@@ -10,7 +10,7 @@ import { useEffect, useState, FC } from "react";
 import { useSelector } from 'react-redux';
 import { deleteRequest, getRequest } from "../../services/apiHelperService";
 import { exportCSVFile } from '../../services/excelService';
-import ViewComponent from "../pages/directoriesPage/ViewComponent";
+import ViewComponent from "../pages/DirectoriesPage/ViewComponent";
 import { professionOption, qualificationOption, statusOption } from '../selectOptions';
 import { currentUserRole } from '../app/slices/userSlice';
 
