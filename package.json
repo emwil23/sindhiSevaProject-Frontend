@@ -1,7 +1,6 @@
 {
   "name": "sindhi-front",
   "version": "0.1.0",
-  "homepage": "https://emwil23.github.io/sindhiSevaProject-Frontend",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",

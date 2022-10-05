@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import { Select, Image } from 'antd';
 import Descriptions from 'antd/lib/descriptions';
 import Spin from 'antd/lib/spin';
 import { FC, useEffect, useState } from 'react';
@@ -56,7 +56,7 @@ const ViewComponent: FC<Props> = (props: Props) => {
 
     const updateData = async (index: string, value: string) => {
         await patchRequest('/members', items?.id, { [index]: value }).then((res) => {
-          openNotification('Records Successfully Updated')
+            openNotification('Records Successfully Updated')
         }).catch(err => openNotification('Some Problem Occured', 'Please try again later.'))
     }
 
@@ -65,6 +65,13 @@ const ViewComponent: FC<Props> = (props: Props) => {
     return loading ? (<Spin size='large' />) :
         <>
             <Descriptions layout="vertical">
+                { items.profilePiture ? <Descriptions.Item label="Profile Picture" contentStyle={{ color: 'grey' }}>
+                <Image
+                    width={100}
+                    src={`${items.profilePiture}`}
+                    className='rounded'
+                />
+                </Descriptions.Item> : null}
                 <Descriptions.Item label="First Name" contentStyle={{ color: 'grey' }}>{items.firstName}</Descriptions.Item>
                 <Descriptions.Item label="Last Name" contentStyle={{ color: 'grey' }}>{items.lastName}</Descriptions.Item>
                 <Descriptions.Item label="Qualification" contentStyle={{ color: 'grey' }}>{items.qualification}</Descriptions.Item>

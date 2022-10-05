@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import OTPInput, { ResendOTP } from 'otp-input-react';
 import React from 'react';
+import FileUpload from '../../FileUpload';
 
 const RegisterComponent: FC = () => {
   const [hideAnniversary, setHideAnniversary] = useState(true);
@@ -21,6 +22,7 @@ const RegisterComponent: FC = () => {
   const [OTP, setOTP] = useState<number>();
   const [step, setStep] = useState('otp');
   const [otpAttempted, setOtpAttempted] = useState<number>(0);
+  const [profileUrl, setProfileUrl] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -45,6 +47,8 @@ const RegisterComponent: FC = () => {
       values.anniversary = `${date.getFullYear()}-${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`
     }
     values.mobile = phoneNumber;
+    if(profileUrl)
+      values.profilePiture = profileUrl;
     postRequest('/signup', values).then(res => {
       dispatch(loggedInTrue());
       dispatch(pushUserDetails(res));
@@ -155,6 +159,11 @@ const RegisterComponent: FC = () => {
                 </Form.Item>
               </div>
             </div>
+            <div className='row'>
+              <div className='col-md-6'>
+                <FileUpload storageUrl={setProfileUrl} />
+              </div>
+            </div>
             {/* <div className="row">
               <div className="col-md-6">
                 <Form.Item
@@ -243,7 +252,7 @@ const RegisterComponent: FC = () => {
                 </Form.Item>
               </div>
             </div>
-
+          
             <div className="row">
               <div className="col-md-6">
                 <Form.Item
