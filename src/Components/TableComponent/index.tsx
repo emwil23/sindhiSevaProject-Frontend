@@ -46,7 +46,7 @@ interface Params {
   total?: number;
   sortField?: string;
   sortOrder?: string;
-  where?: object;
+  where?: object | DataType;
 }
 
 let totalCount: any = getRequest("/members/count").then(({ count }) => {
@@ -69,8 +69,8 @@ const whereBuilder = (whereObject: any | undefined) => {
       }
     });
   }
-  Object.assign(where, { and: andObject });
-  if (where.and.length !== 0) return where;
+  Object.assign(where, { or: andObject });
+  if (where.or.length !== 0) return where;
   return undefined;
 };
 
@@ -91,8 +91,20 @@ const TableComponent: FC = () => {
   });
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [globalSearch, setGlobalSearch] = useState<string>();
   const userRole = useSelector(currentUserRole);
-  console.log(userRole);
+
+  useEffect(() => {
+    if(!globalSearch) 
+      return fetchData({ pagination });
+    
+    const params: Params = {
+      pagination: pagination,
+      where: { firstName: { like: globalSearch, options: 'i' }, lastName: { like: globalSearch, options: 'i' }, gender: { like: globalSearch, options: 'i' }, email: { like: globalSearch, options: 'i' }, profession: { like: globalSearch, options: 'i' }, qualification: { like: globalSearch, options: 'i' }, maritalStatus: { like: globalSearch, options: 'i' }, active: { like: globalSearch, options: 'i' }, address: { like: globalSearch, options: 'i' }}
+    }
+    fetchData(params);
+  }, [globalSearch]);
+
 
   let headers: any = [
     { label: 'First Name', value: 'firstName' },
@@ -112,10 +124,10 @@ const TableComponent: FC = () => {
     let filterParams: any = {
       limit: params.pagination?.pageSize as number,
       order: `${params?.sortField || "dateCreated"} ${params?.sortOrder === "descend"
-          ? "DESC"
-          : params?.sortOrder === "ascend"
-            ? "ASC"
-            : "DESC"
+        ? "DESC"
+        : params?.sortOrder === "ascend"
+          ? "ASC"
+          : "DESC"
         }`,
       skip:
         (params.pagination?.pageSize as number) *
@@ -134,9 +146,9 @@ const TableComponent: FC = () => {
     });
   };
 
-  useEffect(() => {
-    fetchData({ pagination });
-  }, []);
+  // useEffect(() => {
+  //   fetchData({ pagination });
+  // }, []);
 
   const handleTableChange = (
     newPagination: TablePaginationConfig,
@@ -258,61 +270,61 @@ const TableComponent: FC = () => {
       title: "First Name",
       dataIndex: "firstName",
       sorter: true,
-      ...getColumnSearchProps("firstName"),
+      // ...getColumnSearchProps("firstName"),
     },
     {
       title: "Last Name",
       dataIndex: "lastName",
       sorter: true,
-      ...getColumnSearchProps("lastName"),
+      // ...getColumnSearchProps("lastName"),
     },
     {
       title: "Gender",
       dataIndex: "gender",
-      ...getColumnFilterProps("gender", "Gender", [
+      /* ...getColumnFilterProps("gender", "Gender", [
         { label: "Male", value: "Male" },
         { label: "Female", value: "Female" },
         { label: "Others", value: "Others" },
-      ]),
+      ]), */
     },
     {
       title: "Email",
       dataIndex: "email",
-      ...getColumnSearchProps("email"),
+      // ...getColumnSearchProps("email"),
     },
     {
       title: "Profession",
       dataIndex: "profession",
-      ...getColumnFilterProps("profession", "Profession", professionOption),
+      // ...getColumnFilterProps("profession", "Profession", professionOption),
     },
     {
       title: "Status",
       dataIndex: "active",
-      ...getColumnFilterProps("active", "Status", statusOption),
+      // ...getColumnFilterProps("active", "Status", statusOption),
       render: (active: string) => active.match('Inactive') ? <Tag color='red'>{active.toUpperCase()}</Tag> : <Tag color='green'>{active.toUpperCase()}</Tag>
     },
     {
       title: "Qualification",
       dataIndex: "qualification",
-      ...getColumnFilterProps(
+      /* ...getColumnFilterProps(
         "qualification",
         "Qualification",
         qualificationOption
-      ),
+      ), */
     },
     {
       title: "maritalStatus",
       dataIndex: "maritalStatus",
-      ...getColumnFilterProps(
+      /* ...getColumnFilterProps(
         "maritalStatus",
         "MaritalStatus",
         maritalStatusOptions
-      ),
+      ), */
     },
     {
       title: "address",
       dataIndex: "address",
-      ...getColumnSearchProps("address"),
+      // ...getColumnSearchProps("address"),
       ellipsis: true,
     },
     {
@@ -323,7 +335,7 @@ const TableComponent: FC = () => {
       render: (_, record) => <Space size='middle'>
         <EyeTwoTone className="fs-5" onClick={() => confirm(record.firstName, record, userRole)} />
         {/* <DeleteTwoTone hidden={userRole !== 'admin'} className='fs-5' onClick={() => { deleteRecord(record) } } /> */}
-        { userRole === 'admin' ? <Popconfirm
+        {userRole === 'admin' ? <Popconfirm
           title="Are you sure to delete?"
           onConfirm={() => deleteRecord(record)}
           placement='topRight'
@@ -358,8 +370,18 @@ const TableComponent: FC = () => {
 
   return (
     <>
-      <div className='text-end my-2 mx-1'>
-        <Button disabled={!hasSelected || selectedRowKeys.length === 0} onClick={() => { if (hasSelected) exportCSVFile(headers, selectedRows, 'Records') }}><ExportOutlined />Export</Button>
+      <div className='mx-5 d-flex mb-2'>
+        <Input.Search placeholder='Search fields here...'
+          allowClear
+          onSearch={(value) => {
+            setGlobalSearch(value);
+          }}
+          className='mt-2'
+        >
+        </Input.Search>
+        <div className='text-end my-2 mx-1'>
+          <Button disabled={!hasSelected || selectedRowKeys.length === 0} onClick={() => { if (hasSelected) exportCSVFile(headers, selectedRows, 'Records') }}><ExportOutlined />Export</Button>
+        </div>
       </div>
       <Table
         columns={columns}
