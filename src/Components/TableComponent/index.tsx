@@ -1,7 +1,6 @@
-import { DeleteTwoTone, ExportOutlined, EyeTwoTone, SearchOutlined, SolutionOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Popconfirm, Select, Space, Table, Tag } from "antd";
+import { DeleteTwoTone, ExportOutlined, EyeTwoTone, SolutionOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Popconfirm, Space, Table, Tag } from "antd";
 import type {
-  ColumnType,
   ColumnsType,
   TablePaginationConfig,
 } from "antd/es/table";
@@ -11,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { deleteRequest, getRequest } from "../../services/apiHelperService";
 import { exportCSVFile } from '../../services/excelService';
 import ViewComponent from "../pages/DirectoriesPage/ViewComponent";
-import { professionOption, qualificationOption, statusOption } from '../selectOptions';
+// import { professionOption, qualificationOption, statusOption } from '../selectOptions';
 import { currentUserRole } from '../app/slices/userSlice';
 
 const exactMatch = [
@@ -74,13 +73,13 @@ const whereBuilder = (whereObject: any | undefined) => {
   return undefined;
 };
 
-const maritalStatusOptions: object[] = [
+/* const maritalStatusOptions: object[] = [
   { label: "Married", value: "Married" },
   { label: "Unmarried", value: "Unmarried" },
   { label: "Divorced", value: "Divorced" },
   { label: "Widow", value: "Widow" },
   { label: "Widower", value: "Widower" },
-];
+]; */
 
 const TableComponent: FC = () => {
   const [data, setData] = useState();
@@ -146,9 +145,9 @@ const TableComponent: FC = () => {
     });
   };
 
-  // useEffect(() => {
-  //   fetchData({ pagination });
-  // }, []);
+  /* useEffect(() => {
+    fetchData({ pagination });
+  }, []); */
 
   const handleTableChange = (
     newPagination: TablePaginationConfig,
@@ -163,12 +162,12 @@ const TableComponent: FC = () => {
     });
   };
 
-  const handleReset = (setSelectedKeys: any, confirm: any) => {
+/*   const handleReset = (setSelectedKeys: any, confirm: any) => {
     setSelectedKeys("");
     return confirm();
-  };
+  }; */
 
-  const getColumnSearchProps = (dataIndex: string): ColumnType<DataType> => ({
+  /* const getColumnSearchProps = (dataIndex: string): ColumnType<DataType> => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -210,9 +209,9 @@ const TableComponent: FC = () => {
     filterIcon: (filtered: boolean) => (
       <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
-  });
+  }); */
 
-  const getColumnFilterProps = (
+  /* const getColumnFilterProps = (
     dataIndex: string,
     label: string,
     values: object[]
@@ -257,7 +256,7 @@ const TableComponent: FC = () => {
         .toLocaleLowerCase()
         .includes((value as string).toLocaleLowerCase());
     },
-  });
+  }); */
 
   const deleteRecord = (record: any) => {
     deleteRequest('/members', record?.id).then(res => {

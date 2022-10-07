@@ -1,7 +1,7 @@
 import { Button, Card, DatePicker, Form, Input, message, Modal, Select, Space, Tooltip, Upload, UploadProps } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { getRequest, patchRequest } from "../../../services/apiHelperService";
+import { getRequest, patchRequest, postRequest } from "../../../services/apiHelperService";
 import { currentUser, currentUserRole } from "../../app/slices/userSlice";
 import { activeOptions, professionOption, qualificationOption, relationsOptions } from "../../selectOptions";
 import { useDispatch } from "react-redux";
@@ -15,6 +15,8 @@ import comingSoonAmination from '../../../assets/Comingsoon.json';
 
 const ProfileComponent = () => {
   const [membersCount, setMembersCount] = useState(0);
+  const [feeds, setFeeds] = useState<any>();
+  const [coverVideoLink, setCoverVideoLink] = useState<any>();
   const userDetails = useSelector(currentUser);
   const userRole = useSelector(currentUserRole);
   const dispatch = useDispatch();
@@ -30,7 +32,7 @@ const ProfileComponent = () => {
     updateData('members', value.members);
   }
 
-  const stepForm = () => {
+  /* const stepForm = () => {
     return <Form autoComplete='off' className="my-5">
       <Form.List name='feedsList'>
         {(fields, { add, remove }) => (
@@ -57,7 +59,7 @@ const ProfileComponent = () => {
         )}
       </Form.List>
     </Form>
-  }
+  } */
 
   const openModal = (title: string, content: any) => {
     Modal.info({
@@ -76,28 +78,41 @@ const ProfileComponent = () => {
 
   useEffect(() => {
     getUsersCount();
+    getFeedsData();
+    getCoverVideoLink();
   }, [])
+  console.log(feeds);
+  
 
-// feed control panel
+  // feed control panel
   const feedsPanelContent = () => {
-      return <>
-        <Form name="dynamic_form_nest_item"
-          //  onFinish={onFinish}
-            autoComplete="off">
-        <Form.List name="users">
+    return <>
+      <Form name="feedsForm"
+         onFinish={feedsOnFinish}
+         initialValues={ { feedsList: feeds?.feedsList } }
+        autoComplete="off">
+        <Form.List name="feedsList">
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, ...restField }) => (
                 <div key={key} className="row mx-1">
                   <Form.Item
                     {...restField}
-                    name={[name, 'first']}
+                    name={[name, 'link']}
+                    className='col-10'
+                    rules={[{ type: 'url' }]}
+                  >
+                    <Input placeholder="Enter target url" />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'description']}
                     rules={[{ required: true, message: 'Missing  message' }]}
                     className='col-10'
                   >
                     <Input placeholder="Enter Message" />
                   </Form.Item>
-                  <DeleteOutlined  onClick={() => remove(name)} className="col-2 mt-2" />
+                  <DeleteOutlined onClick={() => remove(name)} className="col-2 mt-2" />
                   {/* <MinusCircleOutlined  onClick={() => remove(name)}/> */}
                 </div>
               ))}
@@ -115,103 +130,109 @@ const ProfileComponent = () => {
           </Button>
         </Form.Item>
       </Form>
-      </>
+    </>
+  }
+
+  const feedsOnFinish = (event:any) => {
+    if(!feeds) return postRequest('/feeds', { feedsList: event.feedsList }).then(res => {
+      getFeedsData();
+    })
+    return patchRequest('/feeds',feeds?.id, { feedsList: event.feedsList }).then(res => {
+      getFeedsData();
+    })
+  }
+
+  const getFeedsData = () => {
+    getRequest('/feeds').then((res:object[]) => {
+      setFeeds(res[0]);
+    })
   }
 
   // video panel
 
-  const [form] = Form.useForm();
-
-  const onFinish = () => {
-    message.success('Submit success!');
-  };
-
-  const onFinishFailed = () => {
-    message.error('Submit failed!');
-  };
-
   const videoPanelContent = () => {
-  
     return <>
-
-<Form
-      form={form}
-      layout="vertical"
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item
-        name="url"
-        label="Enter Video URL"
-        rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
+      <Form
+        layout="vertical"
+        onFinish={videoOnFinish}
+        initialValues={{ url: coverVideoLink?.videoUrl }}
+        autoComplete="off"
       >
-        <Input placeholder="Enter valid video url" />
-      </Form.Item>
-      <Form.Item>      
+        <Form.Item
+          name="url"
+          label="Enter Video URL"
+          rules={[{ required: true }, { type: 'url', warningOnly: true }]}
+        >
+          <Input placeholder="Enter valid video url" />
+        </Form.Item>
+        <Form.Item>
           <Button type="primary" htmlType="submit">
             Submit
-          </Button>      
-          </Form.Item>
-    </Form>
-    
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   }
 
-    //Advertisment panel
+  const videoOnFinish = (event:any) => {
+    if(!coverVideoLink) return postRequest('/cover-video', { videoUrl: event.url } ).then(res => {
+      getCoverVideoLink();
+    })
 
-    // const normFile = (e: any) => {
-    //   console.log('Upload event:', e);
-    //   if (Array.isArray(e)) {
-    //     return e;
-    //   }
-    //   return e?.fileList;
-    // };
+    return patchRequest('/cover-video', coverVideoLink.id, { videoUrl: event.url } ).then(res => {
+      getCoverVideoLink();
+    })
+  }
 
-    const props: UploadProps = {
-      beforeUpload: file => {
-        const isPNG = file.type === 'image/png';
-        if (!isPNG) {
-          message.error(`${file.name} is not a png file`);
-        }
-        return isPNG || Upload.LIST_IGNORE;
-      },
-      onChange: info => {
-        console.log(info.fileList);
-      },
-    };
+  const getCoverVideoLink = () => {
+    getRequest('/cover-video').then(res => {
+      setCoverVideoLink(res[0]);
+    })
+  }
 
-    const advertismentContent = () => {
+  //Advertisment panel
   
-      return <>    
-    <Form      
-      form={form}
-      layout="vertical"
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
+  const props: UploadProps = {
+    beforeUpload: file => {
+      const isPNG = file.type === 'image/png';
+      if (!isPNG) {
+        message.error(`${file.name} is not a png file`);
+      }
+      return isPNG || Upload.LIST_IGNORE;
+    },
+    onChange: info => {
+      console.log(info.fileList);
+    },
+  };
+
+  const advertismentContent = () => {
+
+    return <>
+      <Form
+        layout="vertical"
+        autoComplete="off"
       >
         <Form.Item
           name="url"
           label="Enter URL"
-          rules={[ { type: 'url', warningOnly: true }, { type: 'string' }]}
-         >
-        <Input placeholder="Enter your website url" />
+          rules={[{ type: 'url', warningOnly: true }, { type: 'string' }]}
+        >
+          <Input placeholder="Enter your website url" />
         </Form.Item>
         <Upload {...props}>
-            <Button icon={<UploadOutlined />}>Upload jpg only</Button>
+          <Button icon={<UploadOutlined />}>Upload jpg only</Button>
         </Upload>
-       <Form.Item
-        className="mt-2"
-        label="Enter Description"
-        rules={[{required:true , message: "missing description" }]}
+        <Form.Item
+          className="mt-2"
+          label="Enter Description"
+          rules={[{ required: true, message: "missing description" }]}
         >
-          <Input placeholder="Enter Description"  />
+          <Input placeholder="Enter Description" />
         </Form.Item>
       </Form>
     </>
-    }
-  
+  }
+
 
 
   const adminControls = () => {
@@ -222,16 +243,16 @@ const ProfileComponent = () => {
         </div>
         <div className="mx-5 my-4 row">
           <div className="col-6">
-          <Card>
-            <div className="row">
-              <div className="col-6 fs-2 fw-light">
-                {membersCount}
+            <Card>
+              <div className="row">
+                <div className="col-6 fs-2 fw-light">
+                  {membersCount}
+                </div>
+                <div className="col-6">
+                  Total Members
+                </div>
               </div>
-              <div className="col-6">
-                Total Members
-              </div>
-            </div>
-          </Card>
+            </Card>
           </div>
           <div className="col-6"></div>
         </div>
