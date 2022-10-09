@@ -18,7 +18,7 @@ const exactMatch = [
   "qualification",
   "martialStatus",
   "maritalStatus",
-  "active"
+  "status"
 ];
 
 interface DataType {
@@ -32,7 +32,7 @@ interface DataType {
   blood: string;
   qualification: string; //table
   maritalStatus: string; //table
-  active: string; //table
+  status: string; //table
   members: any;
   adminVerified: string;
   anniversary: Date;
@@ -99,7 +99,7 @@ const TableComponent: FC = () => {
     
     const params: Params = {
       pagination: pagination,
-      where: { firstName: { like: globalSearch, options: 'i' }, lastName: { like: globalSearch, options: 'i' }, gender: { like: globalSearch, options: 'i' }, email: { like: globalSearch, options: 'i' }, profession: { like: globalSearch, options: 'i' }, qualification: { like: globalSearch, options: 'i' }, maritalStatus: { like: globalSearch, options: 'i' }, active: { like: globalSearch, options: 'i' }, address: { like: globalSearch, options: 'i' }}
+      where: { firstName: { like: globalSearch, options: 'i' }, lastName: { like: globalSearch, options: 'i' }, gender: { like: globalSearch, options: 'i' }, email: { like: globalSearch, options: 'i' }, profession: { like: globalSearch, options: 'i' }, qualification: { like: globalSearch, options: 'i' }, maritalStatus: { like: globalSearch, options: 'i' }, status: { like: globalSearch, options: 'i' }, address: { like: globalSearch, options: 'i' }}
     }
     fetchData(params);
   }, [globalSearch]);
@@ -298,9 +298,9 @@ const TableComponent: FC = () => {
     },
     {
       title: "Status",
-      dataIndex: "active",
-      // ...getColumnFilterProps("active", "Status", statusOption),
-      render: (active: string) => active.match('Inactive') ? <Tag color='red'>{active.toUpperCase()}</Tag> : <Tag color='green'>{active.toUpperCase()}</Tag>
+      dataIndex: "status",
+      // ...getColumnFilterProps("status", "Status", statusOption),
+      render: (status: string) => status.match('InActive') ? <Tag color='red'>{status.toUpperCase()}</Tag> : <Tag color='green'>{status.toUpperCase()}</Tag>
     },
     {
       title: "Qualification",

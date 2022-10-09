@@ -1,6 +1,6 @@
 import { Spin } from 'antd';
 
-const loadingService = () => {
+const LoadingService = () => {
   return (
     <div className='text-center'>
         <Spin />
@@ -8,4 +8,4 @@ const loadingService = () => {
   )
 }
 
-export default loadingService;
+export default LoadingService;

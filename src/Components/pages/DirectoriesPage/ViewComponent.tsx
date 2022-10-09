@@ -82,8 +82,8 @@ const ViewComponent: FC<Props> = (props: Props) => {
                 <Descriptions.Item label="Email" contentStyle={{ color: 'grey' }}>{items.email}</Descriptions.Item>
                 <Descriptions.Item label="Date Of Birth" contentStyle={{ color: 'grey' }}>{new Date(items.dob).toDateString()}</Descriptions.Item>
                 <Descriptions.Item label="Blood" contentStyle={{ color: 'grey' }}>{items.blood}</Descriptions.Item>
-                {isAdmin ? <Descriptions.Item label="active" contentStyle={{ color: 'grey' }}>{
-                    <Select defaultValue={items.active} onChange={(e) => updateData('active', e)}>
+                {isAdmin ? <Descriptions.Item label="Status" contentStyle={{ color: 'grey' }}>{
+                    <Select defaultValue={items.status} onChange={(e) => updateData('status', e)}>
                         {statusOption.map((option: any, index) => {
                             return (
                                 <Select.Option key={index} value={option.value}>

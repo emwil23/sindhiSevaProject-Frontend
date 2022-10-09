@@ -33,4 +33,5 @@ export const qualificationOption: object[] = [
 export const statusOption: object[] = [
     { label: 'Active', value: 'Active' },
     { label: 'Inactive', value: 'Inactive' },
+    { label: 'Blocked', value: 'Blocked'}
 ]

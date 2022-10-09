@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input, message, Modal, Select, Space, Tooltip, Upload, UploadProps } from "antd";
+import { Badge, Button, Card, DatePicker, Form, Input, message, Modal, Select, Space, Tooltip, Upload, UploadProps } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { getRequest, patchRequest, postRequest } from "../../../services/apiHelperService";
@@ -14,6 +14,7 @@ import Lottie from "lottie-react";
 import comingSoonAmination from '../../../assets/Comingsoon.json';
 
 const ProfileComponent = () => {
+  const [pendingMembers, setPendingMembers] = useState(0);
   const [membersCount, setMembersCount] = useState(0);
   const [feeds, setFeeds] = useState<any>();
   const [coverVideoLink, setCoverVideoLink] = useState<any>();
@@ -32,35 +33,6 @@ const ProfileComponent = () => {
     updateData('members', value.members);
   }
 
-  /* const stepForm = () => {
-    return <Form autoComplete='off' className="my-5">
-      <Form.List name='feedsList'>
-        {(fields, { add, remove }) => (
-          <>
-            {fields.map(({ key, name, ...restField }) => (
-              <div className="row">
-                <Form.Item
-                  {...restField}
-                  name={[name, 'feed']}
-                  rules={[{ required: true, message: 'Missing first name' }]}
-                  className='col-11'
-                >
-                  <Input placeholder="First Name" />
-                </Form.Item>
-                <MinusCircleOutlined onClick={() => remove(name)} className='col-1 mt-2' />
-              </div>
-            ))}
-            <Form.Item>
-              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                Add Feeds
-              </Button>
-            </Form.Item>
-          </>
-        )}
-      </Form.List>
-    </Form>
-  } */
-
   const openModal = (title: string, content: any) => {
     Modal.info({
       title: title,
@@ -73,6 +45,10 @@ const ProfileComponent = () => {
   async function getUsersCount() {
     await getRequest('/members/count').then(res => {
       setMembersCount(res.count);
+    });
+    await getRequest('/members',{ where: { adminVerified: 'Pending' } }).then(res => {
+      console.log(res.length);
+      setPendingMembers(res.length);
     })
   }
 
@@ -136,6 +112,7 @@ const ProfileComponent = () => {
   const feedsOnFinish = (event:any) => {
     if(!feeds) return postRequest('/feeds', { feedsList: event.feedsList }).then(res => {
       getFeedsData();
+      openNotification('Updated Feeds Successfully!')
     })
     return patchRequest('/feeds',feeds?.id, { feedsList: event.feedsList }).then(res => {
       getFeedsData();
@@ -177,6 +154,7 @@ const ProfileComponent = () => {
   const videoOnFinish = (event:any) => {
     if(!coverVideoLink) return postRequest('/cover-video', { videoUrl: event.url } ).then(res => {
       getCoverVideoLink();
+      openNotification('Updated Video Successfully!')
     })
 
     return patchRequest('/cover-video', coverVideoLink.id, { videoUrl: event.url } ).then(res => {
@@ -254,7 +232,14 @@ const ProfileComponent = () => {
               </div>
             </Card>
           </div>
-          <div className="col-6"></div>
+          <div className="col-6">
+            <Card onClick={() => openModal('New Member Requests', <h1>New Members</h1>)} className='btn btn-outline-secondary' >
+              <div className="row">
+                <div className="col-6 fs-2 fw-light">{pendingMembers}</div>
+                <div className="col-6">New Requests</div>
+              </div>
+            </Card>
+          </div>
         </div>
         <div className="text-center">
           {/* <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm())}>Feeds Panel</Button> */}

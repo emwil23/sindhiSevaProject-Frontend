@@ -48,7 +48,7 @@ const RegisterComponent: FC = () => {
     }
     values.mobile = phoneNumber;
     if(profileUrl)
-      values.profilePiture = profileUrl;
+      values.profilePicture = profileUrl;
     postRequest('/signup', values).then(res => {
       dispatch(loggedInTrue());
       dispatch(pushUserDetails(res));

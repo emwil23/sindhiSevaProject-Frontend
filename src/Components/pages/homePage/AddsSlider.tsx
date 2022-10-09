@@ -1,8 +1,26 @@
+import { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import ReactPlayer from 'react-player';
+import { getRequest } from "../../../services/apiHelperService";
+import LoadingService from "../../../services/loadingService";
 
 
 function AddsSlider() {
+
+    const [state, setState] = useState<{ videoUrl?: string, loading?: boolean}>({
+        videoUrl: '',
+        loading: true
+    });
+
+    useEffect(() => {
+        getRequest('/cover-video').then(res => {
+            setState({
+                videoUrl: res[0].videoUrl,
+                loading: false
+            })
+        });
+    }, [])
+
     const responsive = {
         desktop: {
             breakpoint: { max: 3000, min: 1024 },
@@ -24,9 +42,10 @@ function AddsSlider() {
         <div className='container'>
             <div className='mx-5 videoPlayer my-5'>
                 <div className='shadow rounded'>
-                    <div>
-                        <ReactPlayer width={'100%'} url='https://www.youtube.com/watch?v=ysz5S6PUM-U'/>
-                    </div>
+                    {
+                        state?.loading ? <LoadingService/> :
+                        <ReactPlayer width={'100%'} url={state?.videoUrl}/>
+                    }
                 </div>
             </div>
             <Carousel className='mycarosal my-5'
