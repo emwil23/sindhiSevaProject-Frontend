@@ -91,6 +91,7 @@ const TableComponent: FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [globalSearch, setGlobalSearch] = useState<string>();
+  const [refreshTable, setRefreshTable] = useState<boolean>(false);
   const userRole = useSelector(currentUserRole);
 
   useEffect(() => {
@@ -102,7 +103,13 @@ const TableComponent: FC = () => {
       where: { firstName: { like: globalSearch, options: 'i' }, lastName: { like: globalSearch, options: 'i' }, gender: { like: globalSearch, options: 'i' }, email: { like: globalSearch, options: 'i' }, profession: { like: globalSearch, options: 'i' }, qualification: { like: globalSearch, options: 'i' }, maritalStatus: { like: globalSearch, options: 'i' }, status: { like: globalSearch, options: 'i' }, address: { like: globalSearch, options: 'i' }}
     }
     fetchData(params);
+    // eslint-disable-next-line
   }, [globalSearch]);
+
+  useEffect(() => {
+    if(refreshTable) { fetchData({ pagination: pagination}); setRefreshTable(false);}
+    // eslint-disable-next-line
+  }, [refreshTable])
 
 
   let headers: any = [
@@ -300,7 +307,7 @@ const TableComponent: FC = () => {
       title: "Status",
       dataIndex: "status",
       // ...getColumnFilterProps("status", "Status", statusOption),
-      render: (status: string) => status.match('InActive') ? <Tag color='red'>{status.toUpperCase()}</Tag> : <Tag color='green'>{status.toUpperCase()}</Tag>
+      render: (status: string) => ['InActive','Blocked'].includes(status) ? <Tag color='red'>{status.toUpperCase()}</Tag> : <Tag color='green'>{status.toUpperCase()}</Tag>
     },
     {
       title: "Qualification",
@@ -351,7 +358,7 @@ const TableComponent: FC = () => {
     Modal.info({
       title: `${title} Information`,
       icon: <SolutionOutlined style={{ color: 'blue-4' }} />,
-      content: <ViewComponent items={records} userRole={userRole as string} />,
+      content: <ViewComponent items={records} userRole={userRole as string} refreshTable={setRefreshTable} />,
       okText: 'CLOSE',
       width: 1000
     });

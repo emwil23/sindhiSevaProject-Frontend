@@ -8,7 +8,8 @@ import { statusOption } from '../../selectOptions';
 
 interface Props {
     items: any,
-    userRole: string
+    userRole: string,
+    refreshTable?: any
 }
 
 const ViewComponent: FC<Props> = (props: Props) => {
@@ -52,11 +53,13 @@ const ViewComponent: FC<Props> = (props: Props) => {
 
     useEffect(() => {
         findRelation(items?.members);
+        // eslint-disable-next-line
     }, []);
 
     const updateData = async (index: string, value: string) => {
         await patchRequest('/members', items?.id, { [index]: value }).then((res) => {
-            openNotification('Records Successfully Updated')
+            openNotification('Records Successfully Updated');
+            props.refreshTable(true);
         }).catch(err => openNotification('Some Problem Occured', 'Please try again later.'))
     }
 
@@ -65,10 +68,10 @@ const ViewComponent: FC<Props> = (props: Props) => {
     return loading ? (<Spin size='large' />) :
         <>
             <Descriptions layout="vertical">
-                { items.profilePiture ? <Descriptions.Item label="Profile Picture" contentStyle={{ color: 'grey' }}>
+                { items.profilePicture ? <Descriptions.Item label="Profile Picture" contentStyle={{ color: 'grey' }}>
                 <Image
                     width={100}
-                    src={`${items.profilePiture}`}
+                    src={`${items.profilePicture}`}
                     className='rounded'
                 />
                 </Descriptions.Item> : null}
