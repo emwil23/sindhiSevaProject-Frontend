@@ -18,7 +18,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={<LoadingService />} persistor={persistor}>
-        <HashRouter>
+        <HashRouter basename='sindhiSevaProject-Frontend'>
           <App />
         </HashRouter>
       </PersistGate>
