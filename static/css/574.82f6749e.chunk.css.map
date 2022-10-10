@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/574.82f6749e.chunk.css","mappings":"AAAA,MACI,gBAAiB","sources":["Components/pages/aboutPage/index.scss"],"sourcesContent":[".card { \n    min-height: 25rem;\n}\n$darkblue: #0050b3;\n$lighblue: #69c0ff;\n"],"names":[],"sourceRoot":""}
