@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/sindhiSevaProject-Frontend/static/css/main.deb5eccc.css",
-    "main.js": "/sindhiSevaProject-Frontend/static/js/main.ee9aa268.js",
+    "main.js": "/sindhiSevaProject-Frontend/static/js/main.d0b3641a.js",
     "static/js/229.4f17c0c3.chunk.js": "/sindhiSevaProject-Frontend/static/js/229.4f17c0c3.chunk.js",
     "static/js/233.d01e011c.chunk.js": "/sindhiSevaProject-Frontend/static/js/233.d01e011c.chunk.js",
     "static/js/887.1de16c6d.chunk.js": "/sindhiSevaProject-Frontend/static/js/887.1de16c6d.chunk.js",
@@ -36,7 +36,7 @@
     "static/media/revicons.woff": "/sindhiSevaProject-Frontend/static/media/revicons.e8746a624ed098489406.woff",
     "index.html": "/sindhiSevaProject-Frontend/index.html",
     "main.deb5eccc.css.map": "/sindhiSevaProject-Frontend/static/css/main.deb5eccc.css.map",
-    "main.ee9aa268.js.map": "/sindhiSevaProject-Frontend/static/js/main.ee9aa268.js.map",
+    "main.d0b3641a.js.map": "/sindhiSevaProject-Frontend/static/js/main.d0b3641a.js.map",
     "229.4f17c0c3.chunk.js.map": "/sindhiSevaProject-Frontend/static/js/229.4f17c0c3.chunk.js.map",
     "233.d01e011c.chunk.js.map": "/sindhiSevaProject-Frontend/static/js/233.d01e011c.chunk.js.map",
     "887.1de16c6d.chunk.js.map": "/sindhiSevaProject-Frontend/static/js/887.1de16c6d.chunk.js.map",
@@ -67,6 +67,6 @@
   },
   "entrypoints": [
     "static/css/main.deb5eccc.css",
-    "static/js/main.ee9aa268.js"
+    "static/js/main.d0b3641a.js"
   ]
 }
