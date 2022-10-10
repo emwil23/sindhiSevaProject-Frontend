@@ -2,6 +2,7 @@ import {FC,useEffect,useState} from 'react';
 import NewsTicker from "react-advanced-news-ticker";
 import people from '../../../assets/people.png';
 import { getRequest } from '../../../services/apiHelperService';
+import LoadingService from '../../../services/loadingService';
 import AddsSlider from './AddsSlider';
 
 
@@ -32,7 +33,7 @@ const HomeComponent: FC = () => {
                           <a href={feed?.link}>{feed?.description}</a>
                         </div>
                       })}
-                    </NewsTicker> : <p>Loading..</p>}
+                    </NewsTicker> : <LoadingService/>}
                 </div>
             </div>
         <AddsSlider />

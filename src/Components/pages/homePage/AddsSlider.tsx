@@ -40,14 +40,12 @@ function AddsSlider() {
     };
     return (
         <div className='container'>
-            <div className='mx-5 videoPlayer my-5'>
+            { state.loading ? <LoadingService /> : 
+                <div className='mx-5 videoPlayer my-5'>
                 <div className='shadow rounded'>
-                    {
-                        state?.loading ? <LoadingService/> :
                         <ReactPlayer width={'100%'} url={state?.videoUrl}/>
-                    }
                 </div>
-            </div>
+            </div> } 
             <Carousel className='mycarosal my-5'
                 transitionDuration={100}
                 infinite={true}

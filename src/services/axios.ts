@@ -6,5 +6,5 @@ const serverUrl = {
 }
 
 export default axios.create({
-    baseURL: serverUrl.local
+    baseURL: serverUrl.heroku
 })
