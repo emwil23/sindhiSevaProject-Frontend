@@ -10,7 +10,7 @@ import { persistor, store } from './Components/app/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import LoadingService from './services/loadingService';
 
-
+//Hash router used
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
