@@ -29,6 +29,7 @@ const ContactUsComponent = () => {
 
     // Clean up on unmount
     return () => map.remove();
+    // eslint-disable-next-line
   }, []);
 
   return (

@@ -5,14 +5,14 @@ export const convertToCSV = (objArray: any[], headers: any[]) => {
     // adding header
     var headerLine = '';
     for (let header of headers) {
-        if (headerLine != '') headerLine += ','
+        if (headerLine !== '') headerLine += ','
         headerLine += header.label;
     }
     str += headerLine + '\r\n';
     for (var i = 0; i < array.length; i++) {
         var line = '';
         for (let header of headers) {
-            if (line != '') line += ','
+            if (line !== '') line += ','
             line += array[i][header.value] ? `"${array[i][header.value]}"` : '"-"';
         }
         str += line + '\r\n';

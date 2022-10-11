@@ -1,4 +1,4 @@
-import { FC, useDeferredValue, useState } from 'react';
+import { FC, useState } from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
 import { Button, DatePicker, Form, Input, Select } from "antd";
