@@ -14,6 +14,7 @@ const ContactUsComponent = React.lazy(() => import('./pages/contactUsPage'));
 const DirectoriesComponent = React.lazy(() => import("./pages/DirectoriesPage"));
 const ProfileComponent = React.lazy(() => import('./pages/porfilePage'));
 const Association = React.lazy(() => import('./pages/associations'));
+const AdvertismentComponent = React.lazy(() => import('./pages/advertismentPage'));
 
 
 const App: FC = () => {
@@ -35,8 +36,21 @@ const App: FC = () => {
       element: <ProtectedRoute><React.Suspense fallback={<LoadingService />}><DirectoriesComponent /></React.Suspense></ProtectedRoute>
     },
     {
-      path: '/profile',
-      element: <ProtectedRoute><React.Suspense fallback={<LoadingService />}><ProfileComponent /></React.Suspense></ProtectedRoute>
+      path: '/profile/*',
+      children: [
+        {
+          path: '',
+          element: <ProtectedRoute><React.Suspense fallback={<LoadingService />}><ProfileComponent /></React.Suspense></ProtectedRoute>
+        },
+        {
+          path: 'ads',
+          element: <ProtectedRoute><React.Suspense fallback={<LoadingService />}><AdvertismentComponent /></React.Suspense></ProtectedRoute>
+        },
+        {
+          path: '*',
+          element: <React.Suspense fallback={<LoadingService />}><NotFoundComponent /></React.Suspense>
+        }
+      ]
     },
     {
       path: '/associations',

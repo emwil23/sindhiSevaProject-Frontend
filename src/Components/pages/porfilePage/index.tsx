@@ -12,6 +12,8 @@ import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined, Upload
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import comingSoonAmination from '../../../assets/Comingsoon.json';
+import { useNavigate } from "react-router-dom";
+// import FileUpload from "../../FileUpload";
 
 const ProfileComponent = () => {
   const [pendingMembers, setPendingMembers] = useState(0);
@@ -21,6 +23,7 @@ const ProfileComponent = () => {
   const userDetails = useSelector(currentUser);
   const userRole = useSelector(currentUserRole);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const updateData = async (index: string, value: string) => {
     await patchRequest('/members', userDetails?.id, { [index]: value }).then((res) => {
@@ -47,7 +50,6 @@ const ProfileComponent = () => {
       setMembersCount(res.count);
     });
     await getRequest('/members',{ where: { adminVerified: 'Pending' } }).then(res => {
-      console.log(res.length);
       setPendingMembers(res.length);
     })
   }
@@ -57,7 +59,6 @@ const ProfileComponent = () => {
     getFeedsData();
     getCoverVideoLink();
   }, [])
-  console.log(feeds);
   
 
   // feed control panel
@@ -168,51 +169,7 @@ const ProfileComponent = () => {
     })
   }
 
-  //Advertisment panel
   
-  const props: UploadProps = {
-    beforeUpload: file => {
-      const isPNG = file.type === 'image/png';
-      if (!isPNG) {
-        message.error(`${file.name} is not a png file`);
-      }
-      return isPNG || Upload.LIST_IGNORE;
-    },
-    onChange: info => {
-      console.log(info.fileList);
-    },
-  };
-
-  const advertismentContent = () => {
-
-    return <>
-      <Form
-        layout="vertical"
-        autoComplete="off"
-      >
-        <Form.Item
-          name="url"
-          label="Enter URL"
-          rules={[{ type: 'url', warningOnly: true }, { type: 'string' }]}
-        >
-          <Input placeholder="Enter your website url" />
-        </Form.Item>
-        <Upload {...props}>
-          <Button icon={<UploadOutlined />}>Upload jpg only</Button>
-        </Upload>
-        <Form.Item
-          className="mt-2"
-          label="Enter Description"
-          rules={[{ required: true, message: "missing description" }]}
-        >
-          <Input placeholder="Enter Description" />
-        </Form.Item>
-      </Form>
-    </>
-  }
-
-
-
   const adminControls = () => {
     return (
       <>
@@ -245,7 +202,7 @@ const ProfileComponent = () => {
           {/* <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm())}>Feeds Panel</Button> */}
           <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Controls', feedsPanelContent())}>Feeds Panel</Button>
           <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Video Controls', videoPanelContent())} >Change Video Panel</Button>
-          <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Advertisment Controls', advertismentContent())} >Adverisments Panel</Button>
+          <Button type='primary' className="btn w-75 mb-3" onClick={() => navigate('ads')} >Advertisment Panel</Button> 
         </div>
       </>
     )
