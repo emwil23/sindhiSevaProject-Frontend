@@ -4,8 +4,9 @@ import TextArea from "antd/lib/input/TextArea";
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from "react";
 import geoJson from './geoJson.json';
+import { MapBoxKeys } from "./keys";
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiZXdpbGx5IiwiYSI6ImNsNnYxMncyaTAyNjUzZG1lMzFoOWJtcWsifQ.MwTeNszMhkGiCzPgr_zzYA';
+mapboxgl.accessToken = MapBoxKeys.API_KEY;
 
 const ContactUsComponent = () => {
 

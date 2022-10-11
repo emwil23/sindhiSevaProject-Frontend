@@ -4,7 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './Components/App';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { persistor, store } from './Components/app/store';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -18,9 +18,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={<LoadingService />} persistor={persistor}>
-        <HashRouter basename='sindhiSevaProject-Frontend'>
+        <BrowserRouter>
           <App />
-        </HashRouter>
+        </BrowserRouter>
       </PersistGate>
     </Provider>
   </React.StrictMode>
