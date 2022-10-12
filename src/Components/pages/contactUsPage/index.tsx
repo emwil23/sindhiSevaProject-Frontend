@@ -1,6 +1,3 @@
-import { UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
-import TextArea from "antd/lib/input/TextArea";
 import mapboxgl from 'mapbox-gl';
 import { useEffect, useRef, useState } from "react";
 import geoJson from './geoJson.json';
@@ -41,41 +38,14 @@ const ContactUsComponent = () => {
     <div className="container my-5">
       <div className="row align-items-center">
         <div className="col-md-6">
-          <Form layout="vertical">
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Email!",
-                  type: "email",
-                },
-              ]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="email" />
-            </Form.Item>
-            <Form.Item
-              label="Message"
-              name="message"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your message!",
-                  type: "string",
-                },
-              ]}
-            >
-              <TextArea rows={3} placeholder="Enter your messsage" />
-            </Form.Item>
-            <div>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  SUBMIT
-                </Button>
-              </Form.Item>
-            </div>
-          </Form>
+          <div className="text-center fs-5" >
+            <span className="" >Email: </span>
+            <span className="text-secondary" >sindhisederationofbangalore@gmail.com</span>
+          </div>
+          <div className="text-center fs-5 mt-4" >
+            <span className="" >Phone: </span>
+            <span className="text-secondary" >+91 9449364010</span>
+          </div>
         </div>
         <div className="col-md-6" >
           <div className="fw-light fs-4">Where to find us ?</div>

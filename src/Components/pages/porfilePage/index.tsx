@@ -480,6 +480,8 @@ const ProfileComponent = () => {
             </div>
           </Form>
   }
+
+  //Admin Controls
   
   const adminControls = () => {
     return (
@@ -489,7 +491,7 @@ const ProfileComponent = () => {
         </div>
         <div className="mx-5 my-4 row">
           <div className="col-6">
-            <Card>
+            <Card className="shadow-sm">
               <div className="row">
                 <div className="col-6 fs-2 fw-light">
                   {membersCount}
@@ -501,7 +503,7 @@ const ProfileComponent = () => {
             </Card>
           </div>
           <div className="col-6">
-            <Card onClick={() => openModal('New Member Requests', newMembersPanel())} className='btn btn-outline-secondary' >
+            <Card onClick={() => openModal('New Member Requests', newMembersPanel())} className='myBtnCard shadow-sm' style={{ cursor: 'pointer' }} >
               <div className="row">
                 <div className="col-6 fs-2 fw-light">{pendingMembers?.length}</div>
                 <div className="col-6">New Requests</div>

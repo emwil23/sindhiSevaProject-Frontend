@@ -23,3 +23,10 @@ footer {
 .mycarosal{
     height: 21rem;
 }
+
+.myBtnCard {
+    &:hover {
+        background-color: $primary !important;
+        transition: all .4s;
+    }
+}
