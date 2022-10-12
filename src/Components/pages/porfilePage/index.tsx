@@ -1,8 +1,8 @@
-import { Avatar, Button, Card, DatePicker, Form, Input, List, Modal, Popover, Select, Tooltip } from "antd";
+import { Avatar, Button, Card, DatePicker, Form, Image, Input, List, Modal, Popover, Select, Tooltip } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { deleteRequest, getRequest, patchRequest, postRequest } from "../../../services/apiHelperService";
-import { currentUser, currentUserRole } from "../../app/slices/userSlice";
+import { currentUser, currentUserRole, updateProfile } from "../../app/slices/userSlice";
 import { bloodGroupOptions, genderOptions, martialStatusOptions, professionOption, professionOptions, qualificationOption, qualificationOptions, relationsOptions, statusOption } from "../../selectOptions";
 import { useDispatch } from "react-redux";
 import { pushUserDetails } from "../../app/slices/userSlice";
@@ -20,6 +20,7 @@ const ProfileComponent = () => {
   const [feeds, setFeeds] = useState<any>();
   const [coverVideoLink, setCoverVideoLink] = useState<any>();
   const [profileUrl, setProfileUrl] = useState<string>();
+  const [userProfile, setUserProfile] = useState<string>();
   const userDetails = useSelector(currentUser);
   const userRole = useSelector(currentUserRole);
   const dispatch = useDispatch();
@@ -31,6 +32,19 @@ const ProfileComponent = () => {
       openNotification('Records Successfully Updated')
     }).catch(err => openNotification('Some Problem Occured', 'Please try again later.'))
   }
+
+  // Update the Current User Profile
+  const updateUserProfile = async () => {
+    if(localStorage.getItem('userProfile')){
+      var profilePicture = JSON.parse(localStorage.getItem('userProfile') as string);
+    await patchRequest('/members', userDetails?.id, { profilePicture }).then(res => {
+      dispatch(updateProfile(profilePicture));
+      openNotification('Updated Successfully');
+      Modal.destroyAll();
+    })
+    }
+  }
+
 
   const onFinishMembers = (value: any) => {
     updateData('members', value.members);
@@ -70,6 +84,11 @@ const ProfileComponent = () => {
     localStorage.setItem('profileImg', JSON.stringify(profileUrl));
   }, [profileUrl])
   
+  useEffect(() => {
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+    updateUserProfile();
+    // eslint-disable-next-line
+  }, [userProfile])
 
   // feed control panel
   const feedsPanelContent = () => {
@@ -252,6 +271,7 @@ const ProfileComponent = () => {
     if(!profileImg)
       return openNotification('Please Upload Profile Picture');
     values.profilePicture = profileImg;
+    localStorage.removeItem('profileImg');
     postRequest('/signup', values).then(res => {
       openNotification('SignUp Successful');
       getUsersCount();
@@ -510,6 +530,18 @@ const ProfileComponent = () => {
               </div>
             </Card>
           </div>
+          <div className="col-12">
+            <Card className="mt-2">
+              <div className="row">
+                <div className="col-6 text-center pt-5 fw-light">Profile Picture <br/>
+                <Button onClick={() => openModal('Upload new Picture', updateProfilePicture()) }>Change Picture</Button>
+                </div>
+                <div className="col-6">
+                  <Image height='150px' width='100px' src={`${userDetails?.profilePicture}`} />
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
         <div className="text-center">
           {/* <Button type='primary' className="w-75 mb-3" onClick={() => openModal('Feeds Panel', stepForm())}>Feeds Panel</Button> */}
@@ -520,6 +552,30 @@ const ProfileComponent = () => {
       </>
     )
   };
+
+  //Default Members Control
+  const memberControls = (): JSX.Element => {
+    return <>
+      <div className="text-center mt-5">
+      <Card className="mt-2">
+              <div className="row">
+                <div className="col-6 text-center pt-5 fw-light">Profile Picture <br/>
+                <Button onClick={() => openModal('Upload new Picture', updateProfilePicture()) }>Change Picture</Button>
+                </div>
+                <div className="col-6">
+                  <Image height='150px' width='100px' src={`${userDetails?.profilePicture}`} />
+                </div>
+              </div>
+            </Card>
+      </div>
+    </>
+  }
+
+  const updateProfilePicture = ():JSX.Element => {
+    return <>
+      <FileUpload storageUrl={setUserProfile} />
+    </>
+  }
 
   return (
     <div className="row justify-content-center ">
@@ -538,7 +594,7 @@ const ProfileComponent = () => {
         <div className="row mb-2">
           <div className="col-md-6">
             <span>Email</span>
-            <Input value={userDetails?.email} disabled />
+            <Search defaultValue={userDetails?.email} type='email' enterButton="SAVE" size='middle' onSearch={(e) => { updateData('email', e as string) }} />
           </div>
           <div className="col-md-6">
             <span>Date of Birth</span><br />
@@ -568,7 +624,7 @@ const ProfileComponent = () => {
         <div className="row mb-2">
           <div className="col-md-6">
             <span>Active Status</span><br />
-            <Select defaultValue={userDetails?.status} className='w-100' onChange={(e) => { updateData('status', e as string) }}>
+            <Select defaultValue={userDetails?.status} disabled className='w-100' onChange={(e) => { updateData('status', e as string) }}>
               {statusOption.map((value: any, index) => {
                 return <Select.Option value={value.label} key={index}>{value.value}</Select.Option>
               })}
@@ -669,7 +725,7 @@ const ProfileComponent = () => {
         </div>
       </div>
       <div className="col-md-6">{
-        userRole === 'admin' ? adminControls() : ''
+        userRole === 'admin' ? adminControls() : memberControls()
       }</div>
     </div>
   )

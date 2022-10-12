@@ -8,8 +8,9 @@ interface Props {
 
 const ProtectedRoute: FC<Props> = ({ children }) => {
   
-    const userLoggedIn = useSelector((state: any) => state.isLoggedIn.userLoggedIn);
+    const userLoggedIn = useSelector((state: any) => state?.isLoggedIn?.userLoggedIn);
+    const memberStatus = useSelector((state: any) => state?.currentUser?.userDetails?.status);
     const redirectPath = '/';
-  return userLoggedIn ? children : <Navigate to={redirectPath} replace />;
+  return userLoggedIn && memberStatus === 'Active' ? children : <Navigate to={redirectPath} replace />;
 }
 export default ProtectedRoute;

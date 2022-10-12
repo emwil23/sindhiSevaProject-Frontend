@@ -1,10 +1,11 @@
-import { Select, Image } from 'antd';
+import { Select, Image, Input, Button } from 'antd';
 import Descriptions from 'antd/lib/descriptions';
+import TextArea from 'antd/lib/input/TextArea';
 import Spin from 'antd/lib/spin';
 import { FC, useEffect, useState } from 'react';
 import { getRequest, patchRequest } from '../../../services/apiHelperService';
 import { openNotification } from '../../../services/notificationService';
-import { statusOption } from '../../selectOptions';
+import { martialStatusOptions, professionOption, qualificationOption, statusOption } from '../../selectOptions';
 
 interface Props {
     items: any,
@@ -16,11 +17,9 @@ const ViewComponent: FC<Props> = (props: Props) => {
 
     const [relationData, setRelationData]: any[] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [text, setText] = useState<string>();
     const items: any = props.items;
     const isAdmin: boolean = props.userRole === 'admin';
-
-
-
 
 
     const findRelation = (members: any[]) => {
@@ -58,6 +57,7 @@ const ViewComponent: FC<Props> = (props: Props) => {
 
     const updateData = async (index: string, value: string) => {
         await patchRequest('/members', items?.id, { [index]: value }).then((res) => {
+            setText('');
             openNotification('Records Successfully Updated');
             props.refreshTable(true);
         }).catch(err => openNotification('Some Problem Occured', 'Please try again later.'))
@@ -75,14 +75,63 @@ const ViewComponent: FC<Props> = (props: Props) => {
                     className='rounded'
                 />
                 </Descriptions.Item> : null}
-                <Descriptions.Item label="First Name" contentStyle={{ color: 'grey' }}>{items.firstName}</Descriptions.Item>
-                <Descriptions.Item label="Last Name" contentStyle={{ color: 'grey' }}>{items.lastName}</Descriptions.Item>
-                <Descriptions.Item label="Qualification" contentStyle={{ color: 'grey' }}>{items.qualification}</Descriptions.Item>
-                <Descriptions.Item label="Profession" contentStyle={{ color: 'grey' }}>{items.profession}</Descriptions.Item>
-                <Descriptions.Item label='mobile' contentStyle={{ color: 'grey' }}>{items.mobile}</Descriptions.Item>
-                <Descriptions.Item label='Marital Status' contentStyle={{ color: 'grey' }}>{items.maritalStatus}</Descriptions.Item>
+                { isAdmin ? <Descriptions.Item label='First Name' contentStyle={{ color: 'gray' }}>
+                    <Input defaultValue={items.firstName} type='text' onChange={(e) => setText(e.target.value)} className='w-50' />
+                    <Button onClick={() => updateData('firstName', text as string )}>Save</Button>
+                </Descriptions.Item> : 
+                <Descriptions.Item label="First Name" contentStyle={{ color: 'grey' }}>{items.firstName}</Descriptions.Item> }
+                { isAdmin ? <Descriptions.Item label='Last Name' contentStyle={{ color: 'gray' }}>
+                    <Input defaultValue={items.lastName} type='text' onChange={(e) => setText(e.target.value)} className='w-50' />
+                    <Button onClick={() => updateData('lastName', text as string )}>Save</Button>
+                </Descriptions.Item> : 
+                <Descriptions.Item label="Last Name" contentStyle={{ color: 'grey' }}>{items.lastName}</Descriptions.Item> }
+                { isAdmin ? <Descriptions.Item label="Qualification" contentStyle={{ color: 'grey' }}>{
+                    <Select defaultValue={items.qualification} onChange={(e) => updateData('qualification', e)}>
+                        {qualificationOption.map((option: any, index) => {
+                            return (
+                                <Select.Option key={index} value={option.value}>
+                                    {option.label}
+                                </Select.Option>
+                            );
+                        })}
+                    </Select>
+                }</Descriptions.Item> :
+                <Descriptions.Item label="Qualification" contentStyle={{ color: 'grey' }}>{items.qualification}</Descriptions.Item> }
+                { isAdmin ? <Descriptions.Item label="Profession" contentStyle={{ color: 'grey' }}>{
+                    <Select defaultValue={items.profession} onChange={(e) => updateData('profession', e)}>
+                        {professionOption.map((option: any, index) => {
+                            return (
+                                <Select.Option key={index} value={option.value}>
+                                    {option.label}
+                                </Select.Option>
+                            );
+                        })}
+                    </Select>
+                }</Descriptions.Item> :
+                <Descriptions.Item label="Profession" contentStyle={{ color: 'grey' }}>{items.profession}</Descriptions.Item> }
+                { isAdmin ? <Descriptions.Item label='Mobile' contentStyle={{ color: 'gray' }}>
+                    <Input defaultValue={items.mobile} type='text' onChange={(e) => setText(e.target.value)} className='w-50' />
+                    <Button onClick={() => updateData('mobile', text as string )}>Save</Button>
+                </Descriptions.Item> : 
+                <Descriptions.Item label='mobile' contentStyle={{ color: 'grey' }}>{items.mobile}</Descriptions.Item> }
+                { isAdmin ?  <Descriptions.Item label="Marital Status" contentStyle={{ color: 'grey' }}>{
+                    <Select defaultValue={items.maritalStatus} onChange={(e) => updateData('maritalStatus', e)}>
+                        {martialStatusOptions.map((option: any, index) => {
+                            return (
+                                <Select.Option key={index} value={option.value}>
+                                    {option.label}
+                                </Select.Option>
+                            );
+                        })}
+                    </Select>
+                }</Descriptions.Item> :
+                <Descriptions.Item label='Marital Status' contentStyle={{ color: 'grey' }}>{items.maritalStatus}</Descriptions.Item> }
                 <Descriptions.Item label='Gender' contentStyle={{ color: 'grey' }}>{items.gender}</Descriptions.Item>
-                <Descriptions.Item label="Email" contentStyle={{ color: 'grey' }}>{items.email}</Descriptions.Item>
+                { isAdmin ? <Descriptions.Item label='Email' contentStyle={{ color: 'gray' }}>
+                    <Input defaultValue={items.email} type={'email'} onChange={(e) => setText(e.target.value)} className='w-50' />
+                    <Button onClick={() => updateData('email', text as string )}>Save</Button>
+                </Descriptions.Item> :
+                <Descriptions.Item label="Email" contentStyle={{ color: 'grey' }}>{items.email}</Descriptions.Item> }
                 <Descriptions.Item label="Date Of Birth" contentStyle={{ color: 'grey' }}>{new Date(items.dob).toDateString()}</Descriptions.Item>
                 <Descriptions.Item label="Blood" contentStyle={{ color: 'grey' }}>{items.blood}</Descriptions.Item>
                 {isAdmin ? <Descriptions.Item label="Status" contentStyle={{ color: 'grey' }}>{
@@ -95,10 +144,14 @@ const ViewComponent: FC<Props> = (props: Props) => {
                             );
                         })}
                     </Select>
-                }</Descriptions.Item> : <Descriptions.Item label="active" contentStyle={{ color: 'grey' }}>{items.active}</Descriptions.Item>}
+                }</Descriptions.Item> : <Descriptions.Item label="Status" contentStyle={{ color: 'grey' }}>{items.status}</Descriptions.Item>}
+                { isAdmin ? <Descriptions.Item label='Address' contentStyle={{ color: 'gray' }}>
+                    <TextArea defaultValue={items.address} rows={4} onChange={(e) => setText(e.target.value)} className='w-75' />
+                    <Button className='ms-2' onClick={() => updateData('address', text as string )}>Save</Button>
+                </Descriptions.Item> : 
                 <Descriptions.Item label="Address" contentStyle={{ color: 'grey' }} span={2}>
                     {items.address}
-                </Descriptions.Item>
+                </Descriptions.Item> }
             </Descriptions>
             {items?.members ? <Descriptions title="Family">
                 {relationData.map((value: any, index: any) => {
