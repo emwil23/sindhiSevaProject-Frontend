@@ -22,7 +22,7 @@ const RegisterComponent: FC = () => {
   const [OTP, setOTP] = useState<number>();
   const [step, setStep] = useState('otp');
   const [otpAttempted, setOtpAttempted] = useState<number>(0);
-  const [profileUrl, setProfileUrl] = useState<string>();
+  const [profileUrl, setProfileUrl] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

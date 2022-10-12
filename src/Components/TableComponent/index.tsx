@@ -54,7 +54,7 @@ let totalCount: any = getRequest("/members/count").then(({ count }) => {
 
 const whereBuilder = (whereObject: any | undefined) => {
   let andObject: any = [];
-  let where: any = {};
+  let where: any = { adminVerified: { eq: 'Accepted'} };
   if (whereObject) {
     Object.entries(whereObject).map(([key, value]) => {
       if (Array.isArray(value)) {
@@ -69,17 +69,10 @@ const whereBuilder = (whereObject: any | undefined) => {
     });
   }
   Object.assign(where, { or: andObject });
-  if (where.or.length !== 0) return where;
-  return undefined;
+  // if (where.or.length !== 0) return where;
+  return where;
 };
 
-/* const maritalStatusOptions: object[] = [
-  { label: "Married", value: "Married" },
-  { label: "Unmarried", value: "Unmarried" },
-  { label: "Divorced", value: "Divorced" },
-  { label: "Widow", value: "Widow" },
-  { label: "Widower", value: "Widower" },
-]; */
 
 const TableComponent: FC = () => {
   const [data, setData] = useState();

@@ -3,22 +3,23 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import { deleteRequest, getRequest, patchRequest, postRequest } from "../../../services/apiHelperService";
 import { currentUser, currentUserRole } from "../../app/slices/userSlice";
-import { professionOption, qualificationOption, relationsOptions, statusOption } from "../../selectOptions";
+import { bloodGroupOptions, genderOptions, martialStatusOptions, professionOption, professionOptions, qualificationOption, qualificationOptions, relationsOptions, statusOption } from "../../selectOptions";
 import { useDispatch } from "react-redux";
 import { pushUserDetails } from "../../app/slices/userSlice";
 import { openNotification } from "../../../services/notificationService";
 import Search from "antd/lib/input/Search";
 import { CopyOutlined, DeleteOutlined, EyeOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import Lottie from "lottie-react";
-import comingSoonAmination from '../../../assets/Comingsoon.json';
 import { useNavigate } from "react-router-dom";
+import FileUpload from "../../FileUpload";
+import TextArea from "antd/lib/input/TextArea";
 
 const ProfileComponent = () => {
   const [pendingMembers, setPendingMembers] = useState<any[]>();
   const [membersCount, setMembersCount] = useState(0);
   const [feeds, setFeeds] = useState<any>();
   const [coverVideoLink, setCoverVideoLink] = useState<any>();
+  const [profileUrl, setProfileUrl] = useState<string>();
   const userDetails = useSelector(currentUser);
   const userRole = useSelector(currentUserRole);
   const dispatch = useDispatch();
@@ -64,6 +65,10 @@ const ProfileComponent = () => {
     getCoverVideoLink();
     // eslint-disable-next-line
   }, [])
+
+  useEffect(() => {
+    localStorage.setItem('profileImg', JSON.stringify(profileUrl));
+  }, [profileUrl])
   
 
   // feed control panel
@@ -234,12 +239,253 @@ const ProfileComponent = () => {
       </div>
     </>
   }
+
+  //Add Member Form
+
+  const onFinish = (values: any) => {
+    console.log(values);
+    var profileImg = JSON.parse(localStorage.getItem('profileImg') as string);
+    if (values.dob) {
+      let dob = new Date(values?.dob);
+      values.dob = `${dob.getFullYear()}-${dob.getMonth() < 10 ? `0${dob.getMonth()}` : dob.getMonth()}-${dob.getDate() < 10 ? `0${dob.getDate()}` : dob.getDate()}`
+    }
+    if(!profileImg)
+      return openNotification('Please Upload Profile Picture');
+    values.profilePicture = profileImg;
+    postRequest('/signup', values).then(res => {
+      openNotification('SignUp Successful');
+      getUsersCount();
+      getPendingUsers();
+      Modal.destroyAll();
+    }).catch(() => openNotification('Problem occured while signup', 'Retry after some time.'))
+  };
+
+  const addMemberForm = () => {
+    return <Form onFinish={onFinish} layout="vertical">
+            <div className="row">
+              <div className="col-md-6">
+                <Form.Item
+                  label="First Name"
+                  name="firstName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter first name",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Enter your first name" />
+                </Form.Item>
+              </div>
+              <div className="col-md-6">
+                <Form.Item
+                  label="Last Name"
+                  name="lastName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter last name",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Enter your last name" />
+                </Form.Item>
+              </div>
+            </div>
+            <div className='row'>
+              <div className='col-md-6'>
+                <Form.Item name='profilePicture' label='Upload Profile Picture' getValueFromEvent={(e) => console.log(e)}>
+                <FileUpload storageUrl={setProfileUrl} />
+                </Form.Item>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  rules={[
+                    {
+                      // required: true,
+                      message: "Please enter the Email",
+                      type: 'email',
+                    },
+                  ]}
+                >
+                  <Input placeholder="Enter your email" />
+                </Form.Item>
+              </div>
+              <div className="col-md-6">
+                <Form.Item
+                  label="Date of Birth"
+                  name="dob"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select date",
+                      type: "date",
+                    },
+                  ]}
+                >
+                  <DatePicker placeholder="select date" className="w-100" format={'YYYY-MM-DD'} />
+                </Form.Item>
+              </div>
+            </div>
+          
+            <div className="row">
+              <div className="col-md-6">
+                <Form.Item
+                  label="Gender"
+                  name="gender"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select the gender",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Select gender">
+                    {genderOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
+                  </Select>
+                </Form.Item>
+              </div>
+              <div className="col-md-6">
+                <Form.Item
+                  label="Profession"
+                  name="profession"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select the Profession",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Select Profession">
+                    {professionOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
+                  </Select>
+                </Form.Item>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                <Form.Item
+                  label="Phone"
+                  name="mobile"
+                  validateTrigger="onBlur"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please Check your mobile number.",
+                      type: 'string',
+                      validator(rule, value, callback) {
+                        getRequest('/members', { filter: { where: { mobile: { eq: value } } } })
+                        .then((res:any[]) => {
+                          if(res.length >= 1)
+                            return callback('User with phone already exists.')
+                        });
+                      },
+                    },
+                  ]}
+                >
+                  <Input type={'string'} placeholder="Enter Mobile Number with countrycode" />
+                </Form.Item>
+              </div>
+              <div className="col-md-6">
+                <Form.Item
+                  label="Blood Group"
+                  name="blood"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter blood group",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Select placeholder='Select Blood Group'>
+                    {bloodGroupOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
+                  </Select>
+                </Form.Item>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                <Form.Item
+                  label="Qualification"
+                  name="qualification"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter qualification",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Select">
+                    {qualificationOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
+                  </Select>
+                </Form.Item>
+              </div>
+              <div className="col-md-6">
+                <Form.Item
+                  label="Marital Status"
+                  name="maritalStatus"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select marital status",
+                      type: "string",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Select">
+                    {martialStatusOptions.map((option, index) => {
+                      return <Select.Option value={option} key={index}>{option}</Select.Option>
+                    })}
+                  </Select>
+                </Form.Item>
+              </div>
+            </div>
+            <Form.Item
+              label="Address"
+              name="address"
+              rules={[
+                {
+                  // required: true,
+                  message: "Please enter address",
+                  type: "string",
+                },
+              ]}
+            >
+              <TextArea rows={3} placeholder="Enter Address" />
+            </Form.Item>
+            <div>
+              <Form.Item>
+                <Button type="primary" htmlType='submit'>
+                  Register
+                </Button>
+              </Form.Item>
+            </div>
+          </Form>
+  }
   
   const adminControls = () => {
     return (
       <>
         <div className="text-end mt-4 me-3">
-          <Button onClick={() => openModal('Add Members', <Lottie animationData={comingSoonAmination} loop={false} style={{ height: '150px' }} />)} >Add members</Button>
+          <Button onClick={() => openModal('Add Members', addMemberForm())} >Add members</Button>
         </div>
         <div className="mx-5 my-4 row">
           <div className="col-6">
