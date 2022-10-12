@@ -369,6 +369,7 @@ const TableComponent: FC = () => {
     onChange: (onSelectChange: any, selectedRow: any) => {
       setSelectedRowKeys(onSelectChange);
       setSelectedRows(selectedRow);
+      console.log(selectedRow);
     },
   };
 

@@ -11,10 +11,6 @@ export const martialStatusOptions: string[] = ['Married', 'Unmarried', 'Divorced
 
 export const relationsOptions: string[] = ['Father', 'Mother', 'Husband', 'Wife', 'Sister', 'Brother'];
 
-export const activeOptions: object[] = [
-    { label: 'Active', value: 'Active' },
-    { label: 'Inactive', value: 'Inactive' },
-];
 
 export const professionOption: object[] = [
     { label: "Doctor", value: "Doctor" },

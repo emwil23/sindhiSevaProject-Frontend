@@ -1,3 +1,4 @@
+import { Card } from "antd";
 import { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import ReactPlayer from 'react-player';
@@ -77,18 +78,16 @@ function AddsSlider() {
                 // centerMode={true}
                 autoPlay={true}
                 responsive={responsive}>
-                { adsState.loading ? <LoadingService /> : 
-                    adsState.adsData?.length ? adsState.adsData.map((data:any, index:number) => {
-                        return <div key={index} className="card mx-2" style={{ cursor: 'pointer' }} title={`${data?.redirectUrl}`} onClick={() => window.open(`${data?.redirectUrl}`, '_blank')}>
-                        <div className="card-body">
+                {adsState.loading ? <LoadingService /> :
+                    adsState.adsData?.length ? adsState.adsData.map((data: any, index: number) => {
+                        return <Card key={index} className="mx-2" style={{ cursor: 'pointer', height: '18rem' }} onClick={() => window.open(`${data?.redirectUrl}`, '_blank')}>
                             <img className="card-img" alt="" src={`${data?.imageUrl}`} height="200px" width="600px" />
                             <div className="card-text">
                                 <p>
                                     {data?.description}
                                 </p>
                             </div>
-                        </div>
-                    </div> 
+                        </Card>
                     }) : <h4 className="text-center">Contact Admin to post Advertisments</h4>
                 }
             </Carousel>

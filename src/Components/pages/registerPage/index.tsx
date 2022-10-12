@@ -22,7 +22,7 @@ const RegisterComponent: FC = () => {
   const [OTP, setOTP] = useState<number>();
   const [step, setStep] = useState('otp');
   const [otpAttempted, setOtpAttempted] = useState<number>(0);
-  const [profileUrl, setProfileUrl] = useState();
+  const [profileUrl, setProfileUrl] = useState<string>();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -47,8 +47,9 @@ const RegisterComponent: FC = () => {
       values.anniversary = `${date.getFullYear()}-${date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()}`
     }
     values.mobile = phoneNumber;
-    if(profileUrl)
-      values.profilePicture = profileUrl;
+    if(!profileUrl)
+      return openNotification('Please Upload Profile Picture');
+    values.profilePicture = profileUrl;
     postRequest('/signup', values).then(res => {
       dispatch(loggedInTrue());
       dispatch(pushUserDetails(res));

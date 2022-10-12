@@ -1,21 +1,21 @@
-import { Button, Card, DatePicker, Form, Input, Modal, Select, Tooltip } from "antd";
+import { Avatar, Button, Card, DatePicker, Form, Input, List, Modal, Popover, Select, Tooltip } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { getRequest, patchRequest, postRequest } from "../../../services/apiHelperService";
+import { deleteRequest, getRequest, patchRequest, postRequest } from "../../../services/apiHelperService";
 import { currentUser, currentUserRole } from "../../app/slices/userSlice";
-import { activeOptions, professionOption, qualificationOption, relationsOptions } from "../../selectOptions";
+import { professionOption, qualificationOption, relationsOptions, statusOption } from "../../selectOptions";
 import { useDispatch } from "react-redux";
 import { pushUserDetails } from "../../app/slices/userSlice";
 import { openNotification } from "../../../services/notificationService";
 import Search from "antd/lib/input/Search";
-import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, EyeOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import comingSoonAmination from '../../../assets/Comingsoon.json';
 import { useNavigate } from "react-router-dom";
 
 const ProfileComponent = () => {
-  const [pendingMembers, setPendingMembers] = useState(0);
+  const [pendingMembers, setPendingMembers] = useState<any[]>();
   const [membersCount, setMembersCount] = useState(0);
   const [feeds, setFeeds] = useState<any>();
   const [coverVideoLink, setCoverVideoLink] = useState<any>();
@@ -40,7 +40,14 @@ const ProfileComponent = () => {
       title: title,
       content: content,
       onOk: () => { },
+      okText: 'Done',
       width: '50vw'
+    })
+  }
+
+  async function getPendingUsers() {
+    await getRequest('/members', { filter: { where: { adminVerified: 'Pending' } } }).then( res => {
+      setPendingMembers(res);
     })
   }
 
@@ -48,15 +55,14 @@ const ProfileComponent = () => {
     await getRequest('/members/count').then(res => {
       setMembersCount(res.count);
     });
-    await getRequest('/members',{ where: { adminVerified: 'Pending' } }).then(res => {
-      setPendingMembers(res.length);
-    })
+    await getPendingUsers();
   }
 
   useEffect(() => {
     getUsersCount();
     getFeedsData();
     getCoverVideoLink();
+    // eslint-disable-next-line
   }, [])
   
 
@@ -102,7 +108,7 @@ const ProfileComponent = () => {
         </Form.List>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Submit
+            Update
           </Button>
         </Form.Item>
       </Form>
@@ -116,6 +122,7 @@ const ProfileComponent = () => {
     })
     return patchRequest('/feeds',feeds?.id, { feedsList: event.feedsList }).then(res => {
       getFeedsData();
+      openNotification('Updated Feeds Successfully!')
     })
   }
 
@@ -144,7 +151,7 @@ const ProfileComponent = () => {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Submit
+            Update
           </Button>
         </Form.Item>
       </Form>
@@ -159,6 +166,7 @@ const ProfileComponent = () => {
 
     return patchRequest('/cover-video', coverVideoLink.id, { videoUrl: event.url } ).then(res => {
       getCoverVideoLink();
+      openNotification('Updated Video Successfully!')
     })
   }
 
@@ -168,6 +176,64 @@ const ProfileComponent = () => {
     })
   }
 
+
+  //New Members Requests
+
+  const newMembersPanel = (): JSX.Element => {
+    return <>
+      { pendingMembers?.length ? <List itemLayout='horizontal'>
+        { pendingMembers.map((data:any, index:number) => {
+          return <List.Item key={index} actions={[<Popover content={displayNewMembersDetails(data)} title={`${data?.firstName} Details`} trigger='click'><Button icon={<EyeOutlined/>}></Button></Popover>,<Button onClick={() => acceptMember(data)}>Accept</Button>,<Button onClick={() => rejectMember(data)}>Reject</Button>]}>
+            <List.Item.Meta avatar={<Avatar src={`${data?.profilePicture}`}/>} title={`${data?.firstName} ${data?.lastName}`} description={`phone: ${data?.mobile}`} />
+          </List.Item>
+        }) }
+      </List> : 'No List' }
+    </>
+  }
+
+  const acceptMember = async (data:any) => {
+    await patchRequest('/members', data?.id, { adminVerified: 'Accepted' }).then(res => {
+      getPendingUsers();
+      Modal.destroyAll();
+      openNotification('Member Added Successfully');
+    })
+  }
+
+  const rejectMember = async (data:any) => {
+    await deleteRequest('/members', data?.id).then(res => {
+      getPendingUsers();
+      getUsersCount();
+      Modal.destroyAll();
+      openNotification('Member Rejected Successfully');
+    })
+  }
+
+  const displayNewMembersDetails = (data:any): JSX.Element => {
+    var dob:any = new Date(data?.dob);
+    dob = `${dob.getDate()}-${dob.getMonth()}-${dob.getFullYear()}` 
+    return <>
+      <div>
+        <span>Fist Name:</span>
+        <span>{data.firstName}</span>
+      </div>
+      <div>
+        <span>Last Name:</span>
+        <span>{data.lastName}</span>
+      </div>
+      <div>
+        <span>DOB:</span>
+        <span>{dob}</span>
+      </div>
+      <div>
+        <span>Profession:</span>
+        <span>{data.profession}</span>
+      </div>
+      <div>
+        <span>Marital Status:</span>
+        <span>{data.maritalStatus}</span>
+      </div>
+    </>
+  }
   
   const adminControls = () => {
     return (
@@ -189,9 +255,9 @@ const ProfileComponent = () => {
             </Card>
           </div>
           <div className="col-6">
-            <Card onClick={() => openModal('New Member Requests', <h1>New Members</h1>)} className='btn btn-outline-secondary' >
+            <Card onClick={() => openModal('New Member Requests', newMembersPanel())} className='btn btn-outline-secondary' >
               <div className="row">
-                <div className="col-6 fs-2 fw-light">{pendingMembers}</div>
+                <div className="col-6 fs-2 fw-light">{pendingMembers?.length}</div>
                 <div className="col-6">New Requests</div>
               </div>
             </Card>
@@ -254,8 +320,8 @@ const ProfileComponent = () => {
         <div className="row mb-2">
           <div className="col-md-6">
             <span>Active Status</span><br />
-            <Select defaultValue={userDetails?.active} className='w-100' onChange={(e) => { updateData('active', e as string) }}>
-              {activeOptions.map((value: any, index) => {
+            <Select defaultValue={userDetails?.status} className='w-100' onChange={(e) => { updateData('status', e as string) }}>
+              {statusOption.map((value: any, index) => {
                 return <Select.Option value={value.label} key={index}>{value.value}</Select.Option>
               })}
             </Select>
