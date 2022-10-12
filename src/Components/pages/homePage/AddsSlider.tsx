@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
 import ReactPlayer from 'react-player';
-import { getRequest } from "../../../services/apiHelperService";
+import { deleteRequest, getRequest } from "../../../services/apiHelperService";
 import LoadingService from "../../../services/loadingService";
 
 
@@ -12,6 +12,11 @@ function AddsSlider() {
         loading: true
     });
 
+    const [adsState, setAdsSate] = useState<{ adsData: any[], loading?: boolean }>({
+        adsData: [],
+        loading: true
+    })
+
     useEffect(() => {
         getRequest('/cover-video').then(res => {
             setState({
@@ -19,6 +24,25 @@ function AddsSlider() {
                 loading: false
             })
         });
+        getRequest('/ads').then((res:any[]) => {
+            // eslint-disable-next-line
+            var newAds = res.filter((items => {
+                var date = new Date(items.expireDate);
+                if(date.getUTCDate() > new Date().getUTCDate()) return items;
+            }));
+            setAdsSate({
+                adsData: newAds,
+                loading: false
+            })
+            // eslint-disable-next-line
+            var oldAds = res.filter((item) => {
+                var date = new Date(item?.expireDate);
+                if(date.getUTCDate() < new Date().getUTCDate()) return item;
+            })
+            if(oldAds.length){
+                oldAds.map((item) => deleteRequest('/ads', item?.id))
+            }
+        })
     }, [])
 
     const responsive = {
@@ -53,46 +77,20 @@ function AddsSlider() {
                 // centerMode={true}
                 autoPlay={true}
                 responsive={responsive}>
-                <div className="card mx-1">
-                    <div className="card-body">
-                        <img className="card-img" alt="" src='https://unsplash.com/photos/XWl8Pu3HrgY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjYwNzEwODAw&force=true&w=640' height="200px" />
-                        <div className="card-text">
-                            <p>
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet, qui beatae assumenda voluptates, totam tempora odio modi fugiat iure id.
-                            </p>
+                { adsState.loading ? <LoadingService /> : 
+                    adsState.adsData?.length ? adsState.adsData.map((data:any, index:number) => {
+                        return <div key={index} className="card mx-2" style={{ cursor: 'pointer' }} title={`${data?.redirectUrl}`} onClick={() => window.open(`${data?.redirectUrl}`, '_blank')}>
+                        <div className="card-body">
+                            <img className="card-img" alt="" src={`${data?.imageUrl}`} height="200px" width="600px" />
+                            <div className="card-text">
+                                <p>
+                                    {data?.description}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div className="card mx-1">
-                    <div className="card-body">
-                        <img className="card-img" alt="" src='https://unsplash.com/photos/zFSo6bnZJTw/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Nnx8c2Nob29sfGVufDB8fHx8MTY2MTUyMTg0MA&force=true&w=640' height="200px" />
-                        <div className="card-text">
-                            <p>
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet, qui beatae assumenda voluptates, totam tempora odio modi fugiat iure id.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="card mx-1">
-                    <div className="card-body">
-                        <img className="card-img" alt="" src='https://unsplash.com/photos/WE_Kv_ZB1l0/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjYxNTY5Njkx&force=true&w=640' height="200px" />
-                        <div className="card-text">
-                            <p>
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet, qui beatae assumenda voluptates, totam tempora odio modi fugiat iure id.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="card mx-1">
-                    <div className="card-body">
-                        <img className="card-img" alt="" src='https://unsplash.com/photos/s9CC2SKySJM/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjB8fHNjaG9vbHxlbnwwfHx8fDE2NjE1MjE4NDA&force=true&w=640' height="200px" />
-                        <div className="card-text">
-                            <p>
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet, qui beatae assumenda voluptates, totam tempora odio modi fugiat iure id.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                    </div> 
+                    }) : <h4 className="text-center">Contact Admin to post Advertisments</h4>
+                }
             </Carousel>
         </div>
     )

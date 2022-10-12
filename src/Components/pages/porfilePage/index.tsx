@@ -1,4 +1,4 @@
-import { Button, Card, DatePicker, Form, Input, message, Modal, Select, Tooltip, Upload, UploadProps } from "antd";
+import { Button, Card, DatePicker, Form, Input, Modal, Select, Tooltip } from "antd";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { getRequest, patchRequest, postRequest } from "../../../services/apiHelperService";
@@ -8,12 +8,11 @@ import { useDispatch } from "react-redux";
 import { pushUserDetails } from "../../app/slices/userSlice";
 import { openNotification } from "../../../services/notificationService";
 import Search from "antd/lib/input/Search";
-import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 import comingSoonAmination from '../../../assets/Comingsoon.json';
 import { useNavigate } from "react-router-dom";
-// import FileUpload from "../../FileUpload";
 
 const ProfileComponent = () => {
   const [pendingMembers, setPendingMembers] = useState(0);

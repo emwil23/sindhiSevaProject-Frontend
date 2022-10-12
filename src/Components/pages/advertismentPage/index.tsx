@@ -17,7 +17,8 @@ const AdvertismentComponent: FC = () => {
         const payload = {
             imageUrl: imageUrl,
             description: event.description,
-            expireDate: new Date(event.expireDate)
+            expireDate: new Date(event?.expireDate),
+            redirectUrl: event?.redirectUrl
         }
       await postRequest('/ads', payload ).then(res => {
         fetchAds();
@@ -44,9 +45,6 @@ const AdvertismentComponent: FC = () => {
         });
     }
 
-    console.log(adsData);
-    
-
     return (
         <>
             <div className='d-flex justify-content-between mx-5 mt-2'>
@@ -64,14 +62,14 @@ const AdvertismentComponent: FC = () => {
                         <Image src={`${ads?.imageUrl}`} height={'100px'} />
                         <p className='mt-2'>{ads?.description}</p>
                         <p>{displayDate}</p>
-                        <Button type='text' danger onClick={() => deleteAd(ads?.id)} icon={<DeleteOutlined/>}></Button>
+                        <Button type='text' danger onClick={() => deleteAd(ads?.id)} icon={<DeleteOutlined/>} title='Delete Ad'></Button>
                     </Card>
                     </div>
                 } )}
                 </div> : 'No Data' }
             </div>
             }
-            <Modal title="Basic Modal" visible={isModalOpen} destroyOnClose={true} footer={null} onCancel={() => setIsModalOpen(!isModalOpen)}>
+            <Modal title="List Advertisment" visible={isModalOpen} destroyOnClose={true} footer={null} onCancel={() => setIsModalOpen(!isModalOpen)}>
                 <Form onFinish={onFinish} layout='vertical'>
                     <Form.Item
                         name={'imageUrl'}
@@ -85,6 +83,13 @@ const AdvertismentComponent: FC = () => {
                         label='Enter Description'
                     >
                         <TextArea rows={3} maxLength={100} placeholder='Max Characters 100' />
+                    </Form.Item>
+                    <Form.Item
+                        name={'redirectUrl'}
+                        rules={[{ type: 'url' }]}
+                        label='Enter Target Url'
+                    >
+                        <Input placeholder='Enter Target Url' />
                     </Form.Item>
                     <Form.Item
                         name={'expireDate'}
