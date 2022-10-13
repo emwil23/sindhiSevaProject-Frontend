@@ -31,3 +31,8 @@ export const statusOption: object[] = [
     { label: 'InActive', value: 'InActive' },
     { label: 'Blocked', value: 'Blocked'}
 ]
+
+export const yesNoOption: object[] = [
+    { label: 'Yes', value: true },
+    { label: 'No', value: false }
+]

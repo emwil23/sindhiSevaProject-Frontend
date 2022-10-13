@@ -5,7 +5,7 @@ import Spin from 'antd/lib/spin';
 import { FC, useEffect, useState } from 'react';
 import { getRequest, patchRequest } from '../../../services/apiHelperService';
 import { openNotification } from '../../../services/notificationService';
-import { martialStatusOptions, professionOption, qualificationOption, statusOption } from '../../selectOptions';
+import { martialStatusOptions, professionOption, qualificationOption, statusOption, yesNoOption } from '../../selectOptions';
 
 interface Props {
     items: any,
@@ -61,6 +61,13 @@ const ViewComponent: FC<Props> = (props: Props) => {
             openNotification('Records Successfully Updated');
             props.refreshTable(true);
         }).catch(err => openNotification('Some Problem Occured', 'Please try again later.'))
+    }
+
+    const giveDownloadAccess = async (index: string, value: any) => {
+        await patchRequest('/members', items.id, { [index]: value }).then((res) => {
+            openNotification(`Download Access Given to ${items.firstName}`);
+            props.refreshTable(true);
+        }).catch(err => openNotification('Some Problem Occured', 'Please try again later.'));
     }
 
 
@@ -152,6 +159,17 @@ const ViewComponent: FC<Props> = (props: Props) => {
                 <Descriptions.Item label="Address" contentStyle={{ color: 'grey' }} span={2}>
                     {items.address}
                 </Descriptions.Item> }
+                { isAdmin ? <Descriptions.Item label='AllowDownload' contentStyle={{ color: 'gray' }}>
+                    <Select defaultValue={items?.downloadsAllowed?.allowed} onChange={e => giveDownloadAccess('downloadsAllowed', { allowed: e, time: Date.now() })}>
+                    {yesNoOption.map((option: any, index) => {
+                            return (
+                                <Select.Option key={index} value={option.value}>
+                                    {option.label}
+                                </Select.Option>
+                            );
+                        })}
+                    </Select>
+                </Descriptions.Item> : null}
             </Descriptions>
             {items?.members ? <Descriptions title="Family">
                 {relationData.map((value: any, index: any) => {
@@ -162,7 +180,6 @@ const ViewComponent: FC<Props> = (props: Props) => {
                     </> : null;
                 })}
             </Descriptions> : null}
-
         </>
 }
 

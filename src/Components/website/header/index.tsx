@@ -24,20 +24,21 @@ const HeaderComponent: FC = () => {
   }
 
   return (
-    <header className="d-flex align-items-center justify-content-center justify-content-md-between py-2 mx-3">
-      <div className='col-md-4'>
+    <header className="d-flex align-items-center justify-content-center justify-content-md-between py-2 mx-2">
+      <div className='col-md-3'>
         <Link to={'/'} className='text-dark fw-light fs-5'>Sindhi Seva Samiti</Link>
       </div>
 
-      <Space split={<Divider type="vertical" />}>
+      <Space className='col-md-5' split={<Divider type="vertical" />}>
         <Link to={'/'} className='text-dark'>Home</Link>
         <Link to={'/associations'} className='text-dark'>Associations</Link>
+        <Link to={'/reforms'} className='text-dark'>Reforms</Link>
         {userLoggedIn ? <Link to={'/directories'} className='text-dark'>Directories</Link> : null }
         <Link to={'/aboutUs'} className='text-dark'>About</Link>
         <Link to={'/contactUs'} className='text-dark'>ContatctUs</Link>
       </Space>
 
-      <div className="col-md-4 text-end">
+      <div className="col-md-3 text-end">
         <Button type='text' hidden={userLoggedIn} onClick={() => navigate('/auth/login')}>LogIn</Button>
         <Button type='primary' hidden={userLoggedIn} onClick={() => navigate('/auth/register')}>SignUp</Button>
         <Button hidden={!userLoggedIn} onClick={() => navigate('/profile')}>{userDetails?.firstName+' '+userDetails?.lastName}</Button>

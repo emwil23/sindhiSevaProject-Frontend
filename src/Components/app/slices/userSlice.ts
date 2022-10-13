@@ -14,6 +14,9 @@ const userSlice = createSlice({
         },
         updateProfile: (state:any, action) => {
             state.userDetails.profilePicture = action.payload;
+        },
+        updateDownloadAccess: (state:any, action) => {
+            state.userDetails.downloadsAllowed = action.payload;
         }
     }
 });
@@ -23,6 +26,6 @@ export const currentUser = (state:any) => state.currentUser?.userDetails;
 
 export const currentUserRole = (state:any) => state.currentUser?.userDetails?.role;
 
-export const { pushUserDetails, updateProfile } = userSlice.actions;
+export const { pushUserDetails, updateProfile, updateDownloadAccess } = userSlice.actions;
 
 export default userSlice.reducer;

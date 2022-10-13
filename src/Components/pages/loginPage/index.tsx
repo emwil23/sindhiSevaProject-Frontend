@@ -7,7 +7,7 @@ import { openNotification } from '../../../services/notificationService';
 import { useDispatch} from 'react-redux';
 import { loggedInTrue } from '../../app/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
-import { pushUserDetails } from '../../app/slices/userSlice';
+import { pushUserDetails, updateDownloadAccess } from '../../app/slices/userSlice';
 import { AxiosError } from 'axios';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import OTPInput, { ResendOTP } from 'otp-input-react';
@@ -22,11 +22,21 @@ const LoginComponent: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const currentTime = new  Date();
+
   const onFinish = (values: any) => {
-    postRequest('/login', values).then(res => {
+    postRequest('/login', values).then((res:any) => {
+      let allowedDownloadDate = new Date(res?.downloadsAllowed?.time);
       dispatch(pushUserDetails(res));
       openNotification('Logged In');
       dispatch(loggedInTrue());
+      if (allowedDownloadDate) {
+        const msBetweenDates = Math.abs(allowedDownloadDate.getTime() - currentTime.getTime());
+        // 👇️ convert ms to hours                  min  sec   ms
+        const hoursBetweenDates = msBetweenDates / (60 * 60 * 1000);
+        if(hoursBetweenDates > 24)
+          dispatch(updateDownloadAccess({ allowed: false }));
+      }
       navigate('/', { replace: true });
     }).catch((err : AxiosError) => {
       let error:any = err.response?.data;

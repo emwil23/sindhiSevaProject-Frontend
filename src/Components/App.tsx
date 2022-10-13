@@ -15,6 +15,7 @@ const DirectoriesComponent = React.lazy(() => import("./pages/DirectoriesPage"))
 const ProfileComponent = React.lazy(() => import('./pages/porfilePage'));
 const Association = React.lazy(() => import('./pages/associations'));
 const AdvertismentComponent = React.lazy(() => import('./pages/advertismentPage'));
+const ReformsComponent = React.lazy(() => import('./pages/reformsPage'));
 
 
 const App: FC = () => {
@@ -55,6 +56,10 @@ const App: FC = () => {
     {
       path: '/associations',
       element: <React.Suspense fallback={<LoadingService />}><Association /></React.Suspense>
+    },
+    {
+      path: '/reforms',
+      element: <React.Suspense fallback={<LoadingService />}><ReformsComponent /></React.Suspense>
     },
     {
       path: '*',
