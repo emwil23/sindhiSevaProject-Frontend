@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
-import { Button, DatePicker, Form, Input, Select } from "antd";
+import { Button, DatePicker, Form, Input, Select, Tooltip } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/lib/input/TextArea";
 import { genderOptions, professionOptions, bloodGroupOptions, qualificationOptions, martialStatusOptions, relationsOptions } from '../../selectOptions';
@@ -17,7 +17,7 @@ import React from 'react';
 import FileUpload from '../../FileUpload';
 
 const RegisterComponent: FC = () => {
-  const [hideAnniversary, setHideAnniversary] = useState(true);
+  // const [hideAnniversary, setHideAnniversary] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState<string>();
   const [OTP, setOTP] = useState<number>();
   const [step, setStep] = useState('otp');
@@ -26,18 +26,20 @@ const RegisterComponent: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onMartialStatusChange = (value: string) => {
-    switch(value){
-      case 'Married': 
-        setHideAnniversary(false);
-        return;
-      default:
-        setHideAnniversary(true);
-        return;
-    }
-  }
+  // const onMartialStatusChange = (value: string) => {
+  //   switch(value){
+  //     case 'Married': 
+  //       setHideAnniversary(false);
+  //       return;
+  //     default:
+  //       setHideAnniversary(true);
+  //       return;
+  //   }
+  // }
 
   const onFinish = (values: any) => {
+    if(values.email === undefined)
+      delete values.email;
     if (values.dob) {
       let dob = new Date(values?.dob);
       values.dob = `${dob.getFullYear()}-${dob.getMonth() < 10 ? `0${dob.getMonth()}` : dob.getMonth()}-${dob.getDate() < 10 ? `0${dob.getDate()}` : dob.getDate()}`
@@ -162,7 +164,11 @@ const RegisterComponent: FC = () => {
             </div>
             <div className='row'>
               <div className='col-md-6'>
-                <FileUpload storageUrl={setProfileUrl} />
+              <Tooltip title="Max size (200kb). Only jpeg/png" placement='topLeft'>
+                <Form.Item label="Profile Picture">
+                    <FileUpload storageUrl={setProfileUrl} />
+                </Form.Item>
+                </Tooltip>
               </div>
             </div>
             {/* <div className="row">
@@ -249,7 +255,9 @@ const RegisterComponent: FC = () => {
                     },
                   ]}
                 >
+                  <Tooltip title="Date format (YYYY-MM-DD). Press Enter to select">
                   <DatePicker placeholder="select date" className="w-100" format={'YYYY-MM-DD'} />
+                  </Tooltip>
                 </Form.Item>
               </div>
             </div>
@@ -362,7 +370,7 @@ const RegisterComponent: FC = () => {
                     },
                   ]}
                 >
-                  <Select placeholder="Select" onChange={onMartialStatusChange}>
+                  <Select placeholder="Select">
                     {martialStatusOptions.map((option, index) => {
                       return <Select.Option value={option} key={index}>{option}</Select.Option>
                     })}
@@ -370,7 +378,7 @@ const RegisterComponent: FC = () => {
                 </Form.Item>
               </div>
             </div>
-            <Form.Item
+            {/* <Form.Item
               label="Anniversary Date"
               name="anniversary"
               rules={[
@@ -383,7 +391,7 @@ const RegisterComponent: FC = () => {
               hidden={hideAnniversary}
             >
               <DatePicker placeholder="select date" className="w-100" format={'YYYY-MM-DD'} />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               label="Address"
               name="address"

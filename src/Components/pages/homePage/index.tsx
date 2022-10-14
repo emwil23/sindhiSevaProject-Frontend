@@ -4,7 +4,6 @@ import NewsTicker from "react-advanced-news-ticker";
 import { getRequest } from '../../../services/apiHelperService';
 import LoadingService from '../../../services/loadingService';
 import AddsSlider from './AddsSlider';
-import PresidentPhoto from '../../../assets/president-photo.jpg';
 
 
 const HomeComponent: FC = () => {
@@ -45,7 +44,7 @@ const HomeComponent: FC = () => {
             <div className="col-md-6">
               <Avatar
                 size={100}
-                src={PresidentPhoto}
+                src="https://joeschmoe.io/api/v1/random"
               />
               <div className="mt-3">MADAN DOULATRAM</div>
             </div>

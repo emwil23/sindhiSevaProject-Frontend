@@ -28,6 +28,11 @@ const ProfileComponent = () => {
   const navigate = useNavigate();
 
   const updateData = async (index: string, value: string) => {
+    if(index === 'mobile'){
+      const memberExists: any[] = await getRequest('/members', { filter: { where: { mobile: { eq: value } } } } );
+      if(memberExists.length > 0)
+        return openNotification('User with this number already exists');
+    }
     await patchRequest('/members', userDetails?.id, { [index]: value }).then((res) => {
       dispatch(pushUserDetails(res));
       openNotification('Records Successfully Updated')
@@ -69,7 +74,7 @@ const ProfileComponent = () => {
   }
 
   async function getUsersCount() {
-    await getRequest('/members/count').then(res => {
+    await getRequest('/members/valid-member/count').then(res => {
       setMembersCount(res.count);
     });
     await getPendingUsers();
@@ -266,6 +271,8 @@ const ProfileComponent = () => {
 
   const onFinish = (values: any) => {
     var profileImg = JSON.parse(localStorage.getItem('profileImg') as string);
+    if(values.email === undefined)
+      delete values.email;
     if (values.dob) {
       let dob = new Date(values?.dob);
       values.dob = `${dob.getFullYear()}-${dob.getMonth() < 10 ? `0${dob.getMonth()}` : dob.getMonth()}-${dob.getDate() < 10 ? `0${dob.getDate()}` : dob.getDate()}`
@@ -662,7 +669,7 @@ const ProfileComponent = () => {
           </div>
           <div className="col-md-6">
             <span>Mobile</span><br />
-            <Search defaultValue={userDetails?.mobile} maxLength={10} enterButton="SAVE" size='middle' onSearch={(e) => { updateData('mobile', e as string) }} />
+            <Search defaultValue={userDetails?.mobile} minLength={10} maxLength={15} enterButton="SAVE" size='middle' onSearch={(e) => { updateData('mobile', e as string) }} />
           </div>
         </div>
         <div className="row mb-2">

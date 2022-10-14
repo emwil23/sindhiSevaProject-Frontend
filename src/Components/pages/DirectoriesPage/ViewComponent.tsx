@@ -65,7 +65,10 @@ const ViewComponent: FC<Props> = (props: Props) => {
 
     const giveDownloadAccess = async (index: string, value: any) => {
         await patchRequest('/members', items.id, { [index]: value }).then((res) => {
-            openNotification(`Download Access Given to ${items.firstName}`);
+            if(!res.downloadsAllowed.allowed)
+                openNotification('Download Access Taken Back');
+            else
+                openNotification(`Download Access Given to ${items.firstName}`);
             props.refreshTable(true);
         }).catch(err => openNotification('Some Problem Occured', 'Please try again later.'));
     }
