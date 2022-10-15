@@ -2,12 +2,12 @@ import { FC, useState } from 'react';
 import Lottie from 'lottie-react';
 import registrationLottie from '../../../assets/register.json';
 import { Button} from 'antd';
-import { postRequest } from '../../../services/apiHelperService';
+import { getRequest, patchRequest, postRequest } from '../../../services/apiHelperService';
 import { openNotification } from '../../../services/notificationService';
 import { useDispatch} from 'react-redux';
 import { loggedInTrue } from '../../app/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
-import { pushUserDetails, updateDownloadAccess } from '../../app/slices/userSlice';
+import { pushUserDetails, updateDownloadAccess, updateMembers } from '../../app/slices/userSlice';
 import { AxiosError } from 'axios';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import OTPInput, { ResendOTP } from 'otp-input-react';
@@ -27,6 +27,7 @@ const LoginComponent: FC = () => {
   const onFinish = (values: any) => {
     postRequest('/login', values).then((res:any) => {
       let allowedDownloadDate = new Date(res?.downloadsAllowed?.time);
+      let members: object[] = res?.members;
       dispatch(pushUserDetails(res));
       openNotification('Logged In');
       dispatch(loggedInTrue());
@@ -34,8 +35,23 @@ const LoginComponent: FC = () => {
         const msBetweenDates = Math.abs(allowedDownloadDate.getTime() - currentTime.getTime());
         // 👇️ convert ms to hours                  min  sec   ms
         const hoursBetweenDates = msBetweenDates / (60 * 60 * 1000);
-        if(hoursBetweenDates > 24)
+        if(hoursBetweenDates > 24){
           dispatch(updateDownloadAccess({ allowed: false }));
+          patchRequest('/members', res?.id, { downloadsAllowed: { allowed: false } });
+        }
+      }
+      if(members){
+        let newMemberArray: object[] = [];
+        members.map(async (member:any) => {
+          await getRequest('/members', { filter: { where: { uid: member.relationId } } }).then((res:any) => {
+            var exists: object[] = res;
+            if(exists.length > 0){
+              newMemberArray.push(member);
+            }
+          });
+        });
+        dispatch(updateMembers(newMemberArray));
+        patchRequest('/members', res?.id, { members: newMemberArray });
       }
       navigate('/', { replace: true });
     }).catch((err : AxiosError) => {

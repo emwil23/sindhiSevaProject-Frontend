@@ -2,7 +2,7 @@ import { Alert, Avatar, Button, Card, DatePicker, Form, Image, Input, List, Moda
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { deleteRequest, getRequest, patchRequest, postRequest } from "../../../services/apiHelperService";
-import { currentUser, currentUserRole, updateDownloadAccess, updateProfile } from "../../app/slices/userSlice";
+import { currentUser, currentUserRole, updateDownloadAccess, updateMembers, updateProfile } from "../../app/slices/userSlice";
 import { bloodGroupOptions, genderOptions, martialStatusOptions, professionOption, professionOptions, qualificationOption, qualificationOptions, relationsOptions, statusOption } from "../../selectOptions";
 import { useDispatch } from "react-redux";
 import { pushUserDetails } from "../../app/slices/userSlice";
@@ -54,7 +54,11 @@ const ProfileComponent = () => {
 
 
   const onFinishMembers = (value: any) => {
-    updateData('members', value.members);
+    postRequest('/add-members', { userId: userDetails.id, membersData: value.members }).then(res => {
+      if(res.updated)
+        openNotification('Members Saved Successfully');
+      dispatch(updateMembers(value.members));
+    })
   }
 
   const openModal = (title: string, content: any) => {
@@ -226,6 +230,7 @@ const ProfileComponent = () => {
   const acceptMember = async (data: any) => {
     await patchRequest('/members', data?.id, { adminVerified: 'Accepted' }).then(res => {
       getPendingUsers();
+      getUsersCount();
       Modal.destroyAll();
       openNotification('Member Added Successfully');
     })

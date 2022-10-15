@@ -93,6 +93,7 @@ const RegisterComponent: FC = () => {
         openNotification('Verification successful');
         setStep('form');
       }
+      else openNotification('Not a valid OTP');
     })
   }
 
