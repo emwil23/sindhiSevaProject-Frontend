@@ -280,6 +280,7 @@ const ProfileComponent = () => {
     if (!profileImg || profileImg === '')
       return openNotification('Please Upload Profile Picture');
     values.profilePicture = profileImg;
+    values.adminVerified = 'Accepted';
     localStorage.removeItem('profileImg');
     postRequest('/signup', values).then(res => {
       openNotification('SignUp Successful');

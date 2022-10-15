@@ -35,7 +35,7 @@ const HeaderComponent: FC = () => {
         <Link to={'/reforms'} className='text-dark'>Reforms</Link>
         {userLoggedIn ? <Link to={'/directories'} className='text-dark'>Directories</Link> : null }
         <Link to={'/aboutUs'} className='text-dark'>About</Link>
-        <Link to={'/contactUs'} className='text-dark'>ContatctUs</Link>
+        <Link to={'/events'} className='text-dark'>Events</Link>
       </Space>
 
       <div className="col-md-3 text-end">

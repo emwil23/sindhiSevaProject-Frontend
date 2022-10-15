@@ -179,7 +179,7 @@ const ViewComponent: FC<Props> = (props: Props) => {
                     return value?.data ? <>
                         <Descriptions.Item label='Name' key={index}>{`${value.data.firstName} ${value.data.lastName}`}</Descriptions.Item>
                         <Descriptions.Item label='Relation' key={value.data.uid}>{`${value.relationName}`}</Descriptions.Item>
-                        {items?.anniversary && ['Wife', 'Husband'].includes(value.relationName) ? <Descriptions.Item label='Anniversary' key={value.data.id}>{new Date(items.anniversary).toDateString()}</Descriptions.Item> : <></>}
+                        {/* {items?.anniversary && ['Wife', 'Husband'].includes(value.relationName) ? <Descriptions.Item label='Anniversary' key={value.data.id}>{new Date(items.anniversary).toDateString()}</Descriptions.Item> : <></>} */}
                     </> : null;
                 })}
             </Descriptions> : null}

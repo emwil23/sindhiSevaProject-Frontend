@@ -19,8 +19,8 @@ const FooterComponent: FC = () => {
           </address>
         </div>
         <div className="col-md-4 text-center text-white">
-          <div>Email: sindhisevasamiti@gmail.com</div>
-          <div>Phone: 080-4151 2028</div>
+          <div>Email: sindhisederationofbangalore@gmail.com</div>
+          <div>Phone: +91 9449364010</div>
         </div>
         <div className="col-md-4 text-center">
           <FacebookOutlined
@@ -35,7 +35,7 @@ const FooterComponent: FC = () => {
             className="text-white me-3 fs-5"
             onClick={() =>
               (window.location.href =
-                "https://api.whatsapp.com/send?phone=919845040586")
+                "https://api.whatsapp.com/send?phone=919449364010")
             }
           />
         </div>

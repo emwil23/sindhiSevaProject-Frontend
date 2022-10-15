@@ -247,6 +247,7 @@ const RegisterComponent: FC = () => {
                 <Form.Item
                   label="Date of Birth"
                   name="dob"
+                  extra="Date format (YYYY-MM-DD). Press Enter to select"
                   rules={[
                     {
                       required: true,
@@ -255,9 +256,7 @@ const RegisterComponent: FC = () => {
                     },
                   ]}
                 >
-                  <Tooltip title="Date format (YYYY-MM-DD). Press Enter to select">
                   <DatePicker placeholder="select date" className="w-100" format={'YYYY-MM-DD'} />
-                  </Tooltip>
                 </Form.Item>
               </div>
             </div>
