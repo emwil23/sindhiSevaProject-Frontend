@@ -118,8 +118,10 @@ const TableComponent: FC = () => {
     // 👇️ convert ms to hours                   min  sec   ms
     const hoursBetweenDates = msBetweenDates / (60 * 60 * 1000);
     if(hoursBetweenDates < 24){
+          if(userRole !== 'admin'){
           setAllowLocalDownload(false);
           openNotification('Directoies Download Limit reached','Try again after some time');
+        }
       }
       // eslint-disable-next-line
   }, [allowLocalDownload]);
@@ -418,7 +420,8 @@ const TableComponent: FC = () => {
         >
         </Input.Search>
         <div className='text-end my-2 mx-1'>
-          <Button disabled={selectedRowKeys.length === 0 || hasSelected > DOWNLOAD_LIMIT || !allowLocalDownload} onClick={() => { if(hasSelected + selectedRows.length > DOWNLOAD_LIMIT ) return openNotification('You can download only 10 records in a day.'); exportCSVFile(headers, selectedRows, 'Records'); setDownloadLimit({ ...downloadLimit, noOfRecords: (downloadLimit.noOfRecords + selectedRows.length )} )}}><ExportOutlined />Export</Button>
+          { userRole !== 'admin' ? <Button disabled={selectedRowKeys.length === 0 || hasSelected > DOWNLOAD_LIMIT || !allowLocalDownload} onClick={() => { if(hasSelected + selectedRows.length > DOWNLOAD_LIMIT ) return openNotification('You can download only 10 records in a day.'); exportCSVFile(headers, selectedRows, 'Records'); setDownloadLimit({ ...downloadLimit, noOfRecords: (downloadLimit.noOfRecords + selectedRows.length )} )}}><ExportOutlined />Export</Button> :
+          <Button disabled={selectedRowKeys.length === 0 } onClick={() => { exportCSVFile(headers, selectedRows, 'Records')}}><ExportOutlined />Export</Button> }
         </div>
       </div>
       <Table

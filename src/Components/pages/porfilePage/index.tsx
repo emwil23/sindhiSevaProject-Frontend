@@ -197,11 +197,13 @@ const ProfileComponent = () => {
   const videoOnFinish = (event: any) => {
     if (!coverVideoLink) return postRequest('/cover-video', { videoUrl: event.url }).then(res => {
       getCoverVideoLink();
+      Modal.destroyAll();
       openNotification('Updated Video Successfully!')
     })
 
     return patchRequest('/cover-video', coverVideoLink.id, { videoUrl: event.url }).then(res => {
       getCoverVideoLink();
+      Modal.destroyAll();
       openNotification('Updated Video Successfully!')
     })
   }
