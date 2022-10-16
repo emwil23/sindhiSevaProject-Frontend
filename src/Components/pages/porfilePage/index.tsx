@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { pushUserDetails } from "../../app/slices/userSlice";
 import { openNotification } from "../../../services/notificationService";
 import Search from "antd/lib/input/Search";
-import { CopyOutlined, DeleteOutlined, EyeOutlined, MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, DownloadOutlined, EyeOutlined, MinusCircleOutlined, PlusOutlined, UserAddOutlined, UserSwitchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import FileUpload from "../../FileUpload";
@@ -510,13 +510,51 @@ const ProfileComponent = () => {
     </Form>
   }
 
+  // Broadcast Message
+
+  const onFinishMail = async (values:any) => {
+    await getRequest('/members', { filter: { where: { email: {  like: '@', option: 'i' }, adminVerified: { eq: 'Accepted'} } } }).then(async (res:object[]) => {
+      let toList: object[] = [];
+      res.map((ids:any) => {
+        return toList.push({id: ids?.email});
+      })
+      let params = {
+        toList, subject: values.subject, body: values.body
+      }
+      await postRequest('/send-mail', params ).then((res) => {
+        if(res.mailSent){
+          Modal.destroyAll();
+          openNotification('Mail Sent Successfully');
+        }
+      }).catch((err:any) => openNotification('Error',err.response?.data?.error?.message));
+    })
+  }
+
+  const broadCastMessage = (): JSX.Element => {
+    return <>
+      <Form onFinish={onFinishMail} layout='vertical'>
+        <Form.Item name='subject' label='Subject' rules={[{ required: true, message: 'Subject is required.'}]}>
+          <Input type={'string'} placeholder='Enter Subject' />
+        </Form.Item>
+        <Form.Item name='body' label='Body' rules={[{ required: true, message: 'Body is required.' }]}>
+          <TextArea placeholder="Enter Body of the mail" rows={4} />
+        </Form.Item>
+        <Form.Item>
+          <Button htmlType='submit'>Broadcast</Button>
+        </Form.Item>
+      </Form>
+    </>
+  }
+
   //Admin Controls
 
   const adminControls = () => {
     return (
       <>
         <div className="text-end mt-4 me-3">
-          <Button onClick={() => openModal('Add Members', addMemberForm())} >Add members</Button>
+          <Button type='primary' onClick={() => openModal('BroadCast To All', broadCastMessage())} className='me-2' icon={<UserSwitchOutlined />}>Broadcast</Button>
+          <Button onClick={() => openModal('Add Members', addMemberForm())} icon={<UserAddOutlined />} >Add members</Button>
+          <Button type='primary' onClick={() => downloadAllRecords()} className='ms-2' icon={<DownloadOutlined />} >Download Records</Button>
         </div>
         <div className="mx-5 my-4 row">
           <div className="col-6">
@@ -584,9 +622,10 @@ const ProfileComponent = () => {
     if(allRecords.length === 0)
       return openNotification('Some Problem Occured', 'Please try again later');
     exportCSVFile(headers, allRecords, 'AllRecord');
-    await patchRequest('/members', userDetails?.id, { downloadsAllowed: { allowed: false } }).then(res => {
-      dispatch(updateDownloadAccess({ allowed: false }));
-    })
+    if(userRole !== 'admin')
+      await patchRequest('/members', userDetails?.id, { downloadsAllowed: { allowed: false } }).then(res => {
+        dispatch(updateDownloadAccess({ allowed: false }));
+      });
   }
 
   const memberControls = (): JSX.Element => {

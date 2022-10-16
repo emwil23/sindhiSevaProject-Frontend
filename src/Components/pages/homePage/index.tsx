@@ -42,10 +42,10 @@ const HomeComponent: FC = () => {
               </p>
             </div>
             <div className="col-md-6">
-              <Avatar
+              {/* <Avatar
                 size={100}
                 src="https://joeschmoe.io/api/v1/random"
-              />
+              /> */}
               <div className="mt-3">MADAN DOULATRAM</div>
             </div>
           </div>

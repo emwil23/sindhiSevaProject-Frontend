@@ -6,12 +6,12 @@ import type {
 } from "antd/es/table";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import { useEffect, useState, FC } from "react";
-import { useSelector } from 'react-redux';
-import { deleteRequest, getRequest } from "../../services/apiHelperService";
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteRequest, getRequest, patchRequest } from "../../services/apiHelperService";
 import { exportCSVFile } from '../../services/excelService';
 import ViewComponent from "../pages/DirectoriesPage/ViewComponent";
-// import { professionOption, qualificationOption, statusOption } from '../selectOptions';
-import { currentUserRole } from '../app/slices/userSlice';
+import { currentUser, currentUserRole, updateLocalDownloads } from '../app/slices/userSlice';
+import { openNotification } from '../../services/notificationService';
 
 const exactMatch = [
   "gender",
@@ -52,6 +52,8 @@ let totalCount: any = getRequest("/members/count").then(({ count }) => {
   totalCount = count as number;
 });
 
+const DOWNLOAD_LIMIT: number = 10;
+
 const whereBuilder = (whereObject: any | undefined) => {
   let andObject: any = [];
   let where: any = { adminVerified: { eq: 'Accepted'} };
@@ -85,7 +87,12 @@ const TableComponent: FC = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [globalSearch, setGlobalSearch] = useState<string>();
   const [refreshTable, setRefreshTable] = useState<boolean>(false);
+  const [downloadLimit, setDownloadLimit] = useState<any>();
+  const [allowLocalDownload, setAllowLocalDownload] = useState<boolean>(true);
+  const [hasSelected, setHasSelected] = useState<number>(0);
   const userRole = useSelector(currentUserRole);
+  const currentUserDetails = useSelector(currentUser);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(!globalSearch) 
@@ -102,7 +109,40 @@ const TableComponent: FC = () => {
   useEffect(() => {
     if(refreshTable) { fetchData({ pagination: pagination}); setRefreshTable(false);}
     // eslint-disable-next-line
-  }, [refreshTable])
+  }, [refreshTable]);
+
+  useEffect(() => {
+    var currentTime = new Date();
+    var previousTime = new Date(currentUserDetails?.localDownloadLimit?.downloadAllowed)
+    const msBetweenDates = Math.abs(previousTime.getTime() - currentTime.getTime());
+    // 👇️ convert ms to hours                   min  sec   ms
+    const hoursBetweenDates = msBetweenDates / (60 * 60 * 1000);
+    if(hoursBetweenDates < 24){
+          setAllowLocalDownload(false);
+          openNotification('Directoies Download Limit reached','Try again after some time');
+      }
+      // eslint-disable-next-line
+  }, [allowLocalDownload]);
+
+  useEffect(() => {
+    if(!downloadLimit){
+      setDownloadLimit(currentUserDetails?.localDownloadLimit);
+      setHasSelected(currentUserDetails?.localDownloadLimit?.noOfRecords);
+    }
+    else {
+      setHasSelected(downloadLimit?.noOfRecords);
+      if(downloadLimit?.noOfRecords >= DOWNLOAD_LIMIT){
+        patchRequest('/members', currentUserDetails?.id, { localDownloadLimit: { noOfRecords: 0, downloadAllowed: new Date() } });
+        dispatch(updateLocalDownloads({ noOfRecords: 0, downloadAllowed: new Date() }));
+      }
+      else{
+        patchRequest('/members', currentUserDetails?.id, { localDownloadLimit: downloadLimit }).then(res => {
+          dispatch(updateLocalDownloads(downloadLimit));
+        });
+      }
+    }
+    // eslint-disable-next-line
+  }, [downloadLimit]);
 
 
   let headers: any = [
@@ -362,11 +402,9 @@ const TableComponent: FC = () => {
     onChange: (onSelectChange: any, selectedRow: any) => {
       setSelectedRowKeys(onSelectChange);
       setSelectedRows(selectedRow);
-      console.log(selectedRow);
     },
   };
 
-  const hasSelected = selectedRowKeys.length < 11;
 
   return (
     <>
@@ -380,7 +418,7 @@ const TableComponent: FC = () => {
         >
         </Input.Search>
         <div className='text-end my-2 mx-1'>
-          <Button disabled={!hasSelected || selectedRowKeys.length === 0} onClick={() => { if (hasSelected) exportCSVFile(headers, selectedRows, 'Records') }}><ExportOutlined />Export</Button>
+          <Button disabled={selectedRowKeys.length === 0 || hasSelected > DOWNLOAD_LIMIT || !allowLocalDownload} onClick={() => { if(hasSelected + selectedRows.length > DOWNLOAD_LIMIT ) return openNotification('You can download only 10 records in a day.'); exportCSVFile(headers, selectedRows, 'Records'); setDownloadLimit({ ...downloadLimit, noOfRecords: (downloadLimit.noOfRecords + selectedRows.length )} )}}><ExportOutlined />Export</Button>
         </div>
       </div>
       <Table
