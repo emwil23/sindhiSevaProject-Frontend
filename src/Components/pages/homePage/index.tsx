@@ -24,6 +24,7 @@ const HomeComponent: FC = () => {
       <div className='row'>
         <div className='col-md-6'>
           <div className="text-center my-3 ">
+          <h4>Sindhi Federation of Bangalore</h4>
             <span className="fs-1 me-2" style={{ color: "#0050b3" }}>
               President
             </span>
@@ -33,7 +34,7 @@ const HomeComponent: FC = () => {
           </div>
           <div className="row my-5 align-items-center text-center">
             <div className="col-md-6">
-             
+            
               <p className="fw-light fs-6">
                 "&nbsp;Sri Parmanand Khatter Sindhi Council of India- National
                 President, Sri Shrikanth Bhatia Fmr Vice-Chairman NCPSL, Sri Sudesh
