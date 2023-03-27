@@ -29,20 +29,9 @@ const HeaderComponent: FC = () => {
       <div className='col-md-4'>
         <Link to={'/'} className='text-dark fw-light fs-5'>Sindhi Federation of Bangalore </Link>
       </div>
-      function handleDownload() {
-  // create a new link element with the PDF file as the href
-  const link = document.createElement('a');
-  link.href = pdfFile;
-  link.target = '_blank';
-  link.download = 'CARNIVAL V3.pdf';
-  
-  // dispatch a click event on the link to trigger the download
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
+     
 
-      <Space className='col-md-5' split={<Divider type="vertical" />}>
+      <Space className='col-md-6' split={<Divider type="vertical" />}>
         <Link to={'/'} className='text-dark'>Home</Link>
         <Link to={'/associations'} className='text-dark'>Associations</Link>
         <Link to={'/reforms'} className='text-dark'>Reforms</Link>
