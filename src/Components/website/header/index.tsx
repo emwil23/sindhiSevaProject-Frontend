@@ -40,18 +40,7 @@ const HeaderComponent: FC = () => {
         <Link to={'/events'} className='text-dark'>Events</Link>
         
         </Space>
-      function handleDownload() {
-  // create a new link element with the PDF file as the href
-  const link = document.createElement('a');
-  link.href = pdfFile;
-  link.target = '_blank';
-  link.download = './CARNIVAL V3.pdf';
-  
-  // dispatch a click event on the link to trigger the download
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
+      
 
       <div className="col-md-3 text-end">
         <Button type='text' hidden={userLoggedIn} onClick={() => navigate('/auth/login')}>LogIn</Button>
