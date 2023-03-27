@@ -38,15 +38,27 @@ const HeaderComponent: FC = () => {
         {userLoggedIn ? <Link to={'/directories'} className='text-dark'>Directories</Link> : null }
         <Link to={'/aboutUs'} className='text-dark'>About</Link>
         <Link to={'/events'} className='text-dark'>Events</Link>
-         <Link to={'/events'} className='text-dark'>Ho</Link>
-       
-      </Space>
+        
+        </Space>
+      function handleDownload() {
+  // create a new link element with the PDF file as the href
+  const link = document.createElement('a');
+  link.href = pdfFile;
+  link.target = '_blank';
+  link.download = './CARNIVAL V3.pdf';
+  
+  // dispatch a click event on the link to trigger the download
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 
       <div className="col-md-3 text-end">
         <Button type='text' hidden={userLoggedIn} onClick={() => navigate('/auth/login')}>LogIn</Button>
         <Button type='primary' hidden={userLoggedIn} onClick={() => navigate('/auth/register')}>SignUp</Button>
         <Button hidden={!userLoggedIn} onClick={() => navigate('/profile')}>{userDetails?.firstName+' '+userDetails?.lastName}</Button>
         <Button type='text' size='small' title='Logout' hidden={!userLoggedIn} onClick={() => logoutAction()}><LogoutOutlined /></Button>
+        <button onClick={handleDownload}>HoJamLo</button> {/* add a button that calls handleDownload when clicked */}
       </div>
     </header>
   )
