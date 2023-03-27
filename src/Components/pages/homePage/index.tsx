@@ -33,6 +33,7 @@ const HomeComponent: FC = () => {
           </div>
           <div className="row my-5 align-items-center text-center">
             <div className="col-md-6">
+              <button className="btn btn-primary">Ho Jama Lo</button>
               <p className="fw-light fs-6">
                 "&nbsp;Sri Parmanand Khatter Sindhi Council of India- National
                 President, Sri Shrikanth Bhatia Fmr Vice-Chairman NCPSL, Sri Sudesh
