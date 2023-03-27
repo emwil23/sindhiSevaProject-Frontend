@@ -27,7 +27,8 @@ const HeaderComponent: FC = () => {
   return (
     <header className="d-flex align-items-center justify-content-center justify-content-md-between py-2 mx-2">
       <div className='col-md-4'>
-        <Link to={'/'} className='text-dark fw-light fs-5'>Sindhi hello </Link>
+        <Link to={'/'} className='text-dark fw-light fs-5'>Sindhi Federation of Bangalore 
+ </Link>
       </div>
      
 
