@@ -49,7 +49,7 @@ const HeaderComponent: FC = () => {
         {userLoggedIn ? <Link to={'/directories'} className='text-dark'>Directories</Link> : null }
         <Link to={'/aboutUs'} className='text-dark'>About</Link>
         <Link to={'/events'} className='text-dark'>Events</Link>
-         <button onClick={handleDownload}> Ho jama LO</button> {/* add a button that calls handleDownload when clicked */}
+         <button className='text-dark'  onClick={handleDownload}> Ho jama LO</button> {/* add a button that calls handleDownload when clicked */}
       </Space>
 
       <div className="col-md-3 text-end">
