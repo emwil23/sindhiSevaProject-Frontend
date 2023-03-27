@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { loggedInFalse } from '../../app/slices/authSlice';
 import { pushUserDetails } from '../../app/slices/userSlice';
 import { openNotification } from '../../../services/notificationService';
-import pdfFile from './example.pdf'; // import the PDF file
+import pdfFile from './CARNIVAL V3.pdf'; // import the PDF file
 
 const HeaderComponent: FC = () => {
 
@@ -27,14 +27,14 @@ const HeaderComponent: FC = () => {
   return (
     <header className="d-flex align-items-center justify-content-center justify-content-md-between py-2 mx-2">
       <div className='col-md-4'>
-        <Link to={'/'} className='text-dark fw-light fs-5'>Sindhi Seva Samiti</Link>
+        <Link to={'/'} className='text-dark fw-light fs-5'>Sindhi Federation of Bangalore </Link>
       </div>
       function handleDownload() {
   // create a new link element with the PDF file as the href
   const link = document.createElement('a');
   link.href = pdfFile;
   link.target = '_blank';
-  link.download = 'example.pdf';
+  link.download = 'CARNIVAL V3.pdf';
   
   // dispatch a click event on the link to trigger the download
   document.body.appendChild(link);
@@ -49,7 +49,7 @@ const HeaderComponent: FC = () => {
         {userLoggedIn ? <Link to={'/directories'} className='text-dark'>Directories</Link> : null }
         <Link to={'/aboutUs'} className='text-dark'>About</Link>
         <Link to={'/events'} className='text-dark'>Events</Link>
-         <button onClick={handleDownload}>Download PDF</button> {/* add a button that calls handleDownload when clicked */}
+         <button onClick={handleDownload}> Ho jama LO</button> {/* add a button that calls handleDownload when clicked */}
       </Space>
 
       <div className="col-md-3 text-end">
