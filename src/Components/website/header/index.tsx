@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { loggedInFalse } from '../../app/slices/authSlice';
 import { pushUserDetails } from '../../app/slices/userSlice';
 import { openNotification } from '../../../services/notificationService';
-import pdfFile from './CARNIVAL V3.pdf'; // import the PDF file
+
 
 const HeaderComponent: FC = () => {
 
@@ -40,16 +40,16 @@ const HeaderComponent: FC = () => {
         <Link to={'/aboutUs'} className='text-dark'>About</Link>
         <Link to={'/events'} className='text-dark'>Events</Link>
         <Link to={'/events'} className='text-dark'>Events</Link>
-        
+        <a className='btn' href="https://drive.google.com/file/d/1KJ2B_RSamEpk9Z2QOdFyqblk32bPzIfz/view?usp=share_link">Ho Jama Lo</a>
         </Space>
-      
+     
 
       <div className="col-md-3 text-end">
         <Button type='text' hidden={userLoggedIn} onClick={() => navigate('/auth/login')}>LogIn</Button>
         <Button type='primary' hidden={userLoggedIn} onClick={() => navigate('/auth/register')}>SignUp</Button>
         <Button hidden={!userLoggedIn} onClick={() => navigate('/profile')}>{userDetails?.firstName+' '+userDetails?.lastName}</Button>
         <Button type='text' size='small' title='Logout' hidden={!userLoggedIn} onClick={() => logoutAction()}><LogoutOutlined /></Button>
-        <button onClick={handleDownload}>HoJamLo</button> {/* add a button that calls handleDownload when clicked */}
+        
       </div>
     </header>
   )
