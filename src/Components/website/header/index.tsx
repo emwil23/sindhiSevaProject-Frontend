@@ -39,7 +39,6 @@ const HeaderComponent: FC = () => {
         {userLoggedIn ? <Link to={'/directories'} className='text-dark'>Directories</Link> : null }
         <Link to={'/aboutUs'} className='text-dark'>About</Link>
         <Link to={'/events'} className='text-dark'>Events</Link>
-        <Link to={'/events'} className='text-dark'>Events</Link>
         <a className='btn' href="https://drive.google.com/file/d/1KJ2B_RSamEpk9Z2QOdFyqblk32bPzIfz/view?usp=share_link">Ho Jama Lo</a>
         </Space>
      
